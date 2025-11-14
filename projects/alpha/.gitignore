@@ -10,9 +10,8 @@ lerna-debug.log*
 node_modules
 dist
 dist-ssr
-*.local
 
-# Environment variables
+# Environment variables (but NOT .env.local.example)
 .env
 .env.local
 .env.*.local
@@ -30,3 +29,7 @@ dist-ssr
 
 # Convex
 .convex
+
+# Note: This .gitignore is for projects/alpha only
+# It allows src/ and other source files to be tracked
+# The root .gitignore excludes src/ but we override it here
