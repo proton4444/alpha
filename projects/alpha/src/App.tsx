@@ -1,13 +1,57 @@
 import { useState } from 'react'
-import { ConvexProvider, ConvexReactClient } from 'convex/react'
+import { ConvexProvider, ConvexReactClient, useMutation } from 'convex/react'
+import { api } from '../convex/_generated/api'
 
 const convex = new ConvexReactClient(
-  import.meta.env.VITE_CONVEX_URL || 'https://placeholder.convex.cloud'
+  import.meta.env.VITE_CONVEX_URL || 'http://localhost:3210'
 )
 
-function App() {
-  const [count, setCount] = useState(0)
+function TestComponent() {
+  const [result, setResult] = useState<any>(null)
+  const [loading, setLoading] = useState(false)
 
+  const testOpenRouter = useMutation(api.actions.testOpenRouterConnection)
+
+  const handleTest = async () => {
+    setLoading(true)
+    try {
+      const response = await testOpenRouter()
+      setResult(response)
+      console.log('Test result:', response)
+    } catch (error) {
+      setResult({ error: String(error) })
+      console.error('Test failed:', error)
+    }
+    setLoading(false)
+  }
+
+  return (
+    <div style={{ padding: '20px', backgroundColor: '#f0f0f0', borderRadius: '8px', margin: '20px' }}>
+      <h2>🧪 OpenRouter API Test</h2>
+      <button
+        onClick={handleTest}
+        disabled={loading}
+        style={{ padding: '10px 20px', fontSize: '16px', cursor: 'pointer' }}
+      >
+        {loading ? 'Testing...' : 'Test OpenRouter Connection'}
+      </button>
+
+      {result && (
+        <pre style={{
+          marginTop: '20px',
+          padding: '10px',
+          backgroundColor: result.success ? '#d4edda' : '#f8d7da',
+          borderRadius: '4px',
+          overflow: 'auto'
+        }}>
+          {JSON.stringify(result, null, 2)}
+        </pre>
+      )}
+    </div>
+  )
+}
+
+function App() {
   return (
     <ConvexProvider client={convex}>
       <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100">
@@ -17,40 +61,23 @@ function App() {
               Narrative Canvas Platform
             </h1>
 
+            {/* Test Component */}
+            <TestComponent />
+
+            {/* Rest of app */}
             <div className="text-slate-600 mb-6 space-y-3">
-              <p className="text-lg">
-                ✅ React 19.2+ with TypeScript 5.9+
-              </p>
-              <p className="text-lg">
-                ✅ Vite 7.2+ development server
-              </p>
-              <p className="text-lg">
-                ✅ Convex backend ready
-              </p>
-              <p className="text-lg">
-                ✅ Tailwind CSS 4.0 configured
-              </p>
+              <p className="text-lg">✅ React 18.2+ with TypeScript 5.9+</p>
+              <p className="text-lg">✅ Vite 7.2+ development server</p>
+              <p className="text-lg">✅ Convex backend ready</p>
+              <p className="text-lg">✅ Tailwind CSS 4.0 configured</p>
             </div>
 
             <div className="bg-blue-50 border border-blue-200 rounded p-4 mb-6">
               <p className="text-blue-900 text-sm">
-                <strong>Environment:</strong> {import.meta.env.MODE}
+                <strong>Environment:</strong> development
               </p>
               <p className="text-blue-900 text-sm">
-                <strong>Convex URL:</strong> {import.meta.env.VITE_CONVEX_URL ? '✓ Configured' : '⚠ Not configured'}
-              </p>
-            </div>
-
-            <div className="flex flex-col gap-4">
-              <button
-                onClick={() => setCount((c) => c + 1)}
-                className="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-6 rounded-lg transition-colors"
-              >
-                Click count: {count}
-              </button>
-
-              <p className="text-center text-sm text-slate-500">
-                Story 1.1: Initialize Convex + React Project ✓ Complete
+                <strong>Status:</strong> Ready for Story 1.3 testing
               </p>
             </div>
           </div>

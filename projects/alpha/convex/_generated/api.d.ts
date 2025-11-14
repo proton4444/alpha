@@ -1,19 +1,33 @@
-/* prettier-ignore */
+/* eslint-disable */
 /**
- * Generated `api` object type. You can import this type from the
- * convex/_generated/api.js file.
+ * Generated `api` utility.
+ *
+ * THIS CODE IS AUTOMATICALLY GENERATED.
+ *
+ * To regenerate, run `npx convex dev`.
+ * @module
  */
+
 import type {
   ApiFromModules,
   FilterApi,
   FunctionReference,
 } from "convex/server";
-import type * as schema from "../schema";
+import type * as actions_openrouter from "../actions/openrouter.js";
+import type * as example from "../example.js";
 
 /**
- * A utility for referencing Convex functions in your app.
+ * A utility for referencing Convex functions in your app's API.
+ *
+ * Usage:
+ * ```js
+ * const myFunctionReference = api.myModule.myFunction;
+ * ```
  */
-declare const fullApi: ApiFromModules<{}>;
+declare const fullApi: ApiFromModules<{
+  "actions/openrouter": typeof actions_openrouter;
+  example: typeof example;
+}>;
 export declare const api: FilterApi<
   typeof fullApi,
   FunctionReference<any, "public">
