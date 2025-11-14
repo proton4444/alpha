@@ -57,24 +57,28 @@ C:\knosso\Alpha\
 ## 🎯 Key Principles
 
 ### 1. **BMAD Method is Read-Only**
+
 - Everything in `/src`, `/docs`, `/.bmad`, `/.claude` is synced from GitHub
 - **Never** edit these files directly
 - Always pull updates via `START.bat`
 - Any customizations go in `projects/alpha/.project/_cfg/` (created later if needed)
 
 ### 2. **Your Project is in `/projects/alpha/`**
+
 - All your code, tests, stories, and documentation live here
 - This folder is **fully git-tracked** in Alpha repo
 - Separate from BMAD Method updates
 - Can commit/push without affecting BMAD sync
 
 ### 3. **Output is Generated**
+
 - `/output` folder contains results from BMAD workflows
 - Generated files (PRD, Epics, etc.) created here
 - Can be regenerated anytime without losing data
 - Often ignored in git (optional)
 
 ### 4. **No Conflicts Between BMAD & Your Project**
+
 - BMAD files: `src/`, `docs/`, `.bmad/`, `.claude/` → **Read-only, auto-updated**
 - Your project: `projects/alpha/` → **Your exclusive workspace**
 - Generated: `output/` → **Auto-generated, can be ignored**
@@ -84,6 +88,7 @@ C:\knosso\Alpha\
 ## 🚀 Workflow: Using BMAD Method on Your Project
 
 ### Phase 1: Project Discovery & Analysis
+
 ```
 ├── Brainstorm project ideas
 │   └── /bmad:bmm:workflows:brainstorm-project
@@ -93,12 +98,13 @@ C:\knosso\Alpha\
 │
 └── Create product brief
     └── /bmad:bmm:workflows:product-brief
-    
+
 Output: Brief summary of vision and approach
 Location: output/product-brief.md
 ```
 
 ### Phase 2: Planning & Design
+
 ```
 ├── Create PRD (Product Requirements Document)
 │   └── /bmad:bmm:workflows:prd
@@ -115,32 +121,34 @@ Location: output/product-brief.md
 └── Create UX Design
     └── /bmad:bmm:workflows:create-ux-design
     Output: output/ux-specification.md
-    
+
 Save to Project: Copy outputs to projects/alpha/.project/
 ```
 
 ### Phase 3: Implementation (Sprint Cycles)
+
 ```
 For each story:
   1. Generate context
      └── /bmad:bmm:workflows:story-context
-     
+
   2. Develop story
      └── /bmad:bmm:workflows:dev-story
      Location: projects/alpha/src/
-     
+
   3. Code review
      └── /bmad:bmm:workflows:code-review
-     
+
   4. Mark done
      └── /bmad:bmm:workflows:story-done
-     
+
   5. Commit to Git
      git add projects/alpha/
      git commit -m "[STORY] 1.1: Feature X implemented"
 ```
 
 ### Phase 4: Testing & Quality
+
 ```
 ├── Design test architecture
 │   └── /bmad:bmm:testarch/test-design
@@ -154,6 +162,7 @@ For each story:
 ```
 
 ### Phase 5: Continuous Improvement
+
 ```
 ├── Retrospectives
 │   └── /bmad:bmm:workflows:retrospective
@@ -170,6 +179,7 @@ For each story:
 ## 📝 File Organization Examples
 
 ### `.project/prd.md`
+
 ```markdown
 # Alpha Project - Product Requirements Document
 
@@ -177,31 +187,38 @@ For each story:
 **Generated From**: /bmad:bmm:workflows:prd
 
 ## Vision
+
 ...
 
 ## Requirements
+
 ...
 
 ## Success Criteria
+
 ...
 ```
 
 ### `.project/stories/epic-1/story-1.1.md`
+
 ```markdown
 # Story 1.1: Feature X
 
 **Epic**: 1 - Core System
 **Status**: READY-FOR-DEV
-**Acceptance Criteria**: 
+**Acceptance Criteria**:
+
 - [ ] AC 1
 - [ ] AC 2
 
 **Implementation Notes**:
+
 - See /projects/alpha/src/feature-x.ts
 - Tests in /projects/alpha/tests/feature-x.test.ts
 ```
 
 ### `.project/status.yaml`
+
 ```yaml
 project: alpha
 phase: 3-implementation
@@ -221,6 +238,7 @@ last_update: 2025-11-13
 ## 🔄 Git Workflow (No BMAD Conflicts)
 
 ### Daily Workflow
+
 ```bash
 # 1. Start session - pull BMAD updates
 ./START.bat
@@ -240,19 +258,23 @@ git push origin main
 ```
 
 ### Avoiding Conflicts
+
 **DO:**
+
 - ✅ Commit only `projects/alpha/` folder
 - ✅ Commit `.project/` status files (prd.md, status.yaml, etc.)
 - ✅ Commit `output/` if you want to track generated docs (optional)
 - ✅ Run `./START.bat` to update BMAD regularly
 
 **DON'T:**
+
 - ❌ Never commit `.bmad/`, `src/`, `docs/` (except projects/alpha/ subdirs)
 - ❌ Don't manually edit BMAD files
 - ❌ Don't merge BMAD updates into your commits
 - ❌ Don't create files at repo root (keep everything in `projects/alpha/`)
 
 ### `.gitignore` Setup
+
 ```gitignore
 # BMAD files (auto-updated, don't track)
 .bmad/
@@ -295,6 +317,7 @@ nul
 ## 📊 Example: Full Cycle from Brainstorm to Deployment
 
 ### Day 1: Brainstorm & Research
+
 ```bash
 # Run brainstorm workflow
 /bmad:bmm:workflows:brainstorm-project
@@ -304,6 +327,7 @@ nul
 ```
 
 ### Day 2-3: Create PRD & Architecture
+
 ```bash
 # Generate PRD
 /bmad:bmm:workflows:prd
@@ -323,6 +347,7 @@ git commit -m "[PLAN] PRD and Architecture created"
 ```
 
 ### Day 4-5: Create Epics & Stories
+
 ```bash
 # Generate epics and stories
 /bmad:bmm:workflows:create-epics-and-stories
@@ -338,6 +363,7 @@ git commit -m "[PLAN] Epics and stories defined"
 ```
 
 ### Week 1+: Sprint Development
+
 ```bash
 # For each story
 /bmad:bmm:workflows:story-context    # Prepare
@@ -354,21 +380,22 @@ git commit -m "[STORY 1.1] Feature implemented and tested"
 
 ## 🎯 Benefits of This Structure
 
-| Benefit | How It Works |
-|---------|-------------|
-| **BMAD Always Updated** | `START.bat` pulls latest from GitHub regularly |
-| **No Git Conflicts** | Your code in isolated `projects/` folder |
-| **Clean Git History** | Only your code in commits, no BMAD noise |
-| **Reproducible Builds** | BMAD version always known, your code tracked |
-| **Easy Collaboration** | Team pulls BMAD + works on projects/ together |
-| **Scalable** | Can have multiple projects (alpha, beta, gamma) |
-| **Flexible** | Use BMAD workflows OR work independently |
+| Benefit                 | How It Works                                    |
+| ----------------------- | ----------------------------------------------- |
+| **BMAD Always Updated** | `START.bat` pulls latest from GitHub regularly  |
+| **No Git Conflicts**    | Your code in isolated `projects/` folder        |
+| **Clean Git History**   | Only your code in commits, no BMAD noise        |
+| **Reproducible Builds** | BMAD version always known, your code tracked    |
+| **Easy Collaboration**  | Team pulls BMAD + works on projects/ together   |
+| **Scalable**            | Can have multiple projects (alpha, beta, gamma) |
+| **Flexible**            | Use BMAD workflows OR work independently        |
 
 ---
 
 ## 🚀 Getting Started
 
 ### Step 1: Create Project Structure
+
 ```bash
 cd C:\knosso\Alpha
 mkdir -p projects/alpha/.project/stories/epic-1
@@ -378,6 +405,7 @@ mkdir projects/alpha/docs
 ```
 
 ### Step 2: Initialize Project
+
 ```bash
 # Create initial files
 cat > projects/alpha/.project/prd.md << EOF
@@ -422,6 +450,7 @@ EOF
 ```
 
 ### Step 3: First Git Commit
+
 ```bash
 cd C:\knosso\Alpha
 git add projects/
@@ -430,6 +459,7 @@ git push origin main
 ```
 
 ### Step 4: Start Using BMAD Workflows
+
 ```bash
 # Run brainstorm workflow to kick off project
 /bmad:bmm:workflows:brainstorm-project
@@ -446,26 +476,31 @@ git push origin main
 ### Essential Commands
 
 **Update BMAD & Initialize**
+
 ```bash
 ./START.bat
 ```
 
 **Start New Brainstorm**
+
 ```bash
 /bmad:bmm:workflows:brainstorm-project
 ```
 
 **Create PRD**
+
 ```bash
 /bmad:bmm:workflows:prd
 ```
 
 **Check Project Status**
+
 ```bash
 cat projects/alpha/.project/status.yaml
 ```
 
 **Commit Project Work**
+
 ```bash
 git add projects/alpha/
 git commit -m "[TYPE] Description"
@@ -473,6 +508,7 @@ git push origin main
 ```
 
 **Switch BMAD Branches** (if needed)
+
 ```bash
 git fetch origin
 git checkout -b feature-branch origin/feature-branch

@@ -12,19 +12,19 @@ workflow_path: "method-greenfield.yaml"
 
 workflow_status:
   # Phase 0: Discovery (Optional) - COMPLETED
-  brainstorm-project: "output/brainstorming-session-results-2025-11-13.md"  # agent: analyst
-  research: "output/research-summary-convex-openrouter.md"  # agent: analyst
-  product-brief: "optional"  # agent: analyst
+  brainstorm-project: "output/brainstorming-session-results-2025-11-13.md" # agent: analyst
+  research: "output/research-summary-convex-openrouter.md" # agent: analyst
+  product-brief: "optional" # agent: analyst
 
   # Phase 1: Planning (Required)
-  prd: "output/PRD.md"  # agent: pm
-  validate-prd: "optional"  # agent: pm
-  create-design: "conditional"  # agent: ux-designer
+  prd: "output/PRD.md" # agent: pm
+  validate-prd: "optional" # agent: pm
+  create-design: "conditional" # agent: ux-designer
 
   # Phase 2: Solutioning (Required)
-  create-architecture: "output/architecture.md"  # agent: architect
-  validate-architecture: "optional"  # agent: architect
-  solutioning-gate-check: "output/implementation-readiness-report-2025-11-14.md"  # agent: architect
+  create-architecture: "output/architecture.md" # agent: architect
+  validate-architecture: "optional" # agent: architect
+  solutioning-gate-check: "output/implementation-readiness-report-2025-11-14.md" # agent: architect
 
   # Phase 3: Implementation (Required)
-  sprint-planning: "required"  # agent: sm
+  sprint-planning: "required" # agent: sm

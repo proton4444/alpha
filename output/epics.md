@@ -21,13 +21,13 @@ This document provides the complete epic and story breakdown for **Narrative Can
 
 This breakdown organizes the Narrative Canvas Platform into **5 cohesive epics** delivering incremental value:
 
-| Epic | Focus | Value Delivered | Stories |
-|------|-------|-----------------|---------|
-| **1. Project Foundation** | Infrastructure setup | Development environment ready | 4-5 |
-| **2. Story Structure Management** | Hierarchical organization | Writers can organize narratives visually | 5-6 |
-| **3. Character System** | Character definition | Characters ready for AI generation | 3-4 |
-| **4. AI Scene Generation** | Multi-agent prose generation | PoC SUCCESS - Generate 10 scenes! | 6-8 |
-| **5. Workspace & UX Polish** | Complete writing experience | Professional, delightful tool | 4-5 |
+| Epic                              | Focus                        | Value Delivered                          | Stories |
+| --------------------------------- | ---------------------------- | ---------------------------------------- | ------- |
+| **1. Project Foundation**         | Infrastructure setup         | Development environment ready            | 4-5     |
+| **2. Story Structure Management** | Hierarchical organization    | Writers can organize narratives visually | 5-6     |
+| **3. Character System**           | Character definition         | Characters ready for AI generation       | 3-4     |
+| **4. AI Scene Generation**        | Multi-agent prose generation | PoC SUCCESS - Generate 10 scenes!        | 6-8     |
+| **5. Workspace & UX Polish**      | Complete writing experience  | Professional, delightful tool            | 4-5     |
 
 **Total:** 22-28 stories (sized for single dev agent completion)
 
@@ -54,6 +54,7 @@ So that **I have a working React + TypeScript + Convex foundation with proper co
 **Given** I have Node.js 20+ and npm installed
 **When** I run `npm create convex@latest narrative-canvas`
 **Then** The project is created with:
+
 - React 19.2+ with TypeScript 5.9+
 - Vite 7.2+ for fast development
 - Convex client setup with useQuery and useMutation hooks
@@ -66,6 +67,7 @@ So that **I have a working React + TypeScript + Convex foundation with proper co
 **Prerequisites:** None (first story)
 
 **Technical Notes:**
+
 - Use React (Vite) option when prompted
 - Select TypeScript: Yes
 - Authentication: None (defer to post-PoC)
@@ -85,6 +87,7 @@ So that **the data model supports hierarchical story structure and AI generation
 **Given** The Convex project is initialized
 **When** I create `convex/schema.ts` with all table definitions
 **Then** The schema includes:
+
 - `stories` table (title, createdAt)
 - `chapters` table (storyId, chapterNumber, title) with `by_story` index
 - `scenes` table (storyId, chapterId, sceneNumber, outline, prose, status, errorMessage, regenerationCount) with `by_story` and `by_chapter` indexes
@@ -99,6 +102,7 @@ So that **the data model supports hierarchical story structure and AI generation
 **Prerequisites:** Story 1.1
 
 **Technical Notes:**
+
 - Reference: Architecture document Data Architecture section
 - Use `v.number()` for createdAt (Unix timestamp)
 - Use `v.optional()` for prose, backstory, errorMessage
@@ -119,6 +123,7 @@ So that **Convex Actions can call the OpenRouter API without exposing the API ke
 **Then** The environment variable `OPENROUTER_API_KEY` is set in Convex (Settings → Environment Variables)
 
 **And** I create `convex/actions/openrouter.ts` helper file with:
+
 - TypeScript function to call OpenRouter API
 - Proper headers (Authorization, Content-Type)
 - Model parameter: `anthropic/claude-3.5-sonnet`
@@ -131,6 +136,7 @@ So that **Convex Actions can call the OpenRouter API without exposing the API ke
 **Prerequisites:** Story 1.1, Story 1.2
 
 **Technical Notes:**
+
 - Reference: Architecture document Security Architecture
 - OpenRouter endpoint: `https://openrouter.ai/api/v1/chat/completions`
 - Use `process.env.OPENROUTER_API_KEY` in Actions (server-side only)
@@ -163,6 +169,7 @@ So that **I can parse key:value AI output with 60% token savings over JSON**.
 **Prerequisites:** Story 1.1
 
 **Technical Notes:**
+
 - Reference: Architecture document Implementation Patterns → TOON Data Format Pattern
 - Simple 10-line utility function
 - Example input/output in code comments
@@ -195,6 +202,7 @@ So that **I have a styling system and accessible UI primitives ready for compone
 **Prerequisites:** Story 1.1
 
 **Technical Notes:**
+
 - Reference: Architecture document ADR-005 (Tailwind + shadcn/ui)
 - shadcn/ui components are copy-pasted (not npm dependencies)
 - Customize in `src/components/ui/` after installation
@@ -221,6 +229,7 @@ So that **I can manage my story projects in the application**.
 **Given** The Convex schema is defined
 **When** I implement `convex/stories.ts` with mutations and queries
 **Then** The file includes:
+
 - `createStory` mutation that creates a story with title and automatically generates 24 chapters (Chapter 1-24)
 - `getStory` query that loads a story by ID
 - `updateStory` mutation that updates story title
@@ -235,6 +244,7 @@ So that **I can manage my story projects in the application**.
 **Prerequisites:** Story 1.2 (database schema)
 
 **Technical Notes:**
+
 - Reference: Architecture document FR-1 (Story Management)
 - Use `ctx.db.insert()` for creates
 - Use `ctx.db.patch()` for updates
@@ -254,6 +264,7 @@ So that **I can customize the structure of my story**.
 **Given** Stories with chapters exist
 **When** I implement `convex/chapters.ts` with mutations and queries
 **Then** The file includes:
+
 - `getChaptersByStory` query that returns all chapters for a story (ordered by chapterNumber)
 - `updateChapter` mutation that updates chapter title
 - Validation for title length (1-200 characters)
@@ -265,6 +276,7 @@ So that **I can customize the structure of my story**.
 **Prerequisites:** Story 2.1
 
 **Technical Notes:**
+
 - Reference: Architecture document FR-2 (Chapter Management)
 - Use `.withIndex("by_story", q => q.eq("storyId", storyId))` for efficient queries
 - Order by `.order("asc")` on chapterNumber
@@ -282,6 +294,7 @@ So that **I can structure my narrative at the scene level**.
 **Given** Stories and chapters exist
 **When** I implement `convex/scenes.ts` with mutations and queries
 **Then** The file includes:
+
 - `createScene` mutation that creates a scene with outline and initial status="draft"
 - `getScenesByChapter` query that returns all scenes for a chapter (ordered by sceneNumber)
 - `getScene` query that loads a single scene by ID
@@ -297,6 +310,7 @@ So that **I can structure my narrative at the scene level**.
 **Prerequisites:** Story 2.2
 
 **Technical Notes:**
+
 - Reference: Architecture document FR-3 (Scene Management)
 - Use `by_chapter` index for fast scene queries
 - Status field initially set to "draft"
@@ -315,6 +329,7 @@ So that **I have spatial awareness of my narrative at all times**.
 **Given** Stories with chapters and scenes exist
 **When** I create `src/components/StoryTree.tsx` component
 **Then** The component displays:
+
 - Story title at the root
 - 24 chapters as expandable/collapsible nodes
 - Scenes nested under each chapter
@@ -331,6 +346,7 @@ So that **I have spatial awareness of my narrative at all times**.
 **Prerequisites:** Story 2.3, Story 1.5 (Tailwind CSS)
 
 **Technical Notes:**
+
 - Reference: Architecture document Project Structure (StoryTree component)
 - Use `getStoryTree` query that loads story + chapters + scenes in one call
 - Tree expand/collapse state managed in React Context (Story 2.5)
@@ -349,6 +365,7 @@ So that **I don't lose my place when switching between scenes**.
 **Given** The StoryTree component exists
 **When** I create `src/hooks/useCurrentScene.ts` with Context API
 **Then** The hook provides:
+
 - `currentSceneId` - currently selected scene ID (or null)
 - `setCurrentSceneId` - function to change current scene
 - `treeCollapsed` - Record<chapterId, boolean> for expand/collapse state
@@ -365,6 +382,7 @@ So that **I don't lose my place when switching between scenes**.
 **Prerequisites:** Story 2.4
 
 **Technical Notes:**
+
 - Reference: Architecture document Implementation Patterns → State Management Pattern
 - Use React `createContext` and `useContext`
 - Template provided in architecture document
@@ -395,6 +413,7 @@ So that **I never lose my work**.
 **Prerequisites:** Story 2.3
 
 **Technical Notes:**
+
 - Reference: Architecture document FR-1.2 (auto-save after 1 second)
 - Use `useEffect` with debounce (e.g., lodash debounce or custom implementation)
 - Display save status with small text below input
@@ -421,6 +440,7 @@ So that **I can define the characters that will appear in my scenes**.
 **Given** The Convex schema is defined
 **When** I implement `convex/characters.ts` with mutations and queries
 **Then** The file includes:
+
 - `createCharacter` mutation (name, traits, optional backstory)
 - `getCharactersByStory` query (returns all characters for a story)
 - `getCharacter` query (loads single character by ID)
@@ -436,6 +456,7 @@ So that **I can define the characters that will appear in my scenes**.
 **Prerequisites:** Story 1.2 (database schema)
 
 **Technical Notes:**
+
 - Reference: Architecture document FR-4 (Character Management)
 - Backstory is optional (v.optional in schema)
 - Traits can be comma-separated or list format
@@ -453,6 +474,7 @@ So that **I can quickly add and edit character information**.
 **Given** Character mutations and queries exist
 **When** I create `src/components/CharacterManager.tsx`
 **Then** The component displays:
+
 - List of all characters for the current story
 - "Add Character" button
 - Character cards showing name and traits preview
@@ -471,6 +493,7 @@ So that **I can quickly add and edit character information**.
 **Prerequisites:** Story 3.1, Story 1.5 (shadcn/ui dialog component)
 
 **Technical Notes:**
+
 - Reference: Architecture document Component Structure
 - Use shadcn/ui Dialog for add/edit form
 - Use Textarea for traits and backstory fields
@@ -499,6 +522,7 @@ So that **all characters are available for scene generation without explicit sel
 **Prerequisites:** Story 3.1, Story 3.2
 
 **Technical Notes:**
+
 - Reference: Architecture document FR-5.2 (Multi-Agent Pipeline)
 - All characters in the story are available to every scene
 - Scene-specific character filtering deferred to post-PoC
@@ -525,6 +549,7 @@ So that **the UI doesn't freeze while waiting for AI responses**.
 **Given** The Convex schema and OpenRouter config exist
 **When** I create the `requestSceneGeneration` mutation in `convex/scenes.ts`
 **Then** The mutation:
+
 - Accepts `sceneId` and `outline` as arguments
 - Updates the scene with the outline
 - Sets scene.status = "generating"
@@ -540,6 +565,7 @@ So that **the UI doesn't freeze while waiting for AI responses**.
 **Prerequisites:** Story 2.3 (scene mutations), Story 1.3 (OpenRouter config)
 
 **Technical Notes:**
+
 - Reference: Architecture document ADR-001 (Scheduler Pattern)
 - Use `ctx.scheduler.runAfter(0, internal.actions.generateScene, { sceneId })`
 - Returns `{ success: true }` immediately
@@ -558,6 +584,7 @@ So that **scene generation has character-specific guidance with token efficiency
 **Given** OpenRouter API is configured and TOON parser exists
 **When** I create a function in `convex/actions/generateScene.ts` to call the Character Agent
 **Then** The function:
+
 - Accepts scene outline and characters as input
 - Constructs a prompt for the Character Agent with system message: "You are a Character Agent. Analyze the scene and characters, then return your analysis in TOON format."
 - Includes TOON format rules in the prompt (key:value, one per line, pipe | for multiple values)
@@ -574,6 +601,7 @@ So that **scene generation has character-specific guidance with token efficiency
 **Prerequisites:** Story 1.3 (OpenRouter), Story 1.4 (TOON parser), Story 3.3 (character loading)
 
 **Technical Notes:**
+
 - Reference: Architecture document Implementation Patterns → TOON Data Format Pattern
 - System prompt must be clear about TOON format
 - Response is plain text (not JSON)
@@ -592,6 +620,7 @@ So that **writers receive 300-500 word scene prose based on their outline**.
 **Given** Character Agent is implemented
 **When** I extend `convex/actions/generateScene.ts` to include Scene Writer Agent
 **Then** The function:
+
 - Accepts scene outline and Character Agent TOON output as input
 - Parses TOON output using `parseToon` utility
 - Constructs prompt for Scene Writer with system message: "You are a Scene Writer Agent. Generate narrative prose (300-500 words)."
@@ -608,6 +637,7 @@ So that **writers receive 300-500 word scene prose based on their outline**.
 **Prerequisites:** Story 4.2
 
 **Technical Notes:**
+
 - Reference: Architecture document API Contracts (generateScene Action)
 - Scene Writer receives processed character guidance (not raw TOON)
 - Prose returned is plain text string
@@ -626,6 +656,7 @@ So that **scene generation executes end-to-end with proper error handling**.
 **Given** Character Agent and Scene Writer Agent functions exist
 **When** I complete the `generateScene` Action in `convex/actions/generateScene.ts`
 **Then** The Action:
+
 - Is marked as `internalAction` (not callable from frontend)
 - Accepts `sceneId` as argument
 - Loads scene data using `ctx.runQuery(internal.scenes.getScene, { sceneId })`
@@ -644,6 +675,7 @@ So that **scene generation executes end-to-end with proper error handling**.
 **Prerequisites:** Story 4.1, Story 4.2, Story 4.3
 
 **Technical Notes:**
+
 - Reference: Architecture document Implementation Patterns → Error Handling Pattern
 - Use structured logging: `console.log("[SCENE_GEN]", { stage, timestamp, tokensUsed })`
 - Error messages: "Rate limit reached - please wait 30 seconds and retry" (not technical jargon)
@@ -662,6 +694,7 @@ So that **I can generate prose for my scenes**.
 **Given** Scene generation backend is complete
 **When** I create `src/components/SceneEditor.tsx`
 **Then** The component displays:
+
 - Scene outline input (Textarea)
 - "Generate Prose" button
 - Generation status display (Draft / Generating... / Complete / Error)
@@ -682,6 +715,7 @@ So that **I can generate prose for my scenes**.
 **Prerequisites:** Story 4.4, Story 2.6 (auto-save), Story 1.5 (Tailwind CSS)
 
 **Technical Notes:**
+
 - Reference: Architecture document UX Principles → Scene Generation Flow
 - Use Convex `useMutation(api.scenes.requestSceneGeneration)`
 - Use Convex `useQuery(api.scenes.getScene, { sceneId: currentSceneId })`
@@ -700,6 +734,7 @@ So that **I have full control over the final scene content**.
 **Given** Scene prose is generated
 **When** I extend `SceneEditor` component with action buttons
 **Then** Three buttons appear below generated prose:
+
 - **Accept** button (green)
 - **Regenerate** button (yellow)
 - **Edit** button (blue)
@@ -717,6 +752,7 @@ So that **I have full control over the final scene content**.
 **Prerequisites:** Story 4.5
 
 **Technical Notes:**
+
 - Reference: Architecture document FR-5 (Scene Generation Workflow)
 - Accept action: No backend change needed (just visual confirmation)
 - Regenerate: Triggers full pipeline again
@@ -744,6 +780,7 @@ So that **I can see my story structure while working on individual scenes**.
 **Given** StoryTree and SceneEditor components exist
 **When** I implement the layout in `src/App.tsx`
 **Then** The layout displays:
+
 - Left panel (30% width): StoryTree component
 - Right panel (70% width): SceneEditor component
 - Vertical divider between panels (fixed, no resize for PoC)
@@ -757,6 +794,7 @@ So that **I can see my story structure while working on individual scenes**.
 **Prerequisites:** Story 2.4 (StoryTree), Story 4.5 (SceneEditor)
 
 **Technical Notes:**
+
 - Reference: Architecture document UX Principles → Visual Design (split-screen)
 - Use CSS Grid or Flexbox for layout
 - Tailwind classes: `grid grid-cols-[30%_70%]` or similar
@@ -775,6 +813,7 @@ So that **I can work efficiently without mouse clicks**.
 **Given** The split-screen workspace is implemented
 **When** I add keyboard event listeners
 **Then** The following shortcuts work:
+
 - `↑` (Up Arrow): Navigate to previous scene
 - `↓` (Down Arrow): Navigate to next scene
 - `←` (Left Arrow): Collapse current chapter
@@ -790,6 +829,7 @@ So that **I can work efficiently without mouse clicks**.
 **Prerequisites:** Story 5.1, Story 2.5 (navigation state)
 
 **Technical Notes:**
+
 - Reference: Architecture document UX Principles → Interaction Patterns (keyboard shortcuts)
 - Use `useEffect` with `window.addEventListener('keydown')`
 - Check if active element is an input (if so, ignore shortcuts)
@@ -808,6 +848,7 @@ So that **I can see at a glance which scenes are draft, generating, complete, or
 **Given** Scenes have status field (draft/generating/complete/error)
 **When** I enhance StoryTree component with status badges
 **Then** Each scene displays a colored badge:
+
 - Draft: Gray badge with "Draft" text
 - Generating: Blue pulsing badge with "Generating..." text
 - Complete: Green badge with "✓ Complete" text
@@ -822,6 +863,7 @@ So that **I can see at a glance which scenes are draft, generating, complete, or
 **Prerequisites:** Story 5.1, Story 4.5 (scene status)
 
 **Technical Notes:**
+
 - Reference: Architecture document UX Principles → Real-time Status Indicators
 - Use Tailwind color classes: `bg-gray-300` (draft), `bg-blue-500` (generating), `bg-green-500` (complete), `bg-red-500` (error)
 - Pulse animation: Tailwind `animate-pulse` class
@@ -840,6 +882,7 @@ So that **I know the system is working and approximately how long to wait**.
 **Given** Scene generation is in progress
 **When** I create `src/components/GenerationStatus.tsx`
 **Then** The component displays:
+
 - Current stage: "Character Agent analyzing..." or "Scene Writer generating prose..."
 - Spinner/loading animation
 - Estimated time remaining: "~5-10 seconds"
@@ -854,6 +897,7 @@ So that **I know the system is working and approximately how long to wait**.
 **Prerequisites:** Story 4.5 (SceneEditor)
 
 **Technical Notes:**
+
 - Reference: Architecture document UX Principles → Scene Generation Flow (waiting state)
 - For PoC: Show generic "Generating..." message (detailed stage tracking deferred)
 - Use shadcn/ui Spinner or custom CSS spinner
@@ -872,6 +916,7 @@ So that **the tool feels polished and trustworthy**.
 **Given** All components are functionally complete
 **When** I apply comprehensive Tailwind styling
 **Then** The application has:
+
 - Consistent color palette (neutral base: white/light gray, accent color for actions)
 - Readable typography (serif for prose, sans-serif for UI)
 - Generous whitespace and padding
@@ -890,6 +935,7 @@ So that **the tool feels polished and trustworthy**.
 **Prerequisites:** Story 5.1, Story 5.2, Story 5.3, Story 5.4
 
 **Technical Notes:**
+
 - Reference: Architecture document UX Principles → Visual Design
 - Use Tailwind config to define custom color palette
 - Typography: Use font-serif for prose display, font-sans for UI
@@ -902,14 +948,14 @@ So that **the tool feels polished and trustworthy**.
 
 ### Epic & Story Totals
 
-| Epic | Stories | Focus |
-|------|---------|-------|
-| Epic 1: Project Foundation | 5 | Infrastructure setup |
-| Epic 2: Story Structure Management | 6 | Hierarchical organization |
-| Epic 3: Character System | 3 | Character definition |
-| Epic 4: AI Scene Generation | 6 | Multi-agent prose generation |
-| Epic 5: Workspace & UX Polish | 5 | Complete writing experience |
-| **TOTAL** | **26** | **Complete PoC** |
+| Epic                               | Stories | Focus                        |
+| ---------------------------------- | ------- | ---------------------------- |
+| Epic 1: Project Foundation         | 5       | Infrastructure setup         |
+| Epic 2: Story Structure Management | 6       | Hierarchical organization    |
+| Epic 3: Character System           | 3       | Character definition         |
+| Epic 4: AI Scene Generation        | 6       | Multi-agent prose generation |
+| Epic 5: Workspace & UX Polish      | 5       | Complete writing experience  |
+| **TOTAL**                          | **26**  | **Complete PoC**             |
 
 ### PoC Success Milestone
 
@@ -930,9 +976,11 @@ So that **the tool feels polished and trustworthy**.
 **Epic Order:** 1 → 2 → 3 → 4 → 5 (strict sequence for dependencies)
 
 **Critical Path Stories:**
+
 - Story 1.1 → 1.2 → 2.1 → 2.2 → 2.3 → 3.1 → 4.1 → 4.2 → 4.3 → 4.4 → 4.5 (Core generation pipeline)
 
 **Parallel Development Opportunities:**
+
 - Stories 1.4, 1.5 can be done in parallel with 1.3
 - Stories 2.4, 2.5, 2.6 can be done in parallel after 2.3
 - Stories 3.2, 3.3 can follow 3.1 quickly

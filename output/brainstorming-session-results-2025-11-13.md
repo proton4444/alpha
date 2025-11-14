@@ -8,7 +8,8 @@
 
 **Topic:** Narrative Canvas Platform - AI-Assisted Story Writing Tool
 
-**Session Goals:** 
+**Session Goals:**
+
 - Define hierarchical story structure (24-chapter template integration)
 - Clarify multi-agent orchestration (Director-led system)
 - Solve technical architecture (frontend-only + Supabase, no backend complexity)
@@ -36,21 +37,25 @@
 **Fundamental Truths Identified:**
 
 **On Writer Methods:**
+
 - ✓ Writers have individual methods - no single "right way"
 - ✓ Platform should support multiple methodologies
 - ✓ Structure is flexible - same framework, different approaches
 
 **On Story Coherence:**
+
 - ✓ Consistency is the foundation of coherence
 - ✓ Requires memory system (characters remember events, maintain traits)
 - ✓ Consistency checkers needed (later stage, not MVP)
 
 **On AI Capabilities:**
+
 - ✓ AI transforms simple creative concepts → full narrative (when well-guided)
 - ✓ AI can't create from nothing (yet)
 - ✓ Human-in-loop is essential for creative direction
 
 **Critical Future Topic Identified:**
+
 - 🧠 **Character Cognitive Intelligence** - Characters need memory, personality consistency, decision-making logic
 - Must be designed before implementing memory system
 
@@ -59,10 +64,12 @@
 **Rebuilding From First Principles:**
 
 **Minimum Requirements (Bare Essentials):**
+
 1. **Strong Subject** - Core story concept/premise
 2. Everything else builds from this foundation
 
 **Core Creation Loop:**
+
 ```
 1. Writer inputs creative concept
 2. AI uses tree chart + templates → generates multiple prose variations
@@ -77,16 +84,19 @@
 **Template System Architecture:**
 
 **Fixed (Platform Core):**
+
 - Tree/hierarchical structure (Story → Chapters → Scenes)
 - Node relationships and connections
 - Memory system for consistency
 
 **Flexible (Template-Specific):**
+
 - 24-chapter structure is ONE template option
 - Different templates can plug into same system
 - Substructure adapts to template requirements
 
-**Design Principle:** 
+**Design Principle:**
+
 - **Template = Content structure** (24 chapters, Hero's Journey, 3-Act, Save the Cat, etc.)
 - **Platform = System that HOLDS any template**
 - Separation of concerns: engine vs. content framework
@@ -108,6 +118,7 @@
 ```
 
 **Token Cost Strategy:**
+
 - Single generation per cycle (not multiple options)
 - Retry button available if unsatisfied (costs another generation)
 - Balance: Cost control vs. user choice
@@ -116,6 +127,7 @@
 ✓ Character consistency monitoring
 ✓ Plot logic validation  
 ✓ Tone/voice coherence
+
 - All three run automatically before presenting to writer
 - Flags issues for writer review
 
@@ -128,15 +140,18 @@
 **Selected:** A + B
 
 **Director handles:**
+
 - ✓ **Story-level coordination** - Maintains overall narrative arc, themes, pacing
 - ✓ **Agent task assignment** - Decides which specialized agent handles each task
 
 **What Director does NOT handle:**
+
 - ✗ Consistency enforcement (delegated to specialized checker agents)
 - ✗ Context management (memory system handles this)
 - ✗ Quality control (writer evaluates quality)
 
 **Design Implication:**
+
 - Director is a **strategic coordinator**, not a micromanager
 - Think: Film director (vision + delegation) vs. editor (quality control)
 - Keeps architecture clean: Director orchestrates, specialists execute
@@ -148,29 +163,34 @@
 **Selected:** D, A, B, C (Priority order)
 
 **1. Scene Outliner Agent** (First)
+
 - Helps writer structure scene details
 - Input: Chapter purpose + writer's rough ideas
 - Output: Structured scene outline (goal, conflict, stakes, characters, setting, structure)
 
 **2. Scene Writer Agent** (Second)
+
 - Generates prose for specific scene
 - Input: Scene outline from Outliner Agent
 - Output: Narrative prose
 
 **3. Character Agent** (One per character)
+
 - Maintains character voice, traits, memory
 - Generates character-specific dialogue/actions
 - Input: Scene context + character history
 - Output: Character-specific content
 
 **4. Consistency Checker Agent** (Final step)
+
 - Runs 3 checks: character consistency, plot logic, tone/voice
 - Input: Generated content + story memory
 - Output: Flagged issues or approval
 
 **Agent Flow:**
+
 ```
-Writer rough idea 
+Writer rough idea
   → Scene Outliner Agent (structures it)
   → Scene Writer Agent (generates prose with Character Agents)
   → Consistency Checker Agent (validates)
@@ -178,6 +198,7 @@ Writer rough idea
 ```
 
 **NOT in MVP:**
+
 - Summary Agent (later)
 - Prose Refiner Agent (writer edits manually for now)
 
@@ -188,24 +209,28 @@ Writer rough idea
 **Essential Memory Types:** D, A, B (Priority order)
 
 **D. Style Memory** (Critical for consistency)
+
 - Narrative voice/tone
-- POV character preferences  
+- POV character preferences
 - Writing style patterns
 - Ensures prose feels unified across scenes
 
 **A. Character Memory** (Per character node)
+
 - Traits, personality, backstory
 - Knowledge state (what they know/don't know per scene)
 - Relationships with other characters
 - Character arc progression tracking
 
 **B. Plot Memory** (Global story level)
+
 - Timeline of events (what happened when)
 - Cause-effect relationships between scenes
 - Unresolved conflicts/story threads
 - Story arc checkpoints
 
 **NOT Essential for MVP:**
+
 - World Memory (writer maintains this manually for now)
 - Session Memory (browser state handles this)
 
@@ -224,6 +249,7 @@ Story (root)
 ```
 
 **Memory Access Pattern:**
+
 - **Character Agents** → Read own character memory + plot memory
 - **Scene Writer Agent** → Read all relevant character memories + plot memory + style memory
 - **Consistency Checker** → Compare generated content against all three memory types
@@ -233,6 +259,7 @@ Story (root)
 **Parameter 4: Technical Stack Decision**
 
 **Evaluated Options:**
+
 - Supabase (PostgreSQL + Edge Functions)
 - Firebase (Firestore + Cloud Functions)
 - Convex (Reactive DB + Server Functions)
@@ -242,12 +269,14 @@ Story (root)
 **Why Convex Wins:**
 
 **1. Actions + Durable Workflows = Built for Agent Orchestration**
+
 - **Actions** designed specifically for calling external APIs (OpenRouter for LLMs)
 - **Durable Workflows** with built-in retry logic, idempotency, and multi-step orchestration
 - No cold starts (functions stay warm)
 - Better reliability for chaining multiple agent calls
 
 **2. Scheduler Pattern for Async Agent Execution**
+
 ```typescript
 // User clicks "Generate" → Mutation saves intent → Schedules Action
 mutation: Save user intent to DB
@@ -256,27 +285,32 @@ scheduler: runAfter(0, generateScene)
   ↓
 action: Call Character Agent → Call Scene Writer → Save results
 ```
+
 - Decouples user interaction from long-running LLM calls
 - Automatic retry on failures
 - Better UX (immediate response to user)
 
 **3. Real-time Reactivity by Default**
+
 - All queries are reactive → UI updates automatically when agents complete
 - No need to poll for generation status
 - Perfect for showing "AI generating..." → "Complete" transitions
 
 **4. TypeScript End-to-End**
+
 - Backend functions are native TypeScript (not JavaScript)
 - Type-safe database queries with Convex schemas
 - Better DX, fewer runtime errors
 
 **5. Relational Data Model with References**
+
 ```typescript
 // Convex uses tables with references (like SQL)
 stories table: { _id, title, createdAt }
 characters table: { _id, storyId (ref), name, traits }
 scenes table: { _id, storyId (ref), chapterId (ref), outline, prose }
 ```
+
 - Clear separation of concerns
 - Efficient queries with indexes
 - Memory system stored as separate tables (not deeply nested)
@@ -306,6 +340,7 @@ Auth:
 ```
 
 **Data Model: Relational with References**
+
 ```typescript
 // Example: Fetching scene with character data
 const scene = await ctx.db.get(sceneId);
@@ -314,6 +349,7 @@ const character = await ctx.db.get(scene.characterId);
 ```
 
 **LLM Integration: OpenRouter**
+
 - Unified API for Claude, GPT-4, Gemini, and other models
 - Single API key, multiple providers
 - Cost optimization (choose model per task)
@@ -328,16 +364,19 @@ const character = await ctx.db.get(scene.characterId);
 **Anti-Patterns Identified:**
 
 ❌ **No clear guidance**
+
 - Writer has no idea what to do next
 - No prompts, no suggestions, just blank canvas
 - Paralysis and confusion
 
 ❌ **Invisible structure**
+
 - Can't see story outline or hierarchy
 - No visual representation of chapters/scenes
 - Writer lost in their own story
 
 ❌ **Tab hell navigation**
+
 - Need to switch tabs to see different parts
 - Check character info → switch tab
 - Check scene outline → switch tab
@@ -345,6 +384,7 @@ const character = await ctx.db.get(scene.characterId);
 - Context constantly lost
 
 ❌ **Broken character knowledge (cognitive intelligence failure)**
+
 - Characters know things they shouldn't yet
 - "I knew you'd betray me!" (but betrayal is 5 chapters later)
 - No tracking of what character knows at each point in timeline
@@ -355,18 +395,21 @@ const character = await ctx.db.get(scene.characterId);
 **REVERSALS → Design Principles:**
 
 ✅ **Clear Next Steps**
+
 - System ALWAYS suggests what to do next
-- "You've outlined Chapter 1, Scene 1. Ready to generate prose?" 
+- "You've outlined Chapter 1, Scene 1. Ready to generate prose?"
 - "Scene complete. Add another scene or move to Chapter 2?"
 - Guided workflow, never lost
 
 ✅ **Visible Structure Always**
+
 - Canvas shows ENTIRE story hierarchy at once
 - Tree view: Story → Chapters → Scenes (expandable)
 - Current location highlighted
 - Can see "where you are" in the story at all times
 
 ✅ **Single-Screen Context**
+
 - **Split-panel design is CRITICAL**
 - Left: Canvas (structure + current scene)
 - Right: Prose output + scene details
@@ -374,6 +417,7 @@ const character = await ctx.db.get(scene.characterId);
 - Everything visible simultaneously
 
 ✅ **Character Knowledge Tracking (Cognitive Intelligence)**
+
 - Character memory includes **knowledge timeline**
 - Track: "Sarah learns about betrayal in Scene 3.2"
 - Consistency Checker validates: "Does Sarah know this yet?"
@@ -381,6 +425,7 @@ const character = await ctx.db.get(scene.characterId);
 - Each character has "knowledge state" per scene
 
 **Key Differentiation:**
+
 - **Other tools:** Horizontal, chaotic, tab-based
 - **This tool:** Vertical hierarchy, visual, single-screen, context-aware
 
@@ -391,6 +436,7 @@ const character = await ctx.db.get(scene.characterId);
 **Implementation: AI-Detected (Automatic)**
 
 **How it works:**
+
 1. Scene Writer Agent generates prose
 2. Consistency Checker reads the prose before presenting to writer
 3. **Knowledge Extraction:** AI detects knowledge events:
@@ -401,6 +447,7 @@ const character = await ctx.db.get(scene.characterId);
 5. Future scenes: Checker validates character knowledge against timeline
 
 **Example:**
+
 ```
 Scene 3.2 (generated prose): "Sarah gasped as she read the letter. Marcus had lied."
   → Checker extracts: Sarah now knows about Marcus's deception
@@ -411,7 +458,7 @@ Scene 2.1 (earlier scene, generated later): "Sarah trusted Marcus completely..."
   → ✅ Approved
 
 Scene 4.1 (later scene): "Sarah confronted Marcus about his lies..."
-  → Checker validates: Does Sarah know about deception? YES (Scene 4.1 > 3.2)  
+  → Checker validates: Does Sarah know about deception? YES (Scene 4.1 > 3.2)
   → ✅ Approved
 
 Scene 2.5 (earlier scene): "Sarah suspected Marcus was hiding something about his past..."
@@ -420,12 +467,14 @@ Scene 2.5 (earlier scene): "Sarah suspected Marcus was hiding something about hi
 ```
 
 **Advantages:**
+
 - ✅ Zero manual input required
 - ✅ Automatically maintains consistency
 - ✅ Works even when writing out of order
 - ✅ Catches knowledge leaks ("how does she know that yet?")
 
 **For MVP:**
+
 - Basic knowledge extraction (major plot reveals, character discoveries)
 - More sophisticated extraction in later versions
 
@@ -438,17 +487,20 @@ Scene 2.5 (earlier scene): "Sarah suspected Marcus was hiding something about hi
 **Critical Constraints Identified:**
 
 **1. Dev Skills Gap:**
+
 - Need to learn: Firebase, Cloud Functions, React Flow/Cytoscape
 - Need to learn: Agent orchestration patterns
 - Risk: Learning curve may slow MVP development
 
 **2. Library Dependencies:**
+
 - Canvas visualization: React Flow or Cytoscape.js (both complex)
 - LLM integration: OpenAI SDK or Anthropic SDK
 - Firebase SDK
 - TOON encoding library (if exists, or build custom)
 
 **3. Framework Building Challenge:**
+
 - This is NOT a simple app - it's a FRAMEWORK
 - Must be extensible (template system)
 - Testing agent interactions is complex
@@ -459,11 +511,13 @@ Scene 2.5 (earlier scene): "Sarah suspected Marcus was hiding something about hi
 **❤️ Red Hat: Gut Feelings**
 
 **What excites you:**
+
 - 🎯 Agent interaction orchestration
 - 🎯 Building the framework foundation
 - 🎯 Testing everything works together
 
 **What concerns you:**
+
 - ⚠️ Personal dev skill gaps
 - ⚠️ Complex library integrations
 - ⚠️ Framework complexity vs. MVP timeline
@@ -475,6 +529,7 @@ Scene 2.5 (earlier scene): "Sarah suspected Marcus was hiding something about hi
 **💛 Yellow Hat: Benefits & Opportunities**
 
 **Benefits Despite Challenges:**
+
 - ✅ Learning valuable, marketable skills (Firebase, agent orchestration)
 - ✅ Personal tool - full control, no external users to satisfy
 - ✅ Framework thinking - reusable architecture for future projects
@@ -489,6 +544,7 @@ Scene 2.5 (earlier scene): "Sarah suspected Marcus was hiding something about hi
 **Realistic Risk Assessment:**
 
 ⚠️ **MVP Scope Creep: VERY HIGH**
+
 - Building framework, not simple app
 - Agent orchestration = complex debugging
 - Memory system = complex state management
@@ -496,6 +552,7 @@ Scene 2.5 (earlier scene): "Sarah suspected Marcus was hiding something about hi
 - Canvas library = steep learning curve
 
 ⚠️ **Timeline Reality: 6+ months** (solo dev with learning)
+
 - Firebase learning: 2-3 weeks
 - React Flow/Canvas: 2-3 weeks
 - Agent orchestration: 4-6 weeks
@@ -503,6 +560,7 @@ Scene 2.5 (earlier scene): "Sarah suspected Marcus was hiding something about hi
 - Integration + debugging: 4+ weeks
 
 ⚠️ **Technical Risks:**
+
 - Agent debugging complexity (multi-step failures)
 - OpenRouter API reliability (dependent on provider uptime)
 - TOON encoding ROI unclear
@@ -527,12 +585,14 @@ Build minimal PoC to validate core concepts, then expand incrementally.
 ### **PoC Scope:**
 
 **✅ Structure (Minimal)**
+
 - 1 Story
-- 1 Chapter  
+- 1 Chapter
 - 3 Scenes (simple list, not tree)
 - 1 Character
 
 **✅ Agents (Minimal)**
+
 - Scene Writer Agent (generates prose from outline)
 - Character Agent (maintains character voice)
 - NO Scene Outliner (writer types manually)
@@ -540,6 +600,7 @@ Build minimal PoC to validate core concepts, then expand incrementally.
 - NO Director (direct agent calls via scheduler)
 
 **✅ Memory (EXCLUDED from PoC)**
+
 - ❌ NO memory system
 - ❌ NO knowledge timeline
 - ❌ NO character/plot/style memory
@@ -547,6 +608,7 @@ Build minimal PoC to validate core concepts, then expand incrementally.
 - **Memory deferred to Phase 2**
 
 **✅ UI (Basic Visualization from Start)**
+
 - React interface with **basic status visualization**
 - Shows: Character info, Scene list, Generation status ("Generating...", "Complete")
 - Input: Scene outline text box
@@ -555,6 +617,7 @@ Build minimal PoC to validate core concepts, then expand incrementally.
 - **Real-time status updates** (Convex reactivity shows agent progress)
 
 **✅ Tech Stack (Minimal)**
+
 - Frontend: React + Convex React hooks (useQuery, useMutation)
 - Backend: Convex Actions (agent orchestration via scheduler pattern)
 - Database: Convex tables (stories, characters, scenes)
@@ -563,6 +626,7 @@ Build minimal PoC to validate core concepts, then expand incrementally.
 - NO template framework
 
 **✅ Schema & Prompts**
+
 - Schema details: Defined in **worldbuilding phase** document
 - Agent prompts: Provided in **worldbuilding phase** or prompted at runtime
 - If missing: System will prompt user to provide during development
@@ -574,10 +638,10 @@ Build minimal PoC to validate core concepts, then expand incrementally.
    Name: "Sarah"
    Traits: "brave warrior, haunted past"
    (Fields defined in worldbuilding doc)
-   
+
 2. Writer writes Scene 1 outline (text box):
    "Sarah enters market, sees her enemy Marcus"
-   
+
 3. Click "Generate Prose" button
 
 4. Convex Mutation executes:
@@ -585,13 +649,13 @@ Build minimal PoC to validate core concepts, then expand incrementally.
    - Updates status: "generating"
    - Schedules Action (runAfter(0, generateScene))
    - Returns immediately (no waiting for LLM)
-   
+
 5. Convex Action executes (async):
    - Loads character data from DB
    - Calls OpenRouter API (Character Agent prompt)
    - Calls OpenRouter API (Scene Writer Agent prompt)
    - Saves generated prose + status: "complete"
-   
+
 6. UI updates automatically (Convex reactivity):
    - Shows "Generating..." → "Complete"
    - Displays generated prose
@@ -613,7 +677,7 @@ Build minimal PoC to validate core concepts, then expand incrementally.
 ✅ OpenRouter integration functional  
 ✅ Real-time UI updates work automatically  
 ✅ Core generation loop feels good  
-✅ Convex data storage and retrieval works  
+✅ Convex data storage and retrieval works
 
 ### **What PoC Defers:**
 
@@ -622,7 +686,7 @@ Build minimal PoC to validate core concepts, then expand incrementally.
 🔜 **Phase 4:** Knowledge timeline + Consistency Checker  
 🔜 **Phase 5:** Scene Outliner Agent + Director orchestration  
 🔜 **Phase 6:** Template framework (24-chapter, etc.)  
-🔜 **Phase 7:** TOON optimization  
+🔜 **Phase 7:** TOON optimization
 
 **Key Advantage:** Each phase builds on proven foundation from previous phase.
 
@@ -633,6 +697,7 @@ Build minimal PoC to validate core concepts, then expand incrementally.
 ### **TOP 3 IMMEDIATE PRIORITIES (PoC - Weeks 1-3)**
 
 **#1 Priority: Convex Setup & Agent Orchestration**
+
 - Set up Convex project + create tables (stories, characters, scenes)
 - Design Convex Action for Character Agent + Scene Writer Agent pipeline
 - Implement scheduler pattern (mutation → schedules action)
@@ -640,6 +705,7 @@ Build minimal PoC to validate core concepts, then expand incrementally.
 - **Success:** Action successfully orchestrates both agents and saves results
 
 **#2 Priority: Agent Prompt Design**
+
 - Obtain or design Character Agent prompt template (from worldbuilding doc)
 - Obtain or design Scene Writer Agent prompt template (from worldbuilding doc)
 - Test prompts via OpenRouter API with sample data
@@ -647,6 +713,7 @@ Build minimal PoC to validate core concepts, then expand incrementally.
 - **Success:** Consistent character voice in 3 test generations
 
 **#3 Priority: Basic UI with Real-time Visualization**
+
 - React app with Convex React hooks (useQuery, useMutation)
 - Character creation form (fields from worldbuilding doc)
 - Scene input form with "Generate Prose" button
@@ -740,7 +807,7 @@ _Key realizations from the session_
 #### #1 Priority: Convex Setup & Agent Orchestration
 
 - **Rationale:** Core innovation of platform; everything builds on this; Convex scheduler pattern perfect for async agent pipelines
-- **Next steps:** 
+- **Next steps:**
   1. Set up Convex project + initialize tables (stories, characters, scenes)
   2. Design Convex Action for agent orchestration (Character → Scene Writer)
   3. Implement scheduler pattern (mutation schedules action)
@@ -782,7 +849,7 @@ _Key realizations from the session_
 ✅ **Reversal Inversion** - Identified anti-patterns by designing "worst tool," then reversing them  
 ✅ **Six Thinking Hats** - Balanced analysis (facts, feelings, benefits, risks, alternatives, process)  
 ✅ **Progressive flow** - Started broad, went deep, converged to concrete PoC  
-✅ **Honest constraint discussion** - Acknowledged dev skills, complexity, timeline realities  
+✅ **Honest constraint discussion** - Acknowledged dev skills, complexity, timeline realities
 
 ### Areas for Further Exploration
 
@@ -816,15 +883,14 @@ For next brainstorming sessions:
 
 ### Next Session Planning
 
-- **Suggested topics:** 
+- **Suggested topics:**
   - Research Phase findings (competitive analysis, Convex capabilities)
   - PRD/Product Brief (defining PoC scope formally)
   - Architecture design session (Convex schema, Action structure, OpenRouter integration)
   - Worldbuilding documentation (schema fields, agent prompts)
-  
 - **Recommended timeframe:** 1-2 weeks (after initial research)
 
-- **Preparation needed:** 
+- **Preparation needed:**
   - Complete research on Convex tutorials (Actions, Mutations, Scheduler)
   - Explore OpenRouter API documentation and model options
   - Try simple Convex + React example app

@@ -2,7 +2,7 @@
 
 **Date:** 2025-11-13  
 **Project:** Alpha - Narrative Writing Platform  
-**Phase:** Discovery → Research  
+**Phase:** Discovery → Research
 
 ---
 
@@ -11,11 +11,13 @@
 ### This Week
 
 **1. Review Brainstorming Results**
+
 - [ ] Read complete brainstorming document
 - [ ] Highlight any unclear points
 - [ ] Note additional questions that arise
 
 **2. Begin Research Phase**
+
 - [ ] Convex tutorials and documentation (Actions, Mutations, Scheduler)
 - [ ] OpenRouter API documentation and model options
 - [ ] Competitive analysis (2-3 tools)
@@ -30,6 +32,7 @@
 **Goal:** Validate that Character Agent + Scene Writer Agent can work together via Convex Actions
 
 **Tasks:**
+
 - [ ] Set up Convex project (npx convex dev)
 - [ ] Create Convex tables schema:
   - [ ] `stories` table (id, title, createdAt)
@@ -49,6 +52,7 @@
 - [ ] Validate: Consistent character voice across 3 scenes
 
 **Resources Needed:**
+
 - Convex account (free tier)
 - OpenRouter API key
 - Worldbuilding doc (prompts + schema)
@@ -63,6 +67,7 @@
 **Goal:** Create effective prompts that produce consistent character voice
 
 **Tasks:**
+
 - [ ] Reference worldbuilding doc for Character Agent prompt template
   - [ ] If missing: Design prompt for character voice/perspective generation
   - [ ] Define input format (character traits, scene context)
@@ -83,6 +88,7 @@
 - [ ] Document final prompt templates in worldbuilding doc
 
 **Resources Needed:**
+
 - OpenRouter API account and key
 - Worldbuilding doc (or create if missing)
 - Sample character/scene data for testing
@@ -96,6 +102,7 @@
 **Goal:** Build React interface with real-time status updates
 
 **Tasks:**
+
 - [ ] Create React app with Vite
 - [ ] Install Convex React SDK
 - [ ] Set up Convex React hooks (useQuery, useMutation)
@@ -123,6 +130,7 @@
 - [ ] Basic styling (CSS)
 
 **Resources Needed:**
+
 - React knowledge
 - Convex React SDK
 - Worldbuilding doc (form field definitions)
@@ -137,6 +145,7 @@
 ### Convex Research
 
 **Questions to Answer:**
+
 - [ ] How do Convex Actions work? (lifecycle, deployment)
 - [ ] How does the scheduler pattern work? (mutation → schedules → action)
 - [ ] How to structure relational data in Convex? (tables with references)
@@ -146,6 +155,7 @@
 - [ ] How to handle Action failures/retries?
 
 **Resources:**
+
 - Convex official docs (https://docs.convex.dev)
 - Convex Actions tutorial
 - Convex Workflows documentation
@@ -156,6 +166,7 @@
 ### OpenRouter Research
 
 **Questions to Answer:**
+
 - [ ] How does OpenRouter API work? (unified interface)
 - [ ] What models are available? (Claude, GPT-4, Gemini, etc.)
 - [ ] How to handle model selection and fallbacks?
@@ -164,6 +175,7 @@
 - [ ] How to pass system/user prompts correctly?
 
 **Resources:**
+
 - OpenRouter docs (https://openrouter.ai/docs)
 - OpenRouter pricing page
 - OpenRouter API reference
@@ -173,11 +185,13 @@
 ### Competitive Analysis
 
 **Tools to Analyze:**
+
 - [ ] **Scrivener** - Structure and organization approach
 - [ ] **Sudowrite** - AI prose generation features
 - [ ] **NovelAI** - Story generation capabilities
 
 **Questions:**
+
 - What do they do well?
 - What's missing or frustrating?
 - How does our approach differ?
@@ -243,32 +257,38 @@
 ## DEFERRED TO LATER PHASES
 
 ### Phase 2: Canvas Visualization
+
 - React Flow or Cytoscape integration
 - Tree structure display
 - Interactive node manipulation
 
 ### Phase 3: Memory System
+
 - Character memory (traits, knowledge, arc)
 - Plot memory (timeline, events)
 - Style memory (voice, tone)
 
 ### Phase 4: Knowledge Timeline
+
 - AI-detected knowledge extraction
 - Timeline validation
 - Character knowledge state tracking
 
 ### Phase 5: Additional Agents
+
 - Consistency Checker Agent
 - Scene Outliner Agent
 - Director orchestration
 
 ### Phase 6: Template Framework
+
 - 24-chapter template
 - Hero's Journey template
 - Custom template support
 - Template plugin system
 
 ### Phase 7: Optimization
+
 - TOON encoding
 - Token usage optimization
 - Performance tuning
@@ -286,7 +306,7 @@
 ✅ Character voice is consistent across scenes  
 ✅ Can save/load story from Convex  
 ✅ Real-time UI updates show generation status  
-✅ Can regenerate scenes if unsatisfied  
+✅ Can regenerate scenes if unsatisfied
 
 ### PoC Validates:
 
@@ -296,7 +316,7 @@
 ✅ Real-time reactivity provides good UX  
 ✅ Agent pipeline executes correctly  
 ✅ Core generation loop feels good  
-✅ Character consistency is achievable  
+✅ Character consistency is achievable
 
 ---
 
@@ -305,30 +325,35 @@
 ### High-Risk Areas:
 
 **1. Agent Orchestration Complexity**
+
 - Mitigation: Start with simplest possible prompts
 - Mitigation: Test prompts via OpenRouter before integrating
 - Mitigation: Use Convex scheduler pattern (simpler than custom orchestration)
 - Mitigation: Leverage Convex Workflows for retry logic
 
 **2. OpenRouter API Reliability**
+
 - Mitigation: Implement error handling in Actions
 - Mitigation: Use Convex retry mechanisms
 - Mitigation: Consider fallback models (Claude → GPT-4o)
 - Mitigation: Monitor API status and rate limits
 
 **3. Character Consistency**
+
 - Mitigation: Explicit character traits in every prompt
 - Mitigation: Test prompts across multiple generations
 - Mitigation: Iterate on prompt design based on results
 - Mitigation: Manual review initially, automated checker later
 
 **4. Dev Skill Gaps (Convex + React)**
+
 - Mitigation: Follow Convex tutorials step-by-step
 - Mitigation: Start with simple Convex + React example
 - Mitigation: Reference Convex documentation frequently
 - Mitigation: Test each component independently before integration
 
 **5. Worldbuilding Doc Dependency**
+
 - Mitigation: Create minimal worldbuilding doc early in process
 - Mitigation: Start with basic schema, iterate as needed
 - Mitigation: Prompt design can happen in parallel with Convex setup
@@ -382,6 +407,7 @@ PoC COMPLETE 🎉
 ## CONTACT/NOTES
 
 **When Stuck:**
+
 - Review brainstorming results
 - Check Convex documentation
 - Search OpenRouter API docs
@@ -389,6 +415,7 @@ PoC COMPLETE 🎉
 - Try simplified version first
 
 **When PoC Complete:**
+
 - Celebrate! 🎉
 - Document lessons learned
 - Update worldbuilding doc with final prompts/schema
@@ -398,4 +425,3 @@ PoC COMPLETE 🎉
 ---
 
 **Remember:** PoC goal is to VALIDATE, not to be perfect. Ship fast, learn, iterate.
-
