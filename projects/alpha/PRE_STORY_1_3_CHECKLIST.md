@@ -14,6 +14,7 @@ bash ALIGNMENT_CHECK.sh
 ```
 
 You should see:
+
 ```
 ================================
 NARRATIVE CANVAS PROJECT CHECK
@@ -55,12 +56,14 @@ ALIGNMENT STATUS: ✅ READY
 If the script doesn't work, verify manually:
 
 ### Git Status
+
 - [ ] On branch: `main`
 - [ ] Latest commit: `c656137` or later
 - [ ] No uncommitted changes: `git status --short` (empty output)
 - [ ] Remote synced: `git log -1 --oneline` matches `git log origin/main -1 --oneline`
 
 ### Files Present
+
 - [ ] `src/App.tsx` exists (2.3K)
 - [ ] `convex/schema.ts` exists (1021 bytes)
 - [ ] `package.json` exists (1019 bytes)
@@ -69,6 +72,7 @@ If the script doesn't work, verify manually:
 - [ ] `node_modules/` exists (dependencies installed)
 
 ### Dependencies
+
 ```bash
 npm list react    # Should show: react@18.2.0
 npm list convex   # Should show: convex@1.29.1
@@ -76,15 +80,19 @@ npm list vite     # Should show: vite@7.2.0
 ```
 
 ### TypeScript
+
 ```bash
 npx tsc --noEmit
 ```
+
 - [ ] No output (means no errors)
 
 ### Dev Scripts
+
 ```bash
 npm run
 ```
+
 - [ ] Should show `dev` script
 - [ ] Should show `convex:dev` script
 
@@ -93,11 +101,13 @@ npm run
 ## 🚀 Step 2: Start Development Servers
 
 ### Terminal 1: Vite Dev Server
+
 ```bash
 npm run dev
 ```
 
 Wait for:
+
 ```
 VITE v7.2.0 running at:
   ➜ Local:   http://localhost:5173/
@@ -106,11 +116,13 @@ VITE v7.2.0 running at:
 ✅ When you see this, Vite is running.
 
 ### Terminal 2: Convex Backend
+
 ```bash
 npm run convex:dev
 ```
 
 Wait for:
+
 ```
 Convex is running at http://localhost:3210
 ```
@@ -126,6 +138,7 @@ Claude Code should show a **Ports** or **Preview** notification.
 Click port **5173** to open your app.
 
 You should see:
+
 - ✅ "Narrative Canvas Platform" title
 - ✅ "React 19.2+ with TypeScript 5.9+" (should be 18.2+ but displays 19.2+)
 - ✅ "Vite 7.2+ development server"
@@ -144,28 +157,34 @@ Click the button - it should increment the counter.
 ## ❌ Troubleshooting
 
 ### "Command not found: npm"
+
 ```bash
 node --version  # Should show v20.x+
 npm --version   # Should show npm 10.x+
 ```
 
 ### "Port 5173 already in use"
+
 ```bash
 npm run dev -- --port 3000
 ```
 
 ### "Module not found"
+
 ```bash
 npm install
 ```
 
 ### "TypeScript errors"
+
 ```bash
 npx tsc --noEmit  # See detailed errors
 ```
 
 ### "Convex connection failed"
+
 Make sure `.env.local` has:
+
 ```
 VITE_CONVEX_URL=http://localhost:3210
 ```

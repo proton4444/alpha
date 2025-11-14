@@ -8,7 +8,7 @@
 
 ✅ **Story 1.1** - Initialize Convex + React Project  
 ✅ **Story 1.2** - Define Convex Database Schema  
-🚀 **Next: Story 1.3** - Configure OpenRouter API Integration  
+🚀 **Next: Story 1.3** - Configure OpenRouter API Integration
 
 **Total Progress:** 2/26 stories complete (8%)  
 **Time to PoC Success:** ~10-15 more hours
@@ -20,24 +20,28 @@
 ### Step 1: Open Two Terminal Tabs
 
 **Tab 1 - Vite Dev Server:**
+
 ```bash
 cd projects/alpha
 npm run dev
 ```
 
 Wait for:
+
 ```
 VITE v7.2.0 running at:
   ➜ Local:   http://localhost:5173/
 ```
 
 **Tab 2 - Convex Backend:**
+
 ```bash
 cd projects/alpha
 npm run convex:dev
 ```
 
 Wait for:
+
 ```
 Convex is running at http://localhost:3210
 ```
@@ -47,6 +51,7 @@ Convex is running at http://localhost:3210
 Claude Code will show a **"Ports"** or **"Preview"** button → Click port **5173**
 
 You'll see:
+
 - ✅ "Narrative Canvas Platform" title
 - ✅ React + Vite + Convex status
 - ✅ Click counter button (verify interactivity)
@@ -60,19 +65,23 @@ Both servers are running. You're ready to implement stories.
 ## 📚 Documentation Map
 
 ### Quick References
+
 - **`README.md`** - Project overview
 - **`CLAUDE_CODE_START.md`** - Detailed startup instructions
 - **`STORY_1_2_GUIDE.md`** - Story 1.2 (already complete!)
 
 ### Planning Documents (in `output/`)
+
 - **`PRD.md`** - What the product does
 - **`architecture.md`** - How to build it (17 ADRs, implementation patterns)
 - **`epics.md`** - All 26 user stories with acceptance criteria
 
 ### Sprint Tracking
+
 - **`.temp/sprint-status.yaml`** - Track which stories are done
 
 ### Environment
+
 - **`.env.local`** - Your environment configuration
 - **`.env.local.example`** - Template for new vars
 
@@ -81,22 +90,27 @@ Both servers are running. You're ready to implement stories.
 ## 🎬 Stories Overview
 
 ### Completed ✅
+
 - **1.1** Initialize Convex + React with TypeScript and Tailwind
 - **1.2** Define Convex Database Schema (stories, chapters, scenes, characters)
 
 ### Ready to Start 🚀
+
 - **1.3** Configure OpenRouter API Integration
-- **1.4** Implement TOON Parser Utility  
+- **1.4** Implement TOON Parser Utility
 - **1.5** Set Up shadcn/ui Component Library
 
 ### Data Layer (After 1.5)
+
 - **2.1-2.6** Story Structure Management (CRUD operations, Tree UI, Auto-save)
 
 ### AI Pipeline (After 2.6) ← PoC Success! 🎉
+
 - **3.1-3.3** Character System
 - **4.1-4.6** AI Scene Generation (Multi-agent pipeline)
 
 ### Polish (After 4.6)
+
 - **5.1-5.5** Split-Screen Workspace & UX Polish
 
 ---
@@ -184,20 +198,25 @@ git log --oneline -10
 ## 📖 How to Find Things
 
 ### "How do I implement Story X?"
+
 → Open `output/epics.md`, search for "Story X"
 
 ### "What's the architecture decision for feature Y?"
+
 → Open `output/architecture.md`, search for the feature
 
 ### "How do I use Convex?"
+
 → Check `convex/example.ts` for examples
 → Read [Convex Docs](https://docs.convex.dev)
 
 ### "How do I verify my code is correct?"
+
 → Run dev servers: `npm run dev` and `npm run convex:dev`
 → Check browser for errors: Open DevTools (F12)
 
 ### "What's the status of all stories?"
+
 → Check `.temp/sprint-status.yaml`
 
 ---
@@ -207,6 +226,7 @@ git log --oneline -10
 **Configure OpenRouter API Integration and Environment Variables**
 
 ### What You'll Do:
+
 1. Add OpenRouter API key to Convex environment
 2. Create `convex/actions/openrouter.ts` helper
 3. Implement secure API calls to Claude 3.5 Sonnet
@@ -214,10 +234,12 @@ git log --oneline -10
 ### Estimated Time: 30-45 minutes
 
 ### Files to Create/Edit:
+
 - `convex/actions/openrouter.ts` (new)
 - `.env.local` (update with API key if needed)
 
 ### Where to Find Requirements:
+
 → `output/epics.md` → Search for "Story 1.3"
 
 ---
@@ -236,28 +258,34 @@ git log --oneline -10
 ## 🆘 Troubleshooting
 
 ### "Port 5173 already in use"
+
 ```bash
 npm run dev -- --port 3000
 ```
 
 ### "npm: command not found"
+
 You need Node.js 20+ and npm installed:
+
 ```bash
 node --version  # Should show v20.x+
 npm --version   # Should show npm 10.x+
 ```
 
 ### "Module not found: convex"
+
 ```bash
 npm install
 ```
 
 ### "TypeScript errors"
+
 ```bash
 npx tsc --noEmit  # See detailed errors
 ```
 
 ### "Schema validation failed"
+
 ```bash
 npm run convex:dev  # Check Convex logs for details
 ```
@@ -270,7 +298,7 @@ Update `.temp/sprint-status.yaml` as you complete stories:
 
 ```yaml
 development_status:
-  epic-1: contexted        # ← Change from "backlog" to "contexted"
+  epic-1: contexted # ← Change from "backlog" to "contexted"
   1-1-initialize-convex-react-project-with-starter-template: done
   1-2-define-convex-database-schema: done
   1-3-configure-openrouter-api-integration-and-environment-variables: in-progress
@@ -282,6 +310,7 @@ development_status:
 ## 🚀 You're Ready!
 
 Everything is set up. You have:
+
 - ✅ Project initialized with React + Convex
 - ✅ Database schema defined
 - ✅ Dependencies installed
@@ -294,15 +323,15 @@ Everything is set up. You have:
 
 ## 📞 Quick Reference
 
-| Need | Location |
-|------|----------|
-| Story requirements | `output/epics.md` |
-| Architecture | `output/architecture.md` |
-| API patterns | `convex/example.ts` |
-| Dev server setup | `CLAUDE_CODE_START.md` |
-| Progress tracking | `.temp/sprint-status.yaml` |
-| Environment vars | `.env.local` |
-| TypeScript errors | Run `npx tsc --noEmit` |
+| Need               | Location                   |
+| ------------------ | -------------------------- |
+| Story requirements | `output/epics.md`          |
+| Architecture       | `output/architecture.md`   |
+| API patterns       | `convex/example.ts`        |
+| Dev server setup   | `CLAUDE_CODE_START.md`     |
+| Progress tracking  | `.temp/sprint-status.yaml` |
+| Environment vars   | `.env.local`               |
+| TypeScript errors  | Run `npx tsc --noEmit`     |
 
 ---
 

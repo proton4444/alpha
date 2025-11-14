@@ -17,19 +17,24 @@
 ## ✅ Acceptance Criteria
 
 ### Given
+
 The Convex project is initialized
 
 ### When
+
 I create `convex/schema.ts` with all table definitions
 
 ### Then
+
 The schema includes:
+
 - ✅ `stories` table (title, createdAt)
 - ✅ `chapters` table (storyId, chapterNumber, title) with `by_story` index
 - ✅ `scenes` table (storyId, chapterId, sceneNumber, outline, prose, status, errorMessage, regenerationCount) with `by_story` and `by_chapter` indexes
 - ✅ `characters` table (storyId, name, traits, backstory) with `by_story` index
 
 ### And
+
 - ✅ Status field uses union type: "draft" | "generating" | "complete" | "error"
 - ✅ All foreign key references use Convex `v.id()` types
 - ✅ Running `npx convex dev` validates the schema without errors
@@ -41,8 +46,9 @@ The schema includes:
 **File Location:** `convex/schema.ts`
 
 **Current Content:**
+
 ```typescript
-import { defineSchema, defineTable, v } from "convex/server";
+import { defineSchema, defineTable, v } from 'convex/server';
 
 export default defineSchema({
   stories: defineTable({
@@ -51,35 +57,30 @@ export default defineSchema({
   }),
 
   chapters: defineTable({
-    storyId: v.id("stories"),
+    storyId: v.id('stories'),
     chapterNumber: v.number(),
     title: v.string(),
-  }).index("by_story", ["storyId"]),
+  }).index('by_story', ['storyId']),
 
   scenes: defineTable({
-    storyId: v.id("stories"),
-    chapterId: v.id("chapters"),
+    storyId: v.id('stories'),
+    chapterId: v.id('chapters'),
     sceneNumber: v.number(),
     outline: v.string(),
     prose: v.optional(v.string()),
-    status: v.union(
-      v.literal("draft"),
-      v.literal("generating"),
-      v.literal("complete"),
-      v.literal("error")
-    ),
+    status: v.union(v.literal('draft'), v.literal('generating'), v.literal('complete'), v.literal('error')),
     errorMessage: v.optional(v.string()),
     regenerationCount: v.number(),
   })
-    .index("by_story", ["storyId"])
-    .index("by_chapter", ["chapterId"]),
+    .index('by_story', ['storyId'])
+    .index('by_chapter', ['chapterId']),
 
   characters: defineTable({
-    storyId: v.id("stories"),
+    storyId: v.id('stories'),
     name: v.string(),
     traits: v.string(),
     backstory: v.optional(v.string()),
-  }).index("by_story", ["storyId"]),
+  }).index('by_story', ['storyId']),
 });
 ```
 
@@ -90,6 +91,7 @@ export default defineSchema({
 ✅ **Schema.ts already exists and is COMPLETE**
 
 All acceptance criteria are already met:
+
 - ✅ Stories table with title and createdAt
 - ✅ Chapters table with proper indexes
 - ✅ Scenes table with status union type and error handling
@@ -111,12 +113,14 @@ npm run convex:dev
 ```
 
 You should see:
+
 ```
 ✅ Schema is valid
 Convex backend initialized successfully
 ```
 
 Or check the schema by examining:
+
 ```bash
 cat convex/schema.ts
 ```
@@ -154,17 +158,20 @@ cat convex/schema.ts
 ## 🚀 Next Steps
 
 ### Immediate (Story 1.2 Completion)
+
 1. ✅ Schema is already defined and complete
 2. ✅ Verify by running `npm run convex:dev`
 3. ✅ Mark Story 1.2 as DONE
 
 ### Next Story: 1.3
+
 **Configure OpenRouter API Integration and Environment Variables**
 
 Location: `convex/actions/openrouter.ts`  
 Requirements: Set up secure API key access for Claude 3.5 Sonnet calls
 
 ### Story 1.4
+
 **Implement TOON Parser Utility**
 
 Location: `convex/lib/parseToon.ts`  
@@ -175,11 +182,13 @@ Requirements: Parse key:value AI output format (60% token savings)
 ## 📖 Architecture References
 
 See `output/architecture.md` for:
+
 - Data Architecture section (page ~150)
 - Schema design patterns
 - Index strategy for performance
 
 See `output/epics.md` for:
+
 - Complete Story 1.2 requirements
 - Dependencies and prerequisites
 - Testing criteria
@@ -191,6 +200,7 @@ See `output/epics.md` for:
 **Status:** ✅ COMPLETE
 
 The database schema is fully defined and ready for use. All tables, indexes, and types are in place to support:
+
 - Story structure management (Stories 2.x)
 - Character system (Stories 3.x)
 - AI scene generation pipeline (Stories 4.x)

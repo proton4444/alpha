@@ -5,24 +5,28 @@
 In Claude Code terminal, run these commands in **separate terminal tabs**:
 
 ### Terminal 1: Vite Dev Server
+
 ```bash
 cd projects/alpha
 npm run dev
 ```
 
 Wait for this output:
+
 ```
 VITE v7.2.0 running at:
   ➜ Local:   http://localhost:5173/
 ```
 
 ### Terminal 2: Convex Backend (NEW TAB)
+
 ```bash
 cd projects/alpha
 npm run convex:dev
 ```
 
 Wait for this output:
+
 ```
 Convex is running at http://localhost:3210
 ```
@@ -38,22 +42,25 @@ Convex is running at http://localhost:3210
 ✅ Vite running on port 5173  
 ✅ Convex running on port 3210  
 ✅ App loads in browser  
-✅ No console errors  
+✅ No console errors
 
 ## Common Issues
 
 ### "command not found: npm"
+
 ```bash
 node --version  # Should show v20+
 npm --version   # Should show npm 10+
 ```
 
 ### "Port 5173 already in use"
+
 ```bash
 npm run dev -- --port 3000
 ```
 
 ### "Cannot find module 'convex'"
+
 ```bash
 npm install
 ```
