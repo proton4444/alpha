@@ -2,6 +2,7 @@
 
 import { v } from 'convex/values'
 import { action } from '../_generated/server'
+import { parseToon } from '../lib/parseToon'
 
 /**
  * OpenRouter API helper for calling Claude 3.5 Sonnet
@@ -209,3 +210,47 @@ export const testOpenRouterConnection = action({
     }
   },
 })
+
+/**
+ * Helper function to call OpenRouter and parse TOON format response
+ * Used by Character Agent integration (Story 4.2)
+ *
+ * @param prompt - The prompt to send to the model
+ * @param systemPrompt - Optional system prompt for guiding response format
+ * @returns Parsed TOON object mapping keys to values
+ */
+export async function generateToonResponse(
+  prompt: string,
+  systemPrompt?: string
+): Promise<Record<string, string>> {
+  const messages = []
+
+  if (systemPrompt) {
+    messages.push({
+      role: 'system' as const,
+      content: systemPrompt,
+    })
+  }
+
+  messages.push({
+    role: 'user' as const,
+    content: prompt,
+  })
+
+  const request: OpenRouterRequest = {
+    model: 'anthropic/claude-3.5-sonnet',
+    messages,
+    temperature: 1,
+    max_tokens: 500, // TOON responses are compact
+  }
+
+  const response = await callOpenRouterWithRetry(request)
+  const toonText = response.choices[0]?.message?.content
+
+  if (!toonText) {
+    throw new Error('No TOON response from OpenRouter')
+  }
+
+  // Parse the TOON format response into a typed object
+  return parseToon(toonText)
+}
