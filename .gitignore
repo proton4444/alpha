@@ -14,6 +14,10 @@ package.json
 .npmrc
 .nvmrc
 
+# But DO track project package.json files
+!projects/*/package.json
+!projects/*/package-lock.json
+
 # Build and config (BMAD)
 eslint.config.mjs
 prettier.config.mjs
@@ -35,6 +39,9 @@ venv/
 .env
 .env.local
 .env.*.local
+
+# But DO track .env.local in projects (contains placeholder values)
+!projects/**/.env.local
 
 # Node/Python Dependencies
 node_modules/
