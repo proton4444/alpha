@@ -8,31 +8,46 @@
  * @module
  */
 
+import type * as actions_openrouter from "../actions/openrouter.js";
+import type * as example from "../example.js";
+import type * as lib_parseToon from "../lib/parseToon.js";
+
 import type {
   ApiFromModules,
   FilterApi,
   FunctionReference,
 } from "convex/server";
-import type * as actions_openrouter from "../actions/openrouter.js";
-import type * as example from "../example.js";
+
+declare const fullApi: ApiFromModules<{
+  "actions/openrouter": typeof actions_openrouter;
+  example: typeof example;
+  "lib/parseToon": typeof lib_parseToon;
+}>;
 
 /**
- * A utility for referencing Convex functions in your app's API.
+ * A utility for referencing Convex functions in your app's public API.
  *
  * Usage:
  * ```js
  * const myFunctionReference = api.myModule.myFunction;
  * ```
  */
-declare const fullApi: ApiFromModules<{
-  "actions/openrouter": typeof actions_openrouter;
-  example: typeof example;
-}>;
 export declare const api: FilterApi<
   typeof fullApi,
   FunctionReference<any, "public">
 >;
+
+/**
+ * A utility for referencing Convex functions in your app's internal API.
+ *
+ * Usage:
+ * ```js
+ * const myFunctionReference = internal.myModule.myFunction;
+ * ```
+ */
 export declare const internal: FilterApi<
   typeof fullApi,
   FunctionReference<any, "internal">
 >;
+
+export declare const components: {};
