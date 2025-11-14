@@ -5,6 +5,7 @@ An AI-powered story generation engine with visual story organization and AI-assi
 ## Project Setup - Story 1.1 ✓ Complete
 
 ### Tech Stack
+
 - **Frontend:** React 19.2+ with TypeScript 5.9+
 - **Build Tool:** Vite 7.2+
 - **Styling:** Tailwind CSS 4.0
@@ -94,6 +95,7 @@ npm run preview
 ### Architecture References
 
 See `/docs` directory for:
+
 - `PRD.md` - Product requirements
 - `architecture.md` - Technical architecture decisions
 - `epics.md` - Feature breakdown

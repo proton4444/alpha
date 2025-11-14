@@ -13,7 +13,7 @@ All work is committed locally and ready to push to GitHub.
 **Commit:** `ff42a46`  
 **Branch:** `main`  
 **Files Changed:** 26 files  
-**Insertions:** 5,509 lines  
+**Insertions:** 5,509 lines
 
 ### What Was Accomplished
 
@@ -65,30 +65,30 @@ Should start Vite on port 5173 with working Convex integration.
 
 ### Project Root: `projects/alpha/`
 
-| File | Purpose |
-|------|---------|
-| `package.json` | Dependencies and scripts |
-| `src/App.tsx` | React root component |
-| `convex/schema.ts` | Database schema definition |
-| `README.md` | Project overview |
-| `CLOUD_IDE_SETUP.md` | Cloud IDE workflows |
-| `.env.local` | Environment configuration |
+| File                 | Purpose                    |
+| -------------------- | -------------------------- |
+| `package.json`       | Dependencies and scripts   |
+| `src/App.tsx`        | React root component       |
+| `convex/schema.ts`   | Database schema definition |
+| `README.md`          | Project overview           |
+| `CLOUD_IDE_SETUP.md` | Cloud IDE workflows        |
+| `.env.local`         | Environment configuration  |
 
 ### Documentation: `output/`
 
-| File | Purpose |
-|------|---------|
-| `PRD.md` | Product requirements |
-| `architecture.md` | Technical architecture (17 ADRs) |
-| `epics.md` | 5 epics, 26 user stories |
-| `implementation-readiness-report-2025-11-14.md` | Gate check validation |
+| File                                            | Purpose                          |
+| ----------------------------------------------- | -------------------------------- |
+| `PRD.md`                                        | Product requirements             |
+| `architecture.md`                               | Technical architecture (17 ADRs) |
+| `epics.md`                                      | 5 epics, 26 user stories         |
+| `implementation-readiness-report-2025-11-14.md` | Gate check validation            |
 
 ### Sprint Tracking: `.temp/`
 
-| File | Purpose |
-|------|---------|
-| `sprint-status.yaml` | Story tracking (all 26 stories in backlog) |
-| `bmm-workflow-status.yaml` | Phase completion tracking |
+| File                       | Purpose                                    |
+| -------------------------- | ------------------------------------------ |
+| `sprint-status.yaml`       | Story tracking (all 26 stories in backlog) |
+| `bmm-workflow-status.yaml` | Phase completion tracking                  |
 
 ---
 
@@ -97,6 +97,7 @@ Should start Vite on port 5173 with working Convex integration.
 ### Running the Application
 
 **Option 1: Local Development (Recommended)**
+
 ```bash
 # Terminal 1
 npm run dev
@@ -108,6 +109,7 @@ npm run convex:dev
 Then access via Claude Code's port forwarding.
 
 **Option 2: Preview Deployment**
+
 ```bash
 npx convex deploy --preview
 # Update VITE_CONVEX_URL in .env.local
@@ -133,6 +135,7 @@ npm run lint            # Lint TypeScript
 The schema.ts file is already created but ready for enhancement in Story 1.2.
 
 **Acceptance Criteria:**
+
 - ✅ Schema file exists with all table definitions
 - ⏳ Story 1.2: Add additional validation, indexes, and relationships
 
@@ -147,6 +150,7 @@ See `epics.md` for full Story 1.2 requirements.
 ### Environment Variables
 
 `.env.local` is set up with:
+
 ```
 VITE_CONVEX_URL=http://localhost:3210
 ```
@@ -156,6 +160,7 @@ Update this after deploying Convex to production/preview.
 ### Git Configuration
 
 Your GitHub PAT is set in `.env`:
+
 ```
 GITHUB_PERSONAL_ACCESS_TOKEN=github_pat_...
 ```
@@ -165,6 +170,7 @@ This is already configured for git operations.
 ### Cloud IDE Features
 
 Claude Code provides:
+
 - ✅ Integrated terminal (bash)
 - ✅ Port forwarding to localhost
 - ✅ File editing and preview
@@ -176,6 +182,7 @@ Claude Code provides:
 ## Rapid Development Path
 
 ### Stories 1.1 - 1.5 (Infrastructure: ~2-3 hours)
+
 - **1.1** ✅ DONE
 - **1.2** Schema finalization
 - **1.3** OpenRouter API integration
@@ -183,6 +190,7 @@ Claude Code provides:
 - **1.5** shadcn/ui components
 
 ### Stories 2.1 - 2.6 (Data Layer: ~3-4 hours)
+
 - Story CRUD operations
 - Chapter management
 - Scene management
@@ -191,11 +199,13 @@ Claude Code provides:
 - Auto-save functionality
 
 ### Stories 3.1 - 3.3 (Characters: ~1-2 hours)
+
 - Character CRUD
 - Character manager UI
 - Scene-character integration
 
 ### Stories 4.1 - 4.6 (AI Pipeline: ~4-5 hours) **← PoC Success!**
+
 - Scheduler pattern
 - Character Agent
 - Scene Writer Agent
@@ -204,6 +214,7 @@ Claude Code provides:
 - Accept/Regenerate/Edit
 
 ### Stories 5.1 - 5.5 (UX Polish: ~2-3 hours)
+
 - Split-screen layout
 - Keyboard shortcuts
 - Status badges
@@ -217,7 +228,7 @@ Claude Code provides:
 ## Critical Path to PoC Success
 
 ```
-1.1 → 1.2 → 2.1 → 2.2 → 2.3 → 3.1 → 
+1.1 → 1.2 → 2.1 → 2.2 → 2.3 → 3.1 →
 4.1 → 4.2 → 4.3 → 4.4 → 4.5 ✅ PoC SUCCESS!
 ```
 

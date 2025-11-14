@@ -5,6 +5,7 @@ This guide explains how to develop the Narrative Canvas Platform using Claude Co
 ## Story 1.1: Setup Complete ✓
 
 The Convex + React + TypeScript project has been initialized with:
+
 - ✅ React 18.2 with TypeScript 5.9
 - ✅ Vite 7.2 for fast development
 - ✅ Convex backend ready to deploy
@@ -18,6 +19,7 @@ The Convex + React + TypeScript project has been initialized with:
 **When to use:** You want hot-reload and fast iteration
 
 **Setup:**
+
 ```bash
 # Terminal 1: Start Vite dev server
 npm run dev
@@ -27,12 +29,14 @@ npm run convex:dev
 ```
 
 **Access:**
+
 - Vite server runs on `localhost:5173`
 - Convex runs on `localhost:3210`
 - Claude Code may auto-detect and provide public URL via port forwarding
 - Check Claude Code UI for "Ports" or "Preview" panel
 
 **Limitations:**
+
 - Port forwarding depends on Claude Code features
 - Check if Claude Code supports `localhost:5173` forwarding
 
@@ -61,6 +65,7 @@ npm run dev
 ```
 
 **Advantages:**
+
 - ✅ Real Convex backend (not mock)
 - ✅ Data persists between sessions
 - ✅ Deployable to production
@@ -68,6 +73,7 @@ npm run dev
 - ✅ No extra tunneling tools needed
 
 **Workflow:**
+
 ```
 Make code changes → npm run dev → Preview URL from Claude Code → Test feature
 Code changes saved → Browser hot-reloads → See changes instantly
@@ -96,11 +102,13 @@ lt --port 5173
 ```
 
 **Advantages:**
+
 - ✅ Works with any cloud IDE
 - ✅ Hot-reload preserved
 - ✅ Real-time development
 
 **Limitations:**
+
 - ⚠️ Extra tool dependency
 - ⚠️ URLs change on restart
 - ⚠️ May have rate limits
@@ -121,6 +129,7 @@ npm run dev
 ```
 
 **Testing:**
+
 - Open browser to Claude Code's forwarded URL
 - Verify page loads with "Narrative Canvas Platform" title
 - Check console for any errors
@@ -131,6 +140,7 @@ npm run dev
 **Recommended:** Continue with preview deployments for consistency
 
 **Add frequent deployment checkpoints:**
+
 ```bash
 # Before starting Story 3.x
 npx convex deploy --preview
@@ -142,6 +152,7 @@ npx convex deploy --preview
 ### Phase 3: Story 5.x (UX Polish)
 
 If you need hot-reload for rapid UI iteration:
+
 - **Try Option 1 first** (check Claude Code port forwarding)
 - Fall back to **Option 3 (tunneling)** if needed
 - Or continue with **Option 2 (preview deployments)** for stability
@@ -156,6 +167,7 @@ If you need hot-reload for rapid UI iteration:
 4. Click the link to access your app
 
 If no port forwarding appears:
+
 - Use Preview Deployments (Option 2) instead
 - Or use Tunneling (Option 3)
 
@@ -181,16 +193,21 @@ VITE_CONVEX_URL=https://your-deployment-name.convex.cloud
 ## Troubleshooting
 
 ### Issue: "Cannot find module 'convex/react'"
+
 **Solution:** Run `npm install` in the project root
 
 ### Issue: "VITE_CONVEX_URL is not defined"
-**Solution:** 
+
+**Solution:**
+
 - Create `.env.local` file
 - Add `VITE_CONVEX_URL=https://your-deployment.convex.cloud`
 - Restart dev server
 
 ### Issue: "Port 5173 already in use"
+
 **Solution:**
+
 ```bash
 # Kill process on port 5173
 lsof -ti:5173 | xargs kill -9
@@ -200,7 +217,9 @@ npm run dev -- --port 3000
 ```
 
 ### Issue: "Convex connection failed"
+
 **Solution:**
+
 - Verify `VITE_CONVEX_URL` is correct
 - Check if preview deployment is still active
 - Run `npx convex deploy --preview` again

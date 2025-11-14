@@ -16,6 +16,7 @@ export default [
       'test/template-test-generator/**/*.md',
       'test/fixtures/**',
       'test/fixtures/**/*.yaml',
+      'projects/**/postcss.config.js',
     ],
   },
 

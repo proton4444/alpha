@@ -1,25 +1,29 @@
 # Alpha Project - Quick Start Guide
 
 **Created**: 2025-11-13  
-**Using**: BMAD Method v6.0.0-alpha.9  
+**Using**: BMAD Method v6.0.0-alpha.9
 
 ---
 
 ## 🎯 5-Minute Setup
 
 ### 1. Verify Everything is Ready
+
 ```bash
 cd C:\knosso\Alpha
 ./START.bat
 ```
+
 ✅ This pulls latest BMAD updates and confirms your setup
 
 ### 2. Check Project Status
+
 ```bash
 cat projects/alpha/.project/status.yaml
 ```
 
 ### 3. Read Project Overview
+
 ```bash
 cat projects/alpha/README.md
 ```
@@ -29,16 +33,19 @@ cat projects/alpha/README.md
 ## 🚀 First Steps (Pick One)
 
 ### Option A: Start Fresh Brainstorm
+
 **For**: New project with no requirements yet
 
 ```bash
 /bmad:bmm:workflows:brainstorm-project
 ```
+
 - This generates ideas for your Alpha project
 - Results saved to `output/`
 - Copy interesting findings to `projects/alpha/.project/prd.md`
 
 ### Option B: Create from Existing Vision
+
 **For**: You know what you want to build
 
 ```bash
@@ -57,6 +64,7 @@ git commit -m "[PLAN] Initial PRD and Architecture"
 ```
 
 ### Option C: Continue Existing Project
+
 **For**: Resuming work on Alpha
 
 ```bash
@@ -96,12 +104,14 @@ git push origin main
 ## 🔄 Full Development Cycle
 
 ### Phase 1: Discovery (Days 1-2)
+
 ```bash
 /bmad:bmm:workflows:brainstorm-project
 # Output: ideas and vision
 ```
 
 ### Phase 2: Planning (Days 3-5)
+
 ```bash
 /bmad:bmm:workflows:prd                    # Create PRD
 /bmad:bmm:workflows:architecture           # Design system
@@ -109,12 +119,14 @@ git push origin main
 ```
 
 ### Phase 3: Technical Design (Days 6-7)
+
 ```bash
 /bmad:bmm:workflows:epic-tech-context      # Technical specs
 /bmad:bmm:testarch/test-design            # Test strategy
 ```
 
 ### Phase 4: Implementation (Week 2+)
+
 ```bash
 # For each story:
 /bmad:bmm:workflows:story-context         # Prepare
@@ -128,6 +140,7 @@ git push origin main
 ## 💾 Git Workflow (Keep It Simple)
 
 ### Commit Your Work
+
 ```bash
 # Stage your project files
 git add projects/alpha/
@@ -140,6 +153,7 @@ git push origin main
 ```
 
 ### Messages Format
+
 ```
 [TYPE] Description
 
@@ -154,6 +168,7 @@ Types:
 ```
 
 ### Example Commits
+
 ```bash
 git commit -m "[PLAN] PRD and Architecture created"
 git commit -m "[STORY 1.1] User authentication implemented"
@@ -165,28 +180,30 @@ git commit -m "[FIX] Fixed password validation bug"
 
 ## 📁 Key Files & Folders
 
-| Path | Purpose | Edit? |
-|------|---------|-------|
-| `projects/alpha/.project/prd.md` | Product requirements | ✅ Yes |
-| `projects/alpha/.project/architecture.md` | Technical design | ✅ Yes |
-| `projects/alpha/.project/status.yaml` | Sprint status | ⚠️ Via workflows |
-| `projects/alpha/src/` | Your code | ✅ Yes |
-| `projects/alpha/tests/` | Your tests | ✅ Yes |
-| `.bmad/` | BMAD Method | ❌ No - auto-managed |
-| `src/` (root) | BMAD source | ❌ No - auto-managed |
-| `docs/` (root) | BMAD docs | ❌ No - auto-managed |
+| Path                                      | Purpose              | Edit?                |
+| ----------------------------------------- | -------------------- | -------------------- |
+| `projects/alpha/.project/prd.md`          | Product requirements | ✅ Yes               |
+| `projects/alpha/.project/architecture.md` | Technical design     | ✅ Yes               |
+| `projects/alpha/.project/status.yaml`     | Sprint status        | ⚠️ Via workflows     |
+| `projects/alpha/src/`                     | Your code            | ✅ Yes               |
+| `projects/alpha/tests/`                   | Your tests           | ✅ Yes               |
+| `.bmad/`                                  | BMAD Method          | ❌ No - auto-managed |
+| `src/` (root)                             | BMAD source          | ❌ No - auto-managed |
+| `docs/` (root)                            | BMAD docs            | ❌ No - auto-managed |
 
 ---
 
 ## 🆘 Troubleshooting
 
 ### "I don't know what to work on"
+
 ```bash
 cat projects/alpha/.project/status.yaml
 cat projects/alpha/.project/stories/epic-1/story-*.md
 ```
 
 ### "BMAD files are conflicting"
+
 ```bash
 # Don't edit .bmad/, src/, docs/ directly
 # Always work in projects/alpha/
@@ -195,12 +212,14 @@ cat projects/alpha/.project/stories/epic-1/story-*.md
 ```
 
 ### "I want to check my progress"
+
 ```bash
 /bmad:bmm:workflows:workflow-status
 cat projects/alpha/.project/status.yaml
 ```
 
 ### "I need to update the plan"
+
 ```bash
 /bmad:bmm:workflows:prd
 # Update projects/alpha/.project/prd.md with results
@@ -210,25 +229,26 @@ cat projects/alpha/.project/status.yaml
 
 ## ⚡ Essential Commands
 
-| Command | What It Does |
-|---------|------------|
-| `./START.bat` | Update BMAD, initialize project |
-| `/bmad:bmm:workflows:brainstorm-project` | Generate ideas |
-| `/bmad:bmm:workflows:prd` | Create product requirements |
-| `/bmad:bmm:workflows:architecture` | Design system |
-| `/bmad:bmm:workflows:story-context` | Prep a story |
-| `/bmad:bmm:workflows:dev-story` | Implement a story |
-| `/bmad:bmm:workflows:code-review` | Review code |
-| `/bmad:bmm:workflows:story-done` | Mark story complete |
-| `/bmad:bmm:workflows:workflow-status` | Check progress |
-| `git add projects/alpha/ && git commit -m "..."` | Save work |
-| `git push origin main` | Push to GitHub |
+| Command                                          | What It Does                    |
+| ------------------------------------------------ | ------------------------------- |
+| `./START.bat`                                    | Update BMAD, initialize project |
+| `/bmad:bmm:workflows:brainstorm-project`         | Generate ideas                  |
+| `/bmad:bmm:workflows:prd`                        | Create product requirements     |
+| `/bmad:bmm:workflows:architecture`               | Design system                   |
+| `/bmad:bmm:workflows:story-context`              | Prep a story                    |
+| `/bmad:bmm:workflows:dev-story`                  | Implement a story               |
+| `/bmad:bmm:workflows:code-review`                | Review code                     |
+| `/bmad:bmm:workflows:story-done`                 | Mark story complete             |
+| `/bmad:bmm:workflows:workflow-status`            | Check progress                  |
+| `git add projects/alpha/ && git commit -m "..."` | Save work                       |
+| `git push origin main`                           | Push to GitHub                  |
 
 ---
 
 ## 🎓 Learning Resources
 
 ### BMAD Method Guides
+
 ```
 C:\knosso\Alpha\docs/index.md           # Documentation index
 C:\knosso\Alpha\docs/ide-info/          # IDE-specific guides
@@ -236,6 +256,7 @@ C:\knosso\Alpha\README.md               # BMAD overview
 ```
 
 ### Your Project Docs
+
 ```
 C:\knosso\Alpha\projects\alpha\README.md              # Project overview
 C:\knosso\Alpha\projects\alpha\.project\prd.md       # Requirements
@@ -243,6 +264,7 @@ C:\knosso\Alpha\projects\alpha\.project\architecture.md # Design
 ```
 
 ### Claude Code Resources
+
 ```
 https://docs.claude.com/en/docs/claude-code/
 ```
@@ -254,6 +276,7 @@ https://docs.claude.com/en/docs/claude-code/
 **Pick one and do it now:**
 
 ### Quick (15 min)
+
 ```bash
 ./START.bat
 /bmad:bmm:workflows:workflow-status
@@ -261,6 +284,7 @@ cat projects/alpha/README.md
 ```
 
 ### Medium (1 hour)
+
 ```bash
 ./START.bat
 /bmad:bmm:workflows:brainstorm-project
@@ -270,6 +294,7 @@ git commit -m "[PLAN] Initial project brainstorm"
 ```
 
 ### Full Setup (3 hours)
+
 ```bash
 ./START.bat
 /bmad:bmm:workflows:brainstorm-project
