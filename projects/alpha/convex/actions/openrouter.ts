@@ -123,7 +123,7 @@ export const generateWithClaude = action({
     temperature: v.optional(v.number()),
     maxTokens: v.optional(v.number()),
   },
-  handler: async (ctx, args) => {
+  handler: async (_ctx, args) => {
     const messages = []
 
     // Add system prompt if provided
@@ -181,7 +181,7 @@ export const generateWithClaude = action({
  */
 export const testOpenRouterConnection = action({
   args: {},
-  handler: async (ctx) => {
+  handler: async (_ctx) => {
     try {
       const response = await callOpenRouterWithRetry({
         model: 'anthropic/claude-3.5-sonnet',

@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { ConvexProvider, ConvexReactClient, useMutation, useAction } from 'convex/react'
+import { ConvexProvider, ConvexReactClient, useAction } from 'convex/react'
 import { api } from '../convex/_generated/api'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
@@ -21,7 +21,7 @@ function TestComponent() {
   const [result, setResult] = useState<any>(null)
   const [loading, setLoading] = useState(false)
 
-  const testOpenRouter = useAction(api["actions/openrouter"].testOpenRouterConnection)
+  const testOpenRouter = useAction(api.actions.openrouter.testOpenRouterConnection)
 
   const handleTest = async () => {
     setLoading(true)
