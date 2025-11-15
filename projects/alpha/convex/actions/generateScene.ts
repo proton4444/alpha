@@ -8,6 +8,8 @@
  * during scene generation without requiring explicit selection.
  */
 
+"use node";
+
 import { internalAction } from "../_generated/server";
 import { api } from "../_generated/api";
 import { v } from "convex/values";

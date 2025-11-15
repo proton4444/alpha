@@ -13,16 +13,7 @@ import {
   DialogTrigger,
 } from '@/components/ui/dialog'
 import type { Id } from '../../convex/_generated/dataModel'
-
-// Custom hook for character queries
-import { useQuery } from 'convex/react'
-
-function useCharactersByStory(storyId: Id<"stories"> | null) {
-  return useQuery(
-    api.characters.getCharactersByStory,
-    storyId ? { storyId } : "skip"
-  ) ?? []
-}
+import { useCharactersByStory } from '@/hooks/useConvexQueries'
 
 interface CharacterManagerProps {
   storyId: Id<"stories">

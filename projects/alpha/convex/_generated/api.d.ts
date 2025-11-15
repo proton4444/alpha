@@ -8,8 +8,10 @@
  * @module
  */
 
+import type * as actions_generateScene from "../actions/generateScene.js";
 import type * as actions_openrouter from "../actions/openrouter.js";
 import type * as chapters from "../chapters.js";
+import type * as characters from "../characters.js";
 import type * as example from "../example.js";
 import type * as lib_parseToon from "../lib/parseToon.js";
 import type * as scenes from "../scenes.js";
@@ -22,8 +24,10 @@ import type {
 } from "convex/server";
 
 declare const fullApi: ApiFromModules<{
+  "actions/generateScene": typeof actions_generateScene;
   "actions/openrouter": typeof actions_openrouter;
   chapters: typeof chapters;
+  characters: typeof characters;
   example: typeof example;
   "lib/parseToon": typeof lib_parseToon;
   scenes: typeof scenes;

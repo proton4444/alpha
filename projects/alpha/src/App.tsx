@@ -32,10 +32,9 @@ function getConvexClient(): ConvexReactClient {
   return convexInstance
 }
 
-function App() {
+function AppContent() {
   const [isDark, setIsDark] = useState(false)
   const [selectedStoryId, setSelectedStoryId] = useState<string | null>(null)
-  const convex = useMemo(() => getConvexClient(), [])
   const stories = useAllStories()
 
   const updateTheme = useCallback((dark: boolean) => {
@@ -63,8 +62,7 @@ function App() {
   }
 
   return (
-    <ConvexProvider client={convex}>
-      <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 dark:from-slate-950 dark:to-slate-900 transition-colors duration-300">
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 dark:from-slate-950 dark:to-slate-900 transition-colors duration-300">
         <div className="container mx-auto py-12 px-4">
           <div className="bg-white dark:bg-slate-900 rounded-lg shadow-lg p-8 max-w-2xl mx-auto transition-colors duration-300">
             <div className="flex justify-between items-center mb-6">
@@ -116,7 +114,36 @@ function App() {
             <CharacterCRUDTest />
 
             {/* CharacterManager Production UI - Story 3.2 */}
-            {selectedStoryId && <CharacterManager storyId={selectedStoryId} onSelectStory={setSelectedStoryId} />}
+            <div className="border rounded-lg p-6 bg-slate-50 space-y-4">
+              <h3 className="text-xl font-semibold mb-4">📋 Character Manager UI (Story 3.2)</h3>
+              <div>
+                <label className="text-sm font-medium mb-2 block">Select a Story to Manage Characters:</label>
+                {stories.length === 0 ? (
+                  <p className="text-sm text-slate-600">Create a story first using the test above</p>
+                ) : (
+                  <div className="space-y-2">
+                    {stories.map((story) => (
+                      <button
+                        key={story._id}
+                        onClick={() => setSelectedStoryId(story._id)}
+                        className={`block w-full text-left px-4 py-2 rounded border transition-colors ${
+                          selectedStoryId === story._id
+                            ? 'bg-blue-500 text-white border-blue-600'
+                            : 'bg-white border-slate-300 hover:bg-slate-100'
+                        }`}
+                      >
+                        {story.title}
+                      </button>
+                    ))}
+                  </div>
+                )}
+              </div>
+              {selectedStoryId && (
+                <div className="mt-4 border-t pt-4">
+                  <CharacterManager storyId={selectedStoryId as any} />
+                </div>
+              )}
+            </div>
 
             {/* shadcn/ui Components Demo - Story 1.5 */}
             <div className="border rounded-lg p-6 bg-slate-50 space-y-4">
@@ -170,6 +197,14 @@ function App() {
           </div>
         </div>
       </div>
+    )
+}
+
+function App() {
+  const convex = useMemo(() => getConvexClient(), [])
+  return (
+    <ConvexProvider client={convex}>
+      <AppContent />
     </ConvexProvider>
   )
 }

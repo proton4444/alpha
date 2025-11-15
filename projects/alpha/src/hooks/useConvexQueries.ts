@@ -49,3 +49,13 @@ export function useScene(sceneId: Id<"scenes"> | string | null) {
     sceneId ? { sceneId: sceneId as Id<"scenes"> } : "skip"
   )
 }
+
+/**
+ * Hook for fetching characters by story
+ */
+export function useCharactersByStory(storyId: Id<"stories"> | string | null) {
+  return useQuery(
+    api.characters.getCharactersByStory,
+    storyId ? { storyId: storyId as Id<"stories"> } : "skip"
+  ) ?? []
+}
