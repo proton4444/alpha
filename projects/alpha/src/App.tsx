@@ -87,7 +87,7 @@ function AppContent() {
         {/* Test Components Toggle (floating) - Story 5.5: Enhanced */}
         <button
           onClick={() => setShowTestComponents(true)}
-          className="fixed bottom-4 right-4 z-50 px-4 py-3 rounded-lg bg-purple-600 hover:bg-purple-700 text-white transition-all duration-200 shadow-lg hover:shadow-xl hover:scale-105 text-sm font-medium focus:ring-2 focus:ring-purple-500"
+          className="fixed bottom-4 right-4 z-50 px-4 py-3 rounded-lg bg-white hover:bg-gray-100 text-black transition-all duration-200 shadow-lg hover:shadow-xl hover:scale-105 text-sm font-medium focus:ring-2 focus:ring-purple-500"
           title="Show test components for development"
         >
           🧪 Dev Tools
@@ -235,22 +235,22 @@ function AppContent() {
             </div>
 
             {/* Story 6: Chapter Node-Based UI Tests */}
-            
+
             {/* Chapter Node Test - Story 6.1 */}
             <ChapterNodeTest />
-            
+
             {/* Character Badges Test - Story 6.5 */}
             <CharacterBadgesTest />
-            
+
             {/* Drag Drop Test - Story 6.4 */}
             <DragDropTest />
-            
+
             {/* Status Filter Test - Story 6.6 */}
             <StatusFilterTest />
-            
+
             {/* Chapter Overview Test - Story 6.2 */}
             <ChapterOverviewTest />
-            
+
             {/* Chapter Workspace Test - Story 6 Integration */}
             <ChapterWorkspaceTest />
             {/* shadcn/ui Components Demo - Story 1.5 */}
