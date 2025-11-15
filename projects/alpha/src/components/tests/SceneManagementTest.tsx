@@ -22,6 +22,7 @@ export function SceneManagementTest() {
   const createScene = useMutation(api.scenes.createScene)
   const updateScene = useMutation(api.scenes.updateScene)
   const deleteScene = useMutation(api.scenes.deleteScene)
+  const testGenerateScene = useMutation(api.scenes.testGenerateScene)
 
   const handleCreateScene = async () => {
     if (!selectedStoryId || !selectedChapterId || !newSceneOutline.trim()) return
@@ -66,6 +67,18 @@ export function SceneManagementTest() {
       console.log('Deleted scene')
     } catch (error) {
       console.error('Failed to delete scene:', error)
+      alert(String(error))
+    }
+  }
+
+  const handleTestGeneration = async () => {
+    if (!selectedSceneId) return
+    try {
+      const result = await testGenerateScene({ sceneId: selectedSceneId as any })
+      console.log('Test generation started:', result)
+      alert('Story 3.3 Test: Scene generation started! Watch status change to "complete" and prose appear.')
+    } catch (error) {
+      console.error('Failed to test generation:', error)
       alert(String(error))
     }
   }
@@ -204,6 +217,24 @@ export function SceneManagementTest() {
           <Button onClick={handleUpdateScene} variant="secondary" size="sm">
             Update Scene
           </Button>
+
+          {/* Story 3.3 Test Button */}
+          <div className="pt-3 border-t">
+            <p className="text-xs font-medium mb-2 text-blue-600">
+              🧪 Story 3.3 Test: Character Integration
+            </p>
+            <Button
+              onClick={handleTestGeneration}
+              variant="outline"
+              size="sm"
+              className="w-full"
+            >
+              Test Generate Scene (with Character Loading)
+            </Button>
+            <p className="text-xs text-muted-foreground mt-1">
+              Triggers generateScene action. Loads all story characters and generates placeholder prose.
+            </p>
+          </div>
         </div>
       )}
 
@@ -214,6 +245,7 @@ export function SceneManagementTest() {
         <p>✅ updateScene - updates outline/prose</p>
         <p>✅ deleteScene - removes scene</p>
         <p>✅ Initial status: draft, regenerationCount: 0</p>
+        <p className="text-blue-600 font-semibold pt-1 border-t mt-1">✅ Story 3.3: Character integration via generateScene action</p>
       </div>
     </div>
   )

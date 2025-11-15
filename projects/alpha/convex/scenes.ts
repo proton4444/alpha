@@ -1,4 +1,5 @@
 import { mutation, query } from "./_generated/server";
+import { internal } from "./_generated/api";
 import { v } from "convex/values";
 
 /**
@@ -124,5 +125,62 @@ export const deleteScene = mutation({
   handler: async (ctx, args) => {
     await ctx.db.delete(args.sceneId);
     return args.sceneId;
+  },
+});
+
+/**
+ * Update scene status and optional error message
+ * Used by the generateScene action to update generation progress
+ * Story 3.3: Enables scene generation tracking
+ */
+export const updateSceneStatus = mutation({
+  args: {
+    sceneId: v.id("scenes"),
+    status: v.union(
+      v.literal("draft"),
+      v.literal("generating"),
+      v.literal("complete"),
+      v.literal("error")
+    ),
+    errorMessage: v.optional(v.string()),
+  },
+  handler: async (ctx, args) => {
+    const updates: {
+      status: "draft" | "generating" | "complete" | "error";
+      errorMessage?: string;
+    } = {
+      status: args.status,
+    };
+
+    if (args.errorMessage !== undefined) {
+      updates.errorMessage = args.errorMessage;
+    }
+
+    await ctx.db.patch(args.sceneId, updates);
+    return args.sceneId;
+  },
+});
+
+/**
+ * Test scene generation with character integration
+ * Story 3.3: Demonstrates character loading during scene generation
+ *
+ * This is a test mutation that triggers the generateScene action.
+ * Full implementation in Story 4.1 will use scheduler pattern.
+ */
+export const testGenerateScene = mutation({
+  args: {
+    sceneId: v.id("scenes"),
+  },
+  handler: async (ctx, args) => {
+    // Set status to generating
+    await ctx.db.patch(args.sceneId, { status: "generating" });
+
+    // Schedule the generateScene action to run immediately
+    await ctx.scheduler.runAfter(0, internal.actions.generateScene.generateScene, {
+      sceneId: args.sceneId,
+    });
+
+    return { success: true, message: "Scene generation started (Story 3.3 test)" };
   },
 });
