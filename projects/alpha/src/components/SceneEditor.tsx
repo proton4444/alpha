@@ -157,7 +157,7 @@ export const SceneEditor: React.FC<SceneEditorProps> = ({ sceneId }) => {
 
   if (!sceneId) {
     return (
-      <div className="flex items-center justify-center h-full text-slate-500">
+      <div className="flex items-center justify-center h-full text-slate-500 dark:text-slate-400 transition-colors">
         Select a scene to start editing
       </div>
     )
@@ -165,8 +165,20 @@ export const SceneEditor: React.FC<SceneEditorProps> = ({ sceneId }) => {
 
   if (!scene) {
     return (
-      <div className="flex items-center justify-center h-full text-slate-500">
-        Loading scene...
+      <div className="flex items-center justify-center h-full">
+        {/* Loading Skeleton (Story 5.5) */}
+        <div className="w-full max-w-4xl p-6 space-y-6 animate-pulse">
+          <div className="h-8 bg-slate-200 dark:bg-slate-700 rounded w-1/4"></div>
+          <div className="space-y-3">
+            <div className="h-4 bg-slate-200 dark:bg-slate-700 rounded w-3/4"></div>
+            <div className="h-32 bg-slate-200 dark:bg-slate-700 rounded"></div>
+          </div>
+          <div className="h-12 bg-slate-200 dark:bg-slate-700 rounded"></div>
+          <div className="space-y-2">
+            <div className="h-4 bg-slate-200 dark:bg-slate-700 rounded w-1/2"></div>
+            <div className="h-64 bg-slate-200 dark:bg-slate-700 rounded"></div>
+          </div>
+        </div>
       </div>
     )
   }
@@ -225,7 +237,7 @@ export const SceneEditor: React.FC<SceneEditorProps> = ({ sceneId }) => {
           onChange={(e) => setOutlineValue(e.target.value)}
           placeholder="Enter your scene outline (1-2000 characters)..."
           rows={4}
-          className="resize-none"
+          className="resize-none transition-all duration-200 focus:ring-2 focus:ring-purple-500 focus:border-purple-500"
           disabled={scene.status === 'generating'}
         />
         <p className="text-xs text-slate-500">
@@ -238,7 +250,7 @@ export const SceneEditor: React.FC<SceneEditorProps> = ({ sceneId }) => {
         <Button
           onClick={handleGenerateProse}
           disabled={scene.status === 'generating' || !outlineValue.trim()}
-          className="w-full bg-purple-600 hover:bg-purple-700"
+          className="w-full bg-purple-600 hover:bg-purple-700 transition-all duration-200 hover:shadow-lg disabled:opacity-50 disabled:cursor-not-allowed"
         >
           {scene.status === 'generating' ? '⏳ Generating...' : '🤖 Generate Prose'}
         </Button>
@@ -272,11 +284,11 @@ export const SceneEditor: React.FC<SceneEditorProps> = ({ sceneId }) => {
               value={proseValue}
               onChange={(e) => setProseValue(e.target.value)}
               rows={12}
-              className="resize-none font-serif text-base leading-relaxed"
+              className="resize-none font-serif text-base leading-relaxed transition-all duration-200 focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
             />
           ) : (
-            <div className="bg-slate-50 border border-slate-200 rounded-lg p-4 min-h-[300px] max-h-[500px] overflow-y-auto">
-              <p className="font-serif text-base leading-relaxed whitespace-pre-wrap">
+            <div className="bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg p-4 min-h-[300px] max-h-[500px] overflow-y-auto transition-colors duration-200">
+              <p className="font-serif text-base leading-relaxed whitespace-pre-wrap text-slate-900 dark:text-slate-100">
                 {scene.prose}
               </p>
             </div>
@@ -289,13 +301,14 @@ export const SceneEditor: React.FC<SceneEditorProps> = ({ sceneId }) => {
                 <>
                   <Button
                     onClick={handleSaveEditedProse}
-                    className="bg-green-600 hover:bg-green-700"
+                    className="bg-green-600 hover:bg-green-700 transition-all duration-200 hover:shadow-lg hover:scale-105"
                   >
                     💾 Save
                   </Button>
                   <Button
                     onClick={handleCancelEdit}
                     variant="outline"
+                    className="transition-all duration-200 hover:bg-slate-100 dark:hover:bg-slate-700"
                   >
                     Cancel
                   </Button>
@@ -304,20 +317,20 @@ export const SceneEditor: React.FC<SceneEditorProps> = ({ sceneId }) => {
                 <>
                   <Button
                     onClick={handleAccept}
-                    className="bg-green-600 hover:bg-green-700"
+                    className="bg-green-600 hover:bg-green-700 transition-all duration-200 hover:shadow-lg hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100"
                     disabled={isAccepted}
                   >
                     ✓ Accept
                   </Button>
                   <Button
                     onClick={handleRegenerate}
-                    className="bg-yellow-600 hover:bg-yellow-700"
+                    className="bg-yellow-600 hover:bg-yellow-700 transition-all duration-200 hover:shadow-lg hover:scale-105"
                   >
                     🔄 Regenerate
                   </Button>
                   <Button
                     onClick={handleEdit}
-                    className="bg-blue-600 hover:bg-blue-700"
+                    className="bg-blue-600 hover:bg-blue-700 transition-all duration-200 hover:shadow-lg hover:scale-105"
                   >
                     ✏️ Edit
                   </Button>

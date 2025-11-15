@@ -22,7 +22,7 @@ interface GenerationStatusProps {
 export function GenerationStatus({ sceneNumber, onCancel }: GenerationStatusProps) {
   const [elapsedSeconds, setElapsedSeconds] = useState(0)
 
-  // Track elapsed time
+  // Track elapsed time (Story 5.4)
   useEffect(() => {
     const interval = setInterval(() => {
       setElapsedSeconds(prev => prev + 1)
@@ -58,44 +58,47 @@ export function GenerationStatus({ sceneNumber, onCancel }: GenerationStatusProp
         )}
       </div>
 
-      {/* Progress Bar */}
+      {/* Progress Bar (Story 5.5: Enhanced with smooth animations) */}
       <div className="w-full max-w-md space-y-2">
-        <div className="flex justify-between text-xs text-slate-600 dark:text-slate-400">
-          <span>Generating prose...</span>
-          <span>{elapsedSeconds}s elapsed</span>
+        <div className="flex justify-between text-xs text-slate-600 dark:text-slate-400 transition-colors duration-200">
+          <span className="font-medium">Generating prose...</span>
+          <span className="font-mono">{elapsedSeconds}s elapsed</span>
         </div>
-        <div className="w-full h-2 bg-slate-200 dark:bg-slate-700 rounded-full overflow-hidden">
+        <div className="w-full h-2 bg-slate-200 dark:bg-slate-700 rounded-full overflow-hidden shadow-inner">
           <div
-            className="h-full bg-gradient-to-r from-purple-600 to-blue-600 transition-all duration-500 ease-out"
+            className="h-full bg-gradient-to-r from-purple-600 to-blue-600 transition-all duration-500 ease-out relative"
             style={{ width: `${progress}%` }}
-          />
+          >
+            {/* Shimmer effect */}
+            <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent animate-shimmer"></div>
+          </div>
         </div>
-        <p className="text-xs text-center text-slate-500 dark:text-slate-400">
+        <p className="text-xs text-center text-slate-500 dark:text-slate-400 transition-colors duration-200">
           {elapsedSeconds < estimatedTotal
             ? `~${estimatedTotal - elapsedSeconds}s remaining`
             : 'Finishing up...'}
         </p>
       </div>
 
-      {/* Steps Display */}
-      <div className="w-full max-w-md bg-slate-50 dark:bg-slate-800 rounded-lg p-4 space-y-3">
-        <div className="flex items-start gap-3">
-          <div className="flex-shrink-0 w-6 h-6 rounded-full bg-green-500 dark:bg-green-600 flex items-center justify-center">
+      {/* Steps Display (Story 5.5: Enhanced with transitions) */}
+      <div className="w-full max-w-md bg-slate-50 dark:bg-slate-800 rounded-lg p-4 space-y-3 transition-colors duration-200 shadow-sm">
+        <div className="flex items-start gap-3 transition-all duration-200">
+          <div className="flex-shrink-0 w-6 h-6 rounded-full bg-green-500 dark:bg-green-600 flex items-center justify-center shadow-sm transition-all duration-200">
             <span className="text-white text-xs font-bold">✓</span>
           </div>
           <div className="flex-1">
-            <p className="text-sm font-medium text-slate-900 dark:text-white">Character Analysis</p>
-            <p className="text-xs text-slate-600 dark:text-slate-400">Analyzing character traits and context</p>
+            <p className="text-sm font-medium text-slate-900 dark:text-white transition-colors duration-200">Character Analysis</p>
+            <p className="text-xs text-slate-600 dark:text-slate-400 transition-colors duration-200">Analyzing character traits and context</p>
           </div>
         </div>
 
-        <div className="flex items-start gap-3">
-          <div className="flex-shrink-0 w-6 h-6 rounded-full bg-purple-600 dark:bg-purple-500 flex items-center justify-center animate-pulse">
+        <div className="flex items-start gap-3 transition-all duration-200">
+          <div className="flex-shrink-0 w-6 h-6 rounded-full bg-purple-600 dark:bg-purple-500 flex items-center justify-center animate-pulse shadow-sm">
             <div className="w-2 h-2 bg-white rounded-full"></div>
           </div>
           <div className="flex-1">
-            <p className="text-sm font-medium text-slate-900 dark:text-white">Scene Writing</p>
-            <p className="text-xs text-slate-600 dark:text-slate-400">Crafting narrative prose (300-500 words)</p>
+            <p className="text-sm font-medium text-slate-900 dark:text-white transition-colors duration-200">Scene Writing</p>
+            <p className="text-xs text-slate-600 dark:text-slate-400 transition-colors duration-200">Crafting narrative prose (300-500 words)</p>
           </div>
         </div>
       </div>
@@ -152,11 +155,11 @@ export function GenerationError({ errorMessage, onRetry, onDismiss }: Generation
         </p>
       </div>
 
-      {/* Recovery Options */}
+      {/* Recovery Options (Story 5.5: Enhanced with transitions) */}
       <div className="flex gap-3">
         <Button
           onClick={onRetry}
-          className="bg-purple-600 hover:bg-purple-700"
+          className="bg-purple-600 hover:bg-purple-700 transition-all duration-200 hover:shadow-lg hover:scale-105"
         >
           🔄 Retry Generation
         </Button>
@@ -164,6 +167,7 @@ export function GenerationError({ errorMessage, onRetry, onDismiss }: Generation
           <Button
             onClick={onDismiss}
             variant="outline"
+            className="transition-all duration-200 hover:bg-slate-100 dark:hover:bg-slate-700"
           >
             Dismiss
           </Button>

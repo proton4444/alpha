@@ -69,19 +69,19 @@ function AppContent() {
   if (!showTestComponents) {
     return (
       <div className="relative h-screen">
-        {/* Theme Toggle (floating) */}
+        {/* Theme Toggle (floating) - Story 5.5: Enhanced */}
         <button
           onClick={toggleTheme}
-          className="fixed top-4 right-4 z-50 p-2 rounded-lg bg-slate-200 dark:bg-slate-700 hover:bg-slate-300 dark:hover:bg-slate-600 transition-colors shadow-lg"
+          className="fixed top-4 right-4 z-50 p-2 rounded-lg bg-slate-200 dark:bg-slate-700 hover:bg-slate-300 dark:hover:bg-slate-600 transition-all duration-200 shadow-lg hover:shadow-xl hover:scale-110 focus:ring-2 focus:ring-purple-500"
           title={isDark ? 'Switch to light theme' : 'Switch to dark theme'}
         >
-          {isDark ? '☀️' : '🌙'}
+          <span className="text-xl">{isDark ? '☀️' : '🌙'}</span>
         </button>
 
-        {/* Test Components Toggle (floating) */}
+        {/* Test Components Toggle (floating) - Story 5.5: Enhanced */}
         <button
           onClick={() => setShowTestComponents(true)}
-          className="fixed bottom-4 right-4 z-50 p-3 rounded-lg bg-purple-600 hover:bg-purple-700 text-white transition-colors shadow-lg text-sm font-medium"
+          className="fixed bottom-4 right-4 z-50 px-4 py-3 rounded-lg bg-purple-600 hover:bg-purple-700 text-white transition-all duration-200 shadow-lg hover:shadow-xl hover:scale-105 text-sm font-medium focus:ring-2 focus:ring-purple-500"
           title="Show test components for development"
         >
           🧪 Dev Tools
@@ -110,14 +110,14 @@ function AppContent() {
               <div className="flex items-center gap-2">
                 <button
                   onClick={() => setShowTestComponents(false)}
-                  className="p-2 rounded-lg bg-purple-600 hover:bg-purple-700 text-white transition-colors text-sm font-medium"
+                  className="p-2 rounded-lg bg-purple-600 hover:bg-purple-700 text-white transition-all duration-200 text-sm font-medium hover:shadow-lg hover:scale-105 focus:ring-2 focus:ring-purple-500"
                   title="Return to production workspace"
                 >
                   ← Workspace
                 </button>
                 <button
                   onClick={toggleTheme}
-                  className="p-2 rounded-lg bg-slate-200 dark:bg-slate-700 hover:bg-slate-300 dark:hover:bg-slate-600 transition-colors"
+                  className="p-2 rounded-lg bg-slate-200 dark:bg-slate-700 hover:bg-slate-300 dark:hover:bg-slate-600 transition-all duration-200 hover:scale-110 focus:ring-2 focus:ring-purple-500"
                   title={isDark ? 'Switch to light theme' : 'Switch to dark theme'}
                 >
                   {isDark ? '☀️' : '🌙'}

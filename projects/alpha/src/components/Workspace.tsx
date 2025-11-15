@@ -106,14 +106,14 @@ export function Workspace() {
 
   return (
     <div className="h-screen flex flex-col">
-      {/* Header */}
-      <header className="flex-shrink-0 bg-white dark:bg-slate-800 border-b border-slate-200 dark:border-slate-700 shadow-sm">
+      {/* Header (Story 5.5: Enhanced with polish) */}
+      <header className="flex-shrink-0 bg-white dark:bg-slate-800 border-b border-slate-200 dark:border-slate-700 shadow-sm transition-colors duration-200">
         <div className="px-6 py-4 flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <h1 className="text-2xl font-bold text-slate-900 dark:text-white">
+            <h1 className="text-2xl font-bold text-slate-900 dark:text-white transition-colors duration-200">
               Narrative Canvas
             </h1>
-            <span className="text-xs px-2 py-1 rounded bg-purple-100 dark:bg-purple-900 text-purple-800 dark:text-purple-200 font-medium">
+            <span className="text-xs px-2 py-1 rounded bg-purple-100 dark:bg-purple-900 text-purple-800 dark:text-purple-200 font-medium transition-colors duration-200">
               PoC
             </span>
           </div>
@@ -121,12 +121,12 @@ export function Workspace() {
           <div className="flex items-center gap-3">
             <button
               onClick={() => setShowShortcuts(prev => !prev)}
-              className="text-sm px-3 py-1.5 rounded-lg border border-slate-300 dark:border-slate-600 hover:bg-slate-100 dark:hover:bg-slate-700 transition-colors text-slate-700 dark:text-slate-300"
+              className="text-sm px-3 py-1.5 rounded-lg border border-slate-300 dark:border-slate-600 hover:bg-slate-100 dark:hover:bg-slate-700 transition-all duration-200 text-slate-700 dark:text-slate-300 hover:shadow-md focus:ring-2 focus:ring-purple-500 focus:border-purple-500"
               title="View keyboard shortcuts (or press ?)"
             >
               ⌨️ Shortcuts
             </button>
-            <span className="text-sm text-slate-600 dark:text-slate-400">
+            <span className="text-sm text-slate-600 dark:text-slate-400 transition-colors duration-200">
               AI-Powered Story Generation
             </span>
           </div>
@@ -177,52 +177,52 @@ export function Workspace() {
         </div>
       </div>
 
-      {/* Keyboard Shortcuts Help Overlay (Story 5.2) */}
+      {/* Keyboard Shortcuts Help Overlay (Story 5.2 + 5.5: Enhanced with animations) */}
       {showShortcuts && (
         <div
-          className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4"
+          className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4 animate-in fade-in duration-200"
           onClick={() => setShowShortcuts(false)}
         >
           <div
-            className="bg-white dark:bg-slate-800 rounded-lg shadow-2xl max-w-md w-full p-6"
+            className="bg-white dark:bg-slate-800 rounded-lg shadow-2xl max-w-md w-full p-6 animate-in zoom-in-95 slide-in-from-bottom-4 duration-300"
             onClick={(e) => e.stopPropagation()}
           >
             <div className="flex items-center justify-between mb-4">
-              <h2 className="text-xl font-bold text-slate-900 dark:text-white">
+              <h2 className="text-xl font-bold text-slate-900 dark:text-white transition-colors duration-200">
                 ⌨️ Keyboard Shortcuts
               </h2>
               <button
                 onClick={() => setShowShortcuts(false)}
-                className="text-slate-500 hover:text-slate-700 dark:text-slate-400 dark:hover:text-slate-200"
+                className="text-slate-500 hover:text-slate-700 dark:text-slate-400 dark:hover:text-slate-200 transition-colors duration-200 hover:scale-110 transform"
               >
                 ✕
               </button>
             </div>
 
             <div className="space-y-3">
-              <div className="flex justify-between items-center py-2 border-b border-slate-200 dark:border-slate-700">
-                <span className="text-sm text-slate-700 dark:text-slate-300">Navigate to previous scene</span>
-                <kbd className="px-2 py-1 bg-slate-100 dark:bg-slate-700 rounded text-xs font-mono">↑</kbd>
+              <div className="flex justify-between items-center py-2 border-b border-slate-200 dark:border-slate-700 transition-colors duration-200 hover:bg-slate-50 dark:hover:bg-slate-700/50 px-2 rounded">
+                <span className="text-sm text-slate-700 dark:text-slate-300 transition-colors duration-200">Navigate to previous scene</span>
+                <kbd className="px-2 py-1 bg-slate-100 dark:bg-slate-700 rounded text-xs font-mono shadow-sm">↑</kbd>
               </div>
 
-              <div className="flex justify-between items-center py-2 border-b border-slate-200 dark:border-slate-700">
-                <span className="text-sm text-slate-700 dark:text-slate-300">Navigate to next scene</span>
-                <kbd className="px-2 py-1 bg-slate-100 dark:bg-slate-700 rounded text-xs font-mono">↓</kbd>
+              <div className="flex justify-between items-center py-2 border-b border-slate-200 dark:border-slate-700 transition-colors duration-200 hover:bg-slate-50 dark:hover:bg-slate-700/50 px-2 rounded">
+                <span className="text-sm text-slate-700 dark:text-slate-300 transition-colors duration-200">Navigate to next scene</span>
+                <kbd className="px-2 py-1 bg-slate-100 dark:bg-slate-700 rounded text-xs font-mono shadow-sm">↓</kbd>
               </div>
 
-              <div className="flex justify-between items-center py-2 border-b border-slate-200 dark:border-slate-700">
-                <span className="text-sm text-slate-700 dark:text-slate-300">Collapse current chapter</span>
-                <kbd className="px-2 py-1 bg-slate-100 dark:bg-slate-700 rounded text-xs font-mono">←</kbd>
+              <div className="flex justify-between items-center py-2 border-b border-slate-200 dark:border-slate-700 transition-colors duration-200 hover:bg-slate-50 dark:hover:bg-slate-700/50 px-2 rounded">
+                <span className="text-sm text-slate-700 dark:text-slate-300 transition-colors duration-200">Collapse current chapter</span>
+                <kbd className="px-2 py-1 bg-slate-100 dark:bg-slate-700 rounded text-xs font-mono shadow-sm">←</kbd>
               </div>
 
-              <div className="flex justify-between items-center py-2 border-b border-slate-200 dark:border-slate-700">
-                <span className="text-sm text-slate-700 dark:text-slate-300">Expand current chapter</span>
-                <kbd className="px-2 py-1 bg-slate-100 dark:bg-slate-700 rounded text-xs font-mono">→</kbd>
+              <div className="flex justify-between items-center py-2 border-b border-slate-200 dark:border-slate-700 transition-colors duration-200 hover:bg-slate-50 dark:hover:bg-slate-700/50 px-2 rounded">
+                <span className="text-sm text-slate-700 dark:text-slate-300 transition-colors duration-200">Expand current chapter</span>
+                <kbd className="px-2 py-1 bg-slate-100 dark:bg-slate-700 rounded text-xs font-mono shadow-sm">→</kbd>
               </div>
 
-              <div className="flex justify-between items-center py-2 border-b border-slate-200 dark:border-slate-700">
-                <span className="text-sm text-slate-700 dark:text-slate-300">Toggle shortcuts help</span>
-                <kbd className="px-2 py-1 bg-slate-100 dark:bg-slate-700 rounded text-xs font-mono">?</kbd>
+              <div className="flex justify-between items-center py-2 border-b border-slate-200 dark:border-slate-700 transition-colors duration-200 hover:bg-slate-50 dark:hover:bg-slate-700/50 px-2 rounded">
+                <span className="text-sm text-slate-700 dark:text-slate-300 transition-colors duration-200">Toggle shortcuts help</span>
+                <kbd className="px-2 py-1 bg-slate-100 dark:bg-slate-700 rounded text-xs font-mono shadow-sm">?</kbd>
               </div>
             </div>
 

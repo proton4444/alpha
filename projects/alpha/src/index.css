@@ -57,3 +57,19 @@
     color: hsl(var(--foreground));
   }
 }
+
+/* Story 5.5: Custom animations for visual polish */
+@layer utilities {
+  @keyframes shimmer {
+    0% {
+      transform: translateX(-100%);
+    }
+    100% {
+      transform: translateX(100%);
+    }
+  }
+
+  .animate-shimmer {
+    animation: shimmer 2s infinite;
+  }
+}
