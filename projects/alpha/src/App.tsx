@@ -12,6 +12,7 @@ import {
   DialogTrigger,
 } from '@/components/ui/dialog'
 import { Workspace } from '@/components/Workspace'
+import { GraphicalCanvas } from '@/components/canvas/GraphicalCanvas'
 import { CharacterManager } from '@/components/CharacterManager'
 import { SceneEditor } from '@/components/SceneEditor'
 import { useAllStories } from '@/hooks/useConvexQueries'
@@ -31,6 +32,7 @@ function getConvexClient(): ConvexReactClient {
 function AppContent() {
   const [isDark, setIsDark] = useState(true)
   const [showTestComponents, setShowTestComponents] = useState(false)
+  const [useGraphicalCanvas, setUseGraphicalCanvas] = useState(true)
   const [selectedStoryId, setSelectedStoryId] = useState<string | null>(null)
   const [selectedSceneId, setSelectedSceneId] = useState<string | null>(null)
   const stories = useAllStories()
@@ -72,6 +74,15 @@ function AppContent() {
           <span className="text-xl">{isDark ? '☀️' : '🌙'}</span>
         </button>
 
+        {/* Canvas/Workspace Toggle (floating) */}
+        <button
+          onClick={() => setUseGraphicalCanvas(!useGraphicalCanvas)}
+          className="fixed top-4 right-16 z-50 px-3 py-2 rounded-lg bg-slate-200 dark:bg-slate-700 hover:bg-slate-300 dark:hover:bg-slate-600 transition-all duration-200 shadow-lg hover:shadow-xl hover:scale-105 text-sm font-medium focus:ring-2 focus:ring-purple-500"
+          title={useGraphicalCanvas ? 'Switch to text view' : 'Switch to canvas view'}
+        >
+          {useGraphicalCanvas ? '📝 Text' : '🎨 Canvas'}
+        </button>
+
         {/* Test Components Toggle (floating) - Story 5.5: Enhanced */}
         <button
           onClick={() => setShowTestComponents(true)}
@@ -81,8 +92,8 @@ function AppContent() {
           🧪 Dev Tools
         </button>
 
-        {/* Production Workspace */}
-        <Workspace />
+        {/* Main view - Canvas or Workspace */}
+        {useGraphicalCanvas ? <GraphicalCanvas /> : <Workspace />}
       </div>
     )
   }
