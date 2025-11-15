@@ -219,11 +219,13 @@ export const testOpenRouterConnection = action({
  *
  * @param prompt - The prompt to send to the model
  * @param systemPrompt - Optional system prompt for guiding response format
+ * @param model - OpenRouter model to use (defaults to free model)
  * @returns Parsed TOON object mapping keys to values
  */
 export async function generateToonResponse(
   prompt: string,
-  systemPrompt?: string
+  systemPrompt?: string,
+  model: string = 'moonshotai/kimi-k2:free'
 ): Promise<Record<string, string>> {
   const messages = []
 
@@ -240,7 +242,7 @@ export async function generateToonResponse(
   })
 
   const request: OpenRouterRequest = {
-    model: 'moonshotai/kimi-k2:free',
+    model,
     messages,
     temperature: 1,
     max_tokens: 500, // TOON responses are compact
