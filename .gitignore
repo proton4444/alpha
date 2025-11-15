@@ -66,3 +66,4 @@ nul
 # - projects/      (Your project code)
 # - output/        (Generated documents, if desired)
 # - .project/      (Project planning files)
+.playwright-mcp/
