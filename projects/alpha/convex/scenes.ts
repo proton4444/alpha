@@ -164,12 +164,14 @@ export const updateSceneStatus = mutation({
 /**
  * Request scene generation with non-blocking scheduler pattern
  * Story 4.1: Production-ready mutation for scene prose generation
+ * Story 4.6: Enhanced to increment regenerationCount on each request
  *
  * This mutation implements the non-blocking pattern:
  * 1. Updates scene outline
  * 2. Sets status to "generating"
- * 3. Schedules generateScene action asynchronously
- * 4. Returns immediately (UI doesn't freeze)
+ * 3. Increments regenerationCount (Story 4.6)
+ * 4. Schedules generateScene action asynchronously
+ * 5. Returns immediately (UI doesn't freeze)
  *
  * The UI can continue to operate while the action runs in the background.
  * Status updates happen via Convex's reactive queries.
@@ -185,10 +187,23 @@ export const requestSceneGeneration = mutation({
       throw new Error("Scene outline must be between 1 and 2000 characters");
     }
 
-    // Update the scene with the new outline and set status to generating
+    // Get current scene to check regenerationCount
+    const currentScene = await ctx.db.get(args.sceneId);
+    if (!currentScene) {
+      throw new Error("Scene not found");
+    }
+
+    // Determine if this is a regeneration (scene already has prose)
+    const isRegeneration = currentScene.prose !== undefined && currentScene.prose !== null;
+    const newRegenerationCount = isRegeneration
+      ? currentScene.regenerationCount + 1
+      : currentScene.regenerationCount;
+
+    // Update the scene with the new outline, set status to generating, and increment regenerationCount if needed
     await ctx.db.patch(args.sceneId, {
       outline: args.outline,
       status: "generating",
+      regenerationCount: newRegenerationCount,
     });
 
     // Schedule the generateScene action to run immediately (non-blocking)

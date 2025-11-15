@@ -18,6 +18,7 @@ import { SceneManagementTest } from '@/components/tests/SceneManagementTest'
 import { StoryTreeTest } from '@/components/tests/StoryTreeTest'
 import { CharacterCRUDTest } from '@/components/tests/CharacterCRUDTest'
 import { CharacterManager } from '@/components/CharacterManager'
+import { SceneEditor } from '@/components/SceneEditor'
 import { useAllStories } from '@/hooks/useConvexQueries'
 
 // Initialize ConvexReactClient as singleton (only once per session)
@@ -35,6 +36,7 @@ function getConvexClient(): ConvexReactClient {
 function AppContent() {
   const [isDark, setIsDark] = useState(false)
   const [selectedStoryId, setSelectedStoryId] = useState<string | null>(null)
+  const [selectedSceneId, setSelectedSceneId] = useState<string | null>(null)
   const stories = useAllStories()
 
   const updateTheme = useCallback((dark: boolean) => {
@@ -94,7 +96,7 @@ function AppContent() {
                 <strong>Environment:</strong> development
               </p>
               <p className="text-blue-900 dark:text-blue-100 text-sm">
-                <strong>Status:</strong> Story 3.3 - Character Selection for Scene Context implemented
+                <strong>Status:</strong> Stories 4.5 & 4.6 - Scene Editor with Accept/Regenerate/Edit Actions implemented
               </p>
             </div>
 
@@ -143,6 +145,39 @@ function AppContent() {
                   <CharacterManager storyId={selectedStoryId as any} />
                 </div>
               )}
+            </div>
+
+            {/* SceneEditor Production UI - Stories 4.5 & 4.6 */}
+            <div className="border rounded-lg p-6 bg-slate-50 space-y-4">
+              <h3 className="text-xl font-semibold mb-4">✏️ Scene Editor (Stories 4.5 & 4.6)</h3>
+              <div>
+                <label className="text-sm font-medium mb-2 block">
+                  Select a Scene to Edit (use Scene Management Test above to create scenes):
+                </label>
+                <Input
+                  type="text"
+                  placeholder="Paste scene ID here..."
+                  value={selectedSceneId || ''}
+                  onChange={(e) => setSelectedSceneId(e.target.value || null)}
+                  className="mb-4"
+                />
+              </div>
+              {selectedSceneId && (
+                <div className="mt-4 border-t pt-4 bg-white rounded-lg min-h-[600px]">
+                  <SceneEditor sceneId={selectedSceneId as any} />
+                </div>
+              )}
+              <div className="text-xs space-y-1 pt-2 border-t">
+                <p className="font-semibold">Story 4.5 Features:</p>
+                <p>✅ Scene outline input with auto-save (1 second debounce)</p>
+                <p>✅ "Generate Prose" button</p>
+                <p>✅ Generation status display (Draft / Generating / Complete / Error)</p>
+                <p>✅ Generated prose display area</p>
+                <p className="font-semibold mt-2">Story 4.6 Features:</p>
+                <p>✅ Accept button (green) - marks scene as final</p>
+                <p>✅ Regenerate button (yellow) - triggers regeneration with count increment</p>
+                <p>✅ Edit button (blue) - enables manual editing with Save button</p>
+              </div>
             </div>
 
             {/* shadcn/ui Components Demo - Story 1.5 */}

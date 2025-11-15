@@ -179,6 +179,7 @@ export const SceneManagementTest = React.memo(function SceneManagementTest() {
                     <span className="font-semibold">Scene {scene.sceneNumber}</span>
                     <span className="ml-2 text-muted-foreground">({scene.status})</span>
                     <p className="truncate mt-1">{scene.outline}</p>
+                    <p className="text-[10px] text-slate-400 mt-1 font-mono">ID: {scene._id}</p>
                   </div>
                   <Button
                     variant="destructive"
