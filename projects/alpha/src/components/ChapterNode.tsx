@@ -1,3 +1,6 @@
+import { useState } from 'react'
+import { useMutation } from 'convex/react'
+import { api } from '../../convex/_generated/api'
 import type { Id } from '../../convex/_generated/dataModel'
 
 /**
@@ -58,7 +61,7 @@ interface ChapterNodeProps {
 }
 
 /**
- * ChapterNode Component (Story 6.1)
+ * ChapterNode Component (Stories 6.1, 6.4)
  *
  * Displays a chapter card with:
  * - Chapter number and title
@@ -67,12 +70,14 @@ interface ChapterNodeProps {
  * - Total word count
  * - Expand/collapse toggle
  * - Scene list (when expanded)
+ * - Drag-drop reordering (Story 6.4)
  *
  * Features:
  * - Smooth 150ms animations
  * - Click-to-expand interaction
  * - Dark mode support
  * - Scene selection support
+ * - Drag-drop scene reordering within chapter (Story 6.4)
  */
 export function ChapterNode({
   chapter,
@@ -82,6 +87,13 @@ export function ChapterNode({
   selectedSceneId,
 }: ChapterNodeProps) {
   const { scenes } = chapter
+
+  // Drag-drop state (Story 6.4)
+  const [draggedSceneId, setDraggedSceneId] = useState<Id<"scenes"> | null>(null)
+  const [dropTargetIndex, setDropTargetIndex] = useState<number | null>(null)
+
+  // Convex mutation for reordering (Story 6.4)
+  const reorderScenes = useMutation(api.scenes.reorderScenesInChapter)
 
   // Calculate status breakdown
   const statusCounts = scenes.reduce(
@@ -136,6 +148,58 @@ export function ChapterNode({
     if (onSelectScene) {
       onSelectScene(sceneId)
     }
+  }
+
+  // Drag-drop handlers (Story 6.4)
+  const handleDragStart = (e: React.DragEvent, scene: Scene, index: number) => {
+    setDraggedSceneId(scene._id)
+    e.dataTransfer.effectAllowed = 'move'
+    e.dataTransfer.setData('sceneId', scene._id)
+    e.dataTransfer.setData('chapterId', chapter._id)
+    e.dataTransfer.setData('sourceIndex', index.toString())
+  }
+
+  const handleDragOver = (e: React.DragEvent, targetIndex: number) => {
+    e.preventDefault()
+    e.dataTransfer.dropEffect = 'move'
+
+    // Only show drop indicator if we're dragging
+    if (draggedSceneId) {
+      setDropTargetIndex(targetIndex)
+    }
+  }
+
+  const handleDrop = async (e: React.DragEvent, targetIndex: number) => {
+    e.preventDefault()
+
+    const sceneId = e.dataTransfer.getData('sceneId') as Id<"scenes">
+    const chapterId = e.dataTransfer.getData('chapterId') as Id<"chapters">
+
+    // Only allow drops within the same chapter
+    if (chapterId !== chapter._id) {
+      setDraggedSceneId(null)
+      setDropTargetIndex(null)
+      return
+    }
+
+    try {
+      // Call mutation to reorder scenes
+      await reorderScenes({
+        chapterId: chapter._id,
+        sceneId: sceneId,
+        newPosition: targetIndex + 1, // Convert to 1-indexed
+      })
+    } catch (error) {
+      console.error('Failed to reorder scenes:', error)
+    }
+
+    setDraggedSceneId(null)
+    setDropTargetIndex(null)
+  }
+
+  const handleDragEnd = () => {
+    setDraggedSceneId(null)
+    setDropTargetIndex(null)
   }
 
   return (
@@ -217,9 +281,12 @@ export function ChapterNode({
       >
         <div className="border-t border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 p-3 space-y-2">
           {scenes.length > 0 ? (
-            scenes.map((scene) => {
+            scenes.map((scene, index) => {
               const isSelected = selectedSceneId === scene._id
               const sceneWords = countWords(scene.prose)
+              const isDragging = draggedSceneId === scene._id
+              const isDropTarget = dropTargetIndex === index
+              const canDrag = scene.status !== 'generating'
 
               // Status styling
               const statusStyles = {
@@ -237,49 +304,73 @@ export function ChapterNode({
               }
 
               return (
-                <div
-                  key={scene._id}
-                  onClick={() => handleSceneClick(scene._id)}
-                  className={`p-3 rounded border cursor-pointer transition-all duration-150 ${
-                    statusStyles[scene.status]
-                  } ${
-                    isSelected
-                      ? 'ring-2 ring-blue-500 dark:ring-blue-400 shadow-md'
-                      : 'hover:shadow-sm'
-                  }`}
-                >
-                  <div className="flex items-start justify-between gap-2">
-                    <div className="flex-1 min-w-0">
-                      {/* Scene Number & Status */}
-                      <div className="flex items-center gap-2 mb-1">
-                        <span className="text-xs font-semibold">
-                          {statusIcons[scene.status]} Scene {scene.sceneNumber}
-                        </span>
-                        {scene.regenerationCount > 0 && (
-                          <span className="text-xs bg-amber-200 dark:bg-amber-800 text-amber-800 dark:text-amber-200 px-1.5 py-0.5 rounded">
-                            ↻{scene.regenerationCount}
+                <div key={scene._id} className="relative">
+                  {/* Drop indicator */}
+                  {isDropTarget && draggedSceneId && (
+                    <div className="absolute -top-1 left-0 right-0 h-0.5 bg-blue-500 dark:bg-blue-400 z-10"></div>
+                  )}
+
+                  <div
+                    draggable={canDrag}
+                    onDragStart={(e) => canDrag && handleDragStart(e, scene, index)}
+                    onDragOver={(e) => handleDragOver(e, index)}
+                    onDrop={(e) => handleDrop(e, index)}
+                    onDragEnd={handleDragEnd}
+                    onClick={() => handleSceneClick(scene._id)}
+                    className={`group p-3 rounded border cursor-pointer transition-all duration-150 ${
+                      statusStyles[scene.status]
+                    } ${
+                      isSelected
+                        ? 'ring-2 ring-blue-500 dark:ring-blue-400 shadow-md'
+                        : 'hover:shadow-sm'
+                    } ${
+                      isDragging ? 'opacity-50' : 'opacity-100'
+                    }`}
+                  >
+                    <div className="flex items-start gap-2">
+                      {/* Drag Handle (Story 6.4) */}
+                      {canDrag && (
+                        <div
+                          className="flex-shrink-0 opacity-0 group-hover:opacity-100 transition-opacity duration-150 cursor-grab active:cursor-grabbing text-slate-400 dark:text-slate-500 select-none"
+                          onMouseDown={(e) => e.stopPropagation()}
+                          aria-label="Drag to reorder"
+                        >
+                          <span className="text-xs leading-none">⋮⋮</span>
+                        </div>
+                      )}
+
+                      <div className="flex-1 min-w-0">
+                        {/* Scene Number & Status */}
+                        <div className="flex items-center gap-2 mb-1">
+                          <span className="text-xs font-semibold">
+                            {statusIcons[scene.status]} Scene {scene.sceneNumber}
                           </span>
+                          {scene.regenerationCount > 0 && (
+                            <span className="text-xs bg-amber-200 dark:bg-amber-800 text-amber-800 dark:text-amber-200 px-1.5 py-0.5 rounded">
+                              ↻{scene.regenerationCount}
+                            </span>
+                          )}
+                        </div>
+
+                        {/* Outline Preview */}
+                        <div className="text-xs mb-1 line-clamp-2">
+                          {scene.outline}
+                        </div>
+
+                        {/* Word Count */}
+                        {sceneWords > 0 && (
+                          <div className="text-xs opacity-75">
+                            {formatNumber(sceneWords)} words
+                          </div>
+                        )}
+
+                        {/* Error Message */}
+                        {scene.status === 'error' && scene.errorMessage && (
+                          <div className="text-xs mt-1 opacity-75 italic">
+                            Error: {scene.errorMessage}
+                          </div>
                         )}
                       </div>
-
-                      {/* Outline Preview */}
-                      <div className="text-xs mb-1 line-clamp-2">
-                        {scene.outline}
-                      </div>
-
-                      {/* Word Count */}
-                      {sceneWords > 0 && (
-                        <div className="text-xs opacity-75">
-                          {formatNumber(sceneWords)} words
-                        </div>
-                      )}
-
-                      {/* Error Message */}
-                      {scene.status === 'error' && scene.errorMessage && (
-                        <div className="text-xs mt-1 opacity-75 italic">
-                          Error: {scene.errorMessage}
-                        </div>
-                      )}
                     </div>
                   </div>
                 </div>
