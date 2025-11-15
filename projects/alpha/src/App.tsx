@@ -17,6 +17,8 @@ import { ChapterManagementTest } from '@/components/tests/ChapterManagementTest'
 import { SceneManagementTest } from '@/components/tests/SceneManagementTest'
 import { StoryTreeTest } from '@/components/tests/StoryTreeTest'
 import { CharacterCRUDTest } from '@/components/tests/CharacterCRUDTest'
+import { CharacterManager } from '@/components/CharacterManager'
+import { useAllStories } from '@/hooks/useConvexQueries'
 
 const convex = new ConvexReactClient(
   import.meta.env.VITE_CONVEX_URL || 'http://localhost:3210'
@@ -24,6 +26,8 @@ const convex = new ConvexReactClient(
 
 function App() {
   const [isDark, setIsDark] = useState(false)
+  const [selectedStoryId, setSelectedStoryId] = useState<string | null>(null)
+  const stories = useAllStories()
 
   useEffect(() => {
     // Load theme preference from localStorage
@@ -83,7 +87,7 @@ function App() {
                 <strong>Environment:</strong> development
               </p>
               <p className="text-blue-900 dark:text-blue-100 text-sm">
-                <strong>Status:</strong> Story 3.1 - Character CRUD Operations implemented
+                <strong>Status:</strong> Story 3.2 - CharacterManager Production UI implemented
               </p>
             </div>
 
@@ -92,6 +96,51 @@ function App() {
 
             {/* Character CRUD Test - Story 3.1 */}
             <CharacterCRUDTest />
+
+            {/* CharacterManager Production UI - Story 3.2 */}
+            <div className="border dark:border-slate-700 rounded-lg p-6 bg-slate-50 dark:bg-slate-800 space-y-4 mb-6 transition-colors duration-300">
+              <h3 className="text-xl font-semibold mb-4 dark:text-slate-100">
+                👥 Character Manager (Story 3.2 - Production UI)
+              </h3>
+
+              {/* Story Selector */}
+              <div className="space-y-2 pb-4 border-b dark:border-slate-700">
+                <label className="text-sm font-medium block dark:text-slate-200">
+                  Select a Story to Manage Characters:
+                </label>
+                <div className="space-y-2 max-h-32 overflow-y-auto">
+                  {stories.map((story) => (
+                    <div
+                      key={story._id}
+                      className={`p-2 rounded border cursor-pointer transition-colors ${
+                        selectedStoryId === story._id
+                          ? 'bg-blue-100 dark:bg-blue-900 border-blue-300 dark:border-blue-700'
+                          : 'bg-white dark:bg-slate-700 hover:bg-slate-50 dark:hover:bg-slate-600'
+                      }`}
+                      onClick={() => setSelectedStoryId(story._id)}
+                    >
+                      <span className="font-medium text-sm dark:text-slate-100">{story.title}</span>
+                    </div>
+                  ))}
+                  {stories.length === 0 && (
+                    <p className="text-sm text-muted-foreground dark:text-slate-400 italic">
+                      Create a story first using the Story CRUD test above
+                    </p>
+                  )}
+                </div>
+              </div>
+
+              {/* CharacterManager Component */}
+              {selectedStoryId && (
+                <CharacterManager storyId={selectedStoryId as any} />
+              )}
+
+              {!selectedStoryId && stories.length > 0 && (
+                <p className="text-sm text-muted-foreground dark:text-slate-400 italic text-center py-8">
+                  Select a story above to manage its characters
+                </p>
+              )}
+            </div>
 
             {/* Chapter Management Test - Story 2.2 */}
             <ChapterManagementTest />
