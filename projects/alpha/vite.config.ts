@@ -18,5 +18,12 @@ export default defineConfig({
       host: 'localhost',
       port: 5173,
     },
+    watch: {
+      usePolling: true,
+      interval: 1000,
+    },
+  },
+  optimizeDeps: {
+    exclude: ['convex'],
   },
 })
