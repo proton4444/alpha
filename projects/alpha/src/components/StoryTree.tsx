@@ -7,18 +7,28 @@ interface StoryTreeProps {
   storyId: Id<"stories">
   selectedSceneId?: Id<"scenes"> | null
   onSelectScene?: (sceneId: Id<"scenes">) => void
+  expandedChapters?: Record<string, boolean>
+  onToggleChapter?: (chapterId: string) => void
 }
 
-export function StoryTree({ storyId, selectedSceneId, onSelectScene }: StoryTreeProps) {
-  const [expandedChapters, setExpandedChapters] = useState<Record<string, boolean>>({})
+export function StoryTree({
+  storyId,
+  selectedSceneId,
+  onSelectScene,
+  expandedChapters: externalExpandedChapters,
+  onToggleChapter: externalOnToggleChapter
+}: StoryTreeProps) {
+  const [internalExpandedChapters, setInternalExpandedChapters] = useState<Record<string, boolean>>({})
   const storyTree = useQuery(api.stories.getStoryTree, { storyId })
 
-  const toggleChapter = (chapterId: string) => {
-    setExpandedChapters(prev => ({
+  // Use external state if provided, otherwise use internal
+  const expandedChapters = externalExpandedChapters ?? internalExpandedChapters
+  const toggleChapter = externalOnToggleChapter ?? ((chapterId: string) => {
+    setInternalExpandedChapters(prev => ({
       ...prev,
       [chapterId]: !prev[chapterId]
     }))
-  }
+  })
 
   if (!storyTree) {
     return (

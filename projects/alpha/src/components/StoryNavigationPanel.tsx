@@ -9,10 +9,12 @@ interface StoryNavigationPanelProps {
   selectedSceneId: Id<"scenes"> | string | null
   onSelectStory: (storyId: Id<"stories"> | string) => void
   onSelectScene: (sceneId: Id<"scenes">) => void
+  expandedChapters?: Record<string, boolean>
+  onToggleChapter?: (chapterId: string) => void
 }
 
 /**
- * StoryNavigationPanel Component (Story 5.1)
+ * StoryNavigationPanel Component (Stories 5.1 & 5.2)
  *
  * Left sidebar panel (30% width) containing:
  * - Story selection dropdown
@@ -20,12 +22,15 @@ interface StoryNavigationPanelProps {
  * - Quick actions (New Story, etc.)
  *
  * Designed for independent scrolling and responsive layout
+ * Story 5.2: Supports external chapter expansion control for keyboard shortcuts
  */
 export function StoryNavigationPanel({
   selectedStoryId,
   selectedSceneId,
   onSelectStory,
   onSelectScene,
+  expandedChapters,
+  onToggleChapter,
 }: StoryNavigationPanelProps) {
   const stories = useAllStories()
   const [showStorySelector, setShowStorySelector] = useState(false)
@@ -89,6 +94,8 @@ export function StoryNavigationPanel({
             storyId={selectedStoryId as Id<"stories">}
             selectedSceneId={selectedSceneId as Id<"scenes">}
             onSelectScene={onSelectScene}
+            expandedChapters={expandedChapters}
+            onToggleChapter={onToggleChapter}
           />
         ) : (
           <div className="p-4 text-center text-sm text-slate-500 dark:text-slate-400">
