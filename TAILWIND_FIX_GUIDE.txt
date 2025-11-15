@@ -1,0 +1,200 @@
+=============================================================================
+TAILWIND CSS STYLING ISSUES - COMPLETE TROUBLESHOOTING GUIDE
+=============================================================================
+
+PROBLEM: Story 6 components render but lack visual styling (cards, colors, spacing)
+
+=============================================================================
+QUICK DIAGNOSIS (5 MINUTES)
+=============================================================================
+
+Run these commands in order:
+
+1. Check if main.tsx imports CSS:
+   grep "index.css" /c/knosso/Alpha/projects/alpha/src/main.tsx
+   (Should show: import './index.css')
+
+2. Check Tailwind config exists:
+   cat /c/knosso/Alpha/projects/alpha/tailwind.config.ts | grep content
+   (Should show content paths)
+
+3. Check CSS file has directives:
+   grep "@tailwind" /c/knosso/Alpha/projects/alpha/src/index.css
+   (Should show: base, components, utilities)
+
+4. Check PostCSS config:
+   cat /c/knosso/Alpha/projects/alpha/postcss.config.js
+   (Should reference tailwindcss)
+
+=============================================================================
+MOST LIKELY CAUSES (In Order)
+=============================================================================
+
+CAUSE #1: Dev Server Cache (50% probability)
+--Solution--
+cd /c/knosso/Alpha/projects/alpha
+pkill -f "vite" || true
+rm -rf .vite
+npm run dev
+
+CAUSE #2: Browser Cache (30% probability)
+--Solution--
+In browser DevTools (F12):
+  1. Go to Settings
+  2. Check "Disable cache (while DevTools open)"
+  3. Hard refresh: Ctrl+Shift+R
+
+CAUSE #3: Dependencies Not Installed (15% probability)
+--Solution--
+cd /c/knosso/Alpha/projects/alpha
+npm install
+npm run dev
+
+CAUSE #4: CSS Import Missing (5% probability)
+--Solution--
+Edit /c/knosso/Alpha/projects/alpha/src/main.tsx
+Add at the TOP:
+  import './index.css'
+
+=============================================================================
+STEP-BY-STEP TROUBLESHOOTING
+=============================================================================
+
+STEP 1: Stop Dev Server (1 min)
+  pkill -f "vite" || true
+  sleep 2
+
+STEP 2: Clear All Caches (2 min)
+  cd /c/knosso/Alpha/projects/alpha
+  rm -rf .vite
+  rm -rf node_modules/.vite
+  npm cache clean --force
+
+STEP 3: Verify Configuration (2 min)
+  # Check Tailwind can find files
+  cat tailwind.config.ts | grep -A 3 "content:"
+  
+  # Check CSS has directives
+  head -5 src/index.css
+
+STEP 4: Restart Dev Server (1 min)
+  npm run dev
+
+STEP 5: Test in Browser (2 min)
+  Open http://localhost:5173
+  Press F12 to open DevTools
+  Refresh page (Ctrl+R)
+  
+  Look for:
+  - CSS file in Network tab
+  - Colors on buttons
+  - Shadows on cards
+
+=============================================================================
+VERIFICATION IN BROWSER DEVTOOLS
+=============================================================================
+
+1. Open http://localhost:5173
+2. Press F12 (DevTools)
+3. Right-click on a chapter card > Inspect
+4. Look at computed styles:
+   - Should see background-color
+   - Should see padding/margin
+   - Should see border-radius
+   - Should see box-shadow
+
+If styles are MISSING:
+  - Check Network tab for index.css
+  - Check Console for errors
+  - Hard refresh (Ctrl+Shift+R)
+
+If styles are PRESENT:
+  - Issue is CSS not reaching browser
+  - Check build output
+  - Check vite.config.ts has CSS configured
+
+=============================================================================
+COMMON ERROR PATTERNS
+=============================================================================
+
+ERROR 1: "Cannot find module './index.css'"
+SOLUTION: Verify main.tsx imports it at the TOP
+  cat src/main.tsx | head -10
+  Add if missing: import './index.css'
+
+ERROR 2: "@tailwind is not a known keyword"
+SOLUTION: PostCSS not processing - verify postcss.config.js exists
+  cat postcss.config.js
+  Should have: plugins: { tailwindcss: {} }
+
+ERROR 3: CSS loads but no Tailwind styles
+SOLUTION: Dynamic class names prevent detection
+  grep -r "className=.*\$" src/components/
+  If found, refactor to use conditional:
+    ❌ className={`text-${color}`}
+    ✅ className={color === 'red' ? 'text-red-500' : 'text-blue-500'}
+
+=============================================================================
+NUCLEAR OPTION: FULL REBUILD
+=============================================================================
+
+If all else fails:
+
+cd /c/knosso/Alpha/projects/alpha
+
+# Kill everything
+pkill -9 node 2>/dev/null || true
+
+# Clean all caches
+rm -rf .vite dist node_modules/.vite .next
+
+# Deep clean
+npm cache clean --force
+
+# Reinstall
+npm install
+
+# Build
+npm run build
+
+# Run dev server
+npm run dev
+
+=============================================================================
+EXPECTED RESULTS AFTER FIX
+=============================================================================
+
+✅ Chapter cards have visible borders
+✅ Grid layout shows proper spacing
+✅ Status buttons show colors (blue, green, red, etc)
+✅ Character badges display with colors
+✅ Progress bars show filled percentage
+✅ Word counts visible in proper styling
+✅ Expand/collapse icons visible
+✅ Dark mode toggle works
+✅ No console errors
+
+=============================================================================
+IF STILL NOT WORKING: GET DETAILED INFO
+=============================================================================
+
+1. Build status:
+   cd /c/knosso/Alpha/projects/alpha
+   npm run build 2>&1 | tail -20
+
+2. Dev server log:
+   npm run dev -- --loglevel=debug
+
+3. Browser console errors:
+   F12 > Console tab > Check for red errors
+
+4. CSS file check:
+   Open DevTools > Network tab > Search "index.css"
+   Click it > Check Size and Status (should be 200 OK)
+
+5. Element inspection:
+   F12 > Inspector > Click chapter card
+   Look at "Computed Styles" section
+   Should show background-color, padding, etc.
+
+=============================================================================
