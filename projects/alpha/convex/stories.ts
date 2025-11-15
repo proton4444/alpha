@@ -118,3 +118,57 @@ export const deleteStory = mutation({
     return args.storyId;
   },
 });
+
+/**
+ * Get complete story tree: story + all chapters + all scenes
+ * Optimized query for StoryTree component visualization
+ */
+export const getStoryTree = query({
+  args: { storyId: v.id("stories") },
+  handler: async (ctx, args) => {
+    // Load the story
+    const story = await ctx.db.get(args.storyId);
+    if (!story) {
+      return null;
+    }
+
+    // Load all chapters for this story, ordered by chapter number
+    const chapters = await ctx.db
+      .query("chapters")
+      .withIndex("by_story", (q) => q.eq("storyId", args.storyId))
+      .order("asc")
+      .collect();
+
+    // Load all scenes for this story
+    const allScenes = await ctx.db
+      .query("scenes")
+      .withIndex("by_story", (q) => q.eq("storyId", args.storyId))
+      .collect();
+
+    // Group scenes by chapter
+    const scenesByChapter = new Map<string, typeof allScenes>();
+    for (const scene of allScenes) {
+      const chapterId = scene.chapterId;
+      if (!scenesByChapter.has(chapterId)) {
+        scenesByChapter.set(chapterId, []);
+      }
+      scenesByChapter.get(chapterId)!.push(scene);
+    }
+
+    // Sort scenes within each chapter by sceneNumber
+    for (const scenes of scenesByChapter.values()) {
+      scenes.sort((a, b) => a.sceneNumber - b.sceneNumber);
+    }
+
+    // Build tree structure
+    const chaptersWithScenes = chapters.map((chapter) => ({
+      ...chapter,
+      scenes: scenesByChapter.get(chapter._id) || [],
+    }));
+
+    return {
+      story,
+      chapters: chaptersWithScenes,
+    };
+  },
+});
