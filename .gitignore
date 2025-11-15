@@ -58,6 +58,9 @@ build/
 nul
 .temp/
 
+# TypeScript build cache
+*.tsbuildinfo
+
 # Project-specific (optional)
 # output/          # Uncomment if you want to ignore generated files
 # .project/cache/  # If you create a cache folder
