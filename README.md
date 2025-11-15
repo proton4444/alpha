@@ -440,3 +440,4 @@ We welcome contributions! See **[CONTRIBUTING.md](CONTRIBUTING.md)** for:
 [![Contributors](https://contrib.rocks/image?repo=bmad-code-org/BMAD-METHOD)](https://github.com/bmad-code-org/BMAD-METHOD/graphs/contributors)
 
 <sub>Built with ❤️ for the human-AI collaboration community</sub>
+# Rebuild trigger
