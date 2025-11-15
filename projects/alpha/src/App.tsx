@@ -41,7 +41,7 @@ function getConvexClient(): ConvexReactClient {
 }
 
 function AppContent() {
-  const [isDark, setIsDark] = useState(false)
+  const [isDark, setIsDark] = useState(true)
   const [showTestComponents, setShowTestComponents] = useState(false)
   const [selectedStoryId, setSelectedStoryId] = useState<string | null>(null)
   const [selectedSceneId, setSelectedSceneId] = useState<string | null>(null)
