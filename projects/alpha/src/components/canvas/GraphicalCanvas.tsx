@@ -61,20 +61,19 @@ export function GraphicalCanvas() {
     const newNodes: Node[] = []
     const newEdges: Edge[] = []
 
-    const CHAPTER_WIDTH = 200
     const CHAPTER_SPACING_X = 260
     const CHAPTER_SPACING_Y = 400
     const SCENE_WIDTH = 160
     const SCENE_SPACING = 20
 
     // Create chapter nodes
-    storyTree.chapters.forEach((chapter, chapterIndex) => {
+    storyTree.chapters.forEach((chapter: any, chapterIndex: number) => {
       const chapterX = (chapterIndex % 4) * CHAPTER_SPACING_X
       const chapterY = Math.floor(chapterIndex / 4) * CHAPTER_SPACING_Y
 
       // Chapter node
-      const completedScenes = chapter.scenes.filter(s => s.status === 'complete').length
-      const totalWords = chapter.scenes.reduce((sum, s) => {
+      const completedScenes = chapter.scenes.filter((s: any) => s.status === 'complete').length
+      const totalWords = chapter.scenes.reduce((sum: number, s: any) => {
         return sum + (s.prose ? s.prose.split(/\s+/).length : 0)
       }, 0)
 
@@ -92,11 +91,11 @@ export function GraphicalCanvas() {
       })
 
       // Scene nodes (below chapter)
-      chapter.scenes.forEach((scene, sceneIndex) => {
+      chapter.scenes.forEach((scene: any, sceneIndex: number) => {
         const sceneX = chapterX + (sceneIndex * (SCENE_WIDTH + SCENE_SPACING))
         const sceneY = chapterY + 150
 
-        const sceneCharacters = characters.filter(char =>
+        const sceneCharacters = characters.filter((char: any) =>
           scene.prose?.includes(char.name) || scene.outline.includes(char.name)
         )
 
@@ -154,7 +153,7 @@ export function GraphicalCanvas() {
           onChange={(e) => setSelectedStoryId(e.target.value as Id<'stories'>)}
           className="px-3 py-2 border rounded-lg dark:bg-slate-700 dark:text-slate-200 dark:border-slate-600"
         >
-          {stories?.map((story) => (
+          {stories?.map((story: any) => (
             <option key={story._id} value={story._id}>
               {story.title}
             </option>
