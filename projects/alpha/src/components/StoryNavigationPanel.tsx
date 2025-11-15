@@ -1,6 +1,5 @@
 import { useState } from 'react'
 import { StoryTree } from './StoryTree'
-import { Button } from '@/components/ui/button'
 import { useAllStories } from '@/hooks/useConvexQueries'
 import type { Id } from '../../convex/_generated/dataModel'
 

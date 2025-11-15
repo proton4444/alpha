@@ -180,7 +180,7 @@ export const generateScene = internalAction({
   args: {
     sceneId: v.id("scenes"),
   },
-  handler: async (ctx, args) => {
+  handler: async (ctx, args): Promise<any> => {
     console.log(`[generateScene] Starting generation for scene: ${args.sceneId}`);
 
     try {

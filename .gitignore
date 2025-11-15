@@ -67,3 +67,5 @@ nul
 # - output/        (Generated documents, if desired)
 # - .project/      (Project planning files)
 .playwright-mcp/
+
+.vercel

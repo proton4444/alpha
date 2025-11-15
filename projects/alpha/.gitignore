@@ -34,3 +34,4 @@ convex/_generated/
 # Note: This .gitignore is for projects/alpha only
 # It allows src/ and other source files to be tracked
 # The root .gitignore excludes src/ but we override it here
+.vercel

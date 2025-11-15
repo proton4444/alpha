@@ -3,7 +3,6 @@ import { useQuery } from 'convex/react'
 import { api } from '../../convex/_generated/api'
 import { StoryNavigationPanel } from './StoryNavigationPanel'
 import { SceneEditor } from './SceneEditor'
-import { Button } from '@/components/ui/button'
 import type { Id } from '../../convex/_generated/dataModel'
 
 /**

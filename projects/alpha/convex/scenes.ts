@@ -208,7 +208,7 @@ export const requestSceneGeneration = mutation({
 
     // Schedule the generateScene action to run immediately (non-blocking)
     // The action will run asynchronously and update the scene when complete
-    await ctx.scheduler.runAfter(0, internal.actions.generateScene.generateScene, {
+    await ctx.scheduler.runAfter(0, (internal as any).actions.generateScene.generateScene, {
       sceneId: args.sceneId,
     });
 
@@ -233,7 +233,7 @@ export const testGenerateScene = mutation({
     await ctx.db.patch(args.sceneId, { status: "generating" });
 
     // Schedule the generateScene action to run immediately
-    await ctx.scheduler.runAfter(0, internal.actions.generateScene.generateScene, {
+    await ctx.scheduler.runAfter(0, (internal as any).actions.generateScene.generateScene, {
       sceneId: args.sceneId,
     });
 
