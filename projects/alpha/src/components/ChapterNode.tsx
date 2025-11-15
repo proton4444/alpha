@@ -19,6 +19,35 @@ const formatNumber = (num: number): string => {
 }
 
 /**
+ * Get character initial (first letter of name) - Story 6.5
+ */
+const getCharacterInitial = (name: string): string => {
+  return name.charAt(0).toUpperCase()
+}
+
+/**
+ * Character badge color palette (Story 6.5)
+ * Colors cycle through this palette based on character index
+ */
+const characterColors = [
+  'bg-blue-500 text-white',
+  'bg-purple-500 text-white',
+  'bg-pink-500 text-white',
+  'bg-orange-500 text-white',
+  'bg-green-500 text-white',
+  'bg-teal-500 text-white',
+  'bg-red-500 text-white',
+  'bg-yellow-500 text-white',
+]
+
+/**
+ * Get color class for character at given index (Story 6.5)
+ */
+const getCharacterColor = (index: number): string => {
+  return characterColors[index % characterColors.length]
+}
+
+/**
  * Scene type from the story tree
  */
 interface Scene {
@@ -45,6 +74,16 @@ interface Chapter {
 }
 
 /**
+ * Character type (Story 6.5)
+ */
+interface Character {
+  _id: Id<"characters">
+  storyId: Id<"stories">
+  name: string
+  description?: string
+}
+
+/**
  * ChapterNode Props
  */
 interface ChapterNodeProps {
@@ -58,10 +97,12 @@ interface ChapterNodeProps {
   onSelectScene?: (sceneId: Id<"scenes">) => void
   /** Currently selected scene ID for highlighting */
   selectedSceneId?: Id<"scenes"> | null
+  /** Characters in the story (Story 6.5) */
+  characters?: Character[]
 }
 
 /**
- * ChapterNode Component (Stories 6.1, 6.4)
+ * ChapterNode Component (Stories 6.1, 6.4, 6.5)
  *
  * Displays a chapter card with:
  * - Chapter number and title
@@ -71,6 +112,7 @@ interface ChapterNodeProps {
  * - Expand/collapse toggle
  * - Scene list (when expanded)
  * - Drag-drop reordering (Story 6.4)
+ * - Character badges on scenes (Story 6.5)
  *
  * Features:
  * - Smooth 150ms animations
@@ -78,6 +120,7 @@ interface ChapterNodeProps {
  * - Dark mode support
  * - Scene selection support
  * - Drag-drop scene reordering within chapter (Story 6.4)
+ * - Character initials with tooltips (Story 6.5)
  */
 export function ChapterNode({
   chapter,
@@ -85,6 +128,7 @@ export function ChapterNode({
   onToggle,
   onSelectScene,
   selectedSceneId,
+  characters = [],
 }: ChapterNodeProps) {
   const { scenes } = chapter
 
@@ -356,6 +400,21 @@ export function ChapterNode({
                         <div className="text-xs mb-1 line-clamp-2">
                           {scene.outline}
                         </div>
+
+                        {/* Character Badges (Story 6.5) */}
+                        {characters.length > 0 && (
+                          <div className="flex flex-wrap gap-1 mt-1 mb-1">
+                            {characters.map((character, index) => (
+                              <span
+                                key={character._id}
+                                className={`${getCharacterColor(index)} text-xs px-1.5 py-0.5 rounded font-medium cursor-help`}
+                                title={character.name}
+                              >
+                                {getCharacterInitial(character.name)}
+                              </span>
+                            ))}
+                          </div>
+                        )}
 
                         {/* Word Count */}
                         {sceneWords > 0 && (

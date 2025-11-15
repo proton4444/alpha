@@ -17,7 +17,7 @@ interface ChapterOverviewProps {
 }
 
 /**
- * ChapterOverview Component (Story 6.2)
+ * ChapterOverview Component (Stories 6.2, 6.5)
  *
  * Displays all chapters in a responsive grid layout with coordinated
  * expand/collapse behavior (only one chapter open at a time).
@@ -27,6 +27,7 @@ interface ChapterOverviewProps {
  * - One chapter expanded at a time
  * - Smooth transitions via ChapterNode
  * - Scene selection support
+ * - Character badges on scenes (Story 6.5)
  * - Dark mode support
  *
  * Grid Layout:
@@ -61,6 +62,9 @@ export function ChapterOverview({
 
   // Load story tree with all chapters and scenes
   const storyTree = useQuery(api.stories.getStoryTree, { storyId })
+
+  // Load characters for this story (Story 6.5)
+  const characters = useQuery(api.characters.getCharactersByStory, { storyId })
 
   // Handle chapter toggle
   const handleToggleChapter = (chapterId: Id<"chapters">) => {
@@ -137,6 +141,7 @@ export function ChapterOverview({
             onToggle={() => handleToggleChapter(chapter._id)}
             onSelectScene={onSelectScene}
             selectedSceneId={selectedSceneId}
+            characters={characters || []}
           />
         ))}
       </div>

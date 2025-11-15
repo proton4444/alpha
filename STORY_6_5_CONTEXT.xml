@@ -1,0 +1,212 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<story-context>
+  <metadata>
+    <story-id>6.5</story-id>
+    <title>Character Badges on Scene Cards</title>
+    <developer>Amelia (DEV Agent)</developer>
+    <date>2025-11-15</date>
+    <status>IN PROGRESS</status>
+    <duration>2-3 hours</duration>
+    <complexity>Low</complexity>
+  </metadata>
+
+  <requirements>
+    <overview>
+      Display character badges on scene cards showing character initials.
+      Badges are color-coded per character and show full name on hover.
+      Uses existing character data from story context (no new API calls).
+    </overview>
+
+    <acceptance-criteria>
+      <criterion id="AC1">
+        <description>Show character initials on each scene card (e.g., [M][S])</description>
+        <verification>Scene cards display character badges with initials</verification>
+      </criterion>
+      <criterion id="AC2">
+        <description>Badges display character initials (first letter of name)</description>
+        <verification>Badge shows "M" for "Marcus", "S" for "Sarah", etc.</verification>
+      </criterion>
+      <criterion id="AC3">
+        <description>Hover over badge shows tooltip with full character name</description>
+        <verification>Tooltip appears on hover displaying full name</verification>
+      </criterion>
+      <criterion id="AC4">
+        <description>Characters are color-coded consistently</description>
+        <verification>Same character always has same color across scenes</verification>
+      </criterion>
+      <criterion id="AC5">
+        <description>Characters loaded from story context (existing API)</description>
+        <verification>Uses getCharactersByStory query, no new API calls</verification>
+      </criterion>
+      <criterion id="AC6">
+        <description>Badges don't interfere with drag-drop functionality</description>
+        <verification>Can still drag scenes with character badges present</verification>
+      </criterion>
+    </acceptance-criteria>
+  </requirements>
+
+  <technical-design>
+    <component-changes>
+      <component name="ChapterOverview">
+        <changes>
+          - Load characters using getCharactersByStory query
+          - Pass characters prop to ChapterNode
+        </changes>
+      </component>
+      <component name="ChapterNode">
+        <changes>
+          - Accept characters prop
+          - Display character badges on scene cards
+          - Extract initials from character names
+          - Assign colors to characters consistently
+          - Add tooltip on hover
+        </changes>
+      </component>
+    </component-changes>
+
+    <character-extraction>
+      <rationale>
+        Characters are not directly associated with scenes in the schema.
+        For MVP, we'll show all story characters on all scenes.
+        Future enhancement: Track which characters appear in each scene.
+      </rationale>
+      <implementation>
+        Display all story characters on every scene card.
+        This is acceptable for MVP scope.
+      </implementation>
+    </character-extraction>
+
+    <initials-logic>
+      <rule>Extract first letter of character name</rule>
+      <examples>
+        "Marcus" → "M"
+        "Sarah" → "S"
+        "Dr. Smith" → "D"
+        "Mary Jane" → "M"
+      </examples>
+      <edge-cases>
+        Empty name → "?" (shouldn't occur with validation)
+        Single character name → Use that character
+        Unicode characters → Use first character
+      </edge-cases>
+    </initials-logic>
+
+    <color-scheme>
+      <approach>Deterministic color assignment based on character index</approach>
+      <palette>
+        - Blue: #3b82f6
+        - Purple: #a855f7
+        - Pink: #ec4899
+        - Orange: #f97316
+        - Green: #10b981
+        - Teal: #14b8a6
+        - Red: #ef4444
+        - Yellow: #eab308
+      </palette>
+      <assignment>
+        Use modulo to cycle through palette: color = palette[index % palette.length]
+      </assignment>
+      <consistency>
+        Characters maintain same color throughout the story.
+        Achieved by consistent ordering from getCharactersByStory.
+      </consistency>
+    </color-scheme>
+
+    <tooltip-implementation>
+      <approach>Native HTML title attribute</approach>
+      <rationale>
+        Simple, no additional libraries needed.
+        Accessible by default.
+        Browser-native behavior.
+      </rationale>
+      <content>Full character name</content>
+    </tooltip-implementation>
+
+    <styling>
+      <framework>Tailwind CSS</framework>
+      <badge-style>
+        - Rounded badge with solid background
+        - White text
+        - Small size (text-xs)
+        - Padding: px-1.5 py-0.5
+        - Inline-flex display
+        - Font: font-medium
+      </badge-style>
+      <positioning>
+        Display badges below scene outline, above word count.
+        Flex row with gap between badges.
+      </positioning>
+      <theme>Dark mode: Lighter background variants for visibility</theme>
+    </styling>
+  </technical-design>
+
+  <testing-strategy>
+    <approach>Test-Driven Development (TDD)</approach>
+    <test-file>src/components/tests/CharacterBadgesTest.tsx</test-file>
+    <test-type>Interactive component test harness</test-type>
+    <test-scenarios>
+      <scenario>Scene cards display character badges</scenario>
+      <scenario>Badges show correct initials</scenario>
+      <scenario>Hover shows full character names</scenario>
+      <scenario>Characters have consistent colors</scenario>
+      <scenario>Multiple characters display correctly</scenario>
+      <scenario>Badges don't break drag-drop</scenario>
+    </test-scenarios>
+  </testing-strategy>
+
+  <dependencies>
+    <existing-components>
+      <component>ChapterNode (Stories 6.1, 6.4) - Will be enhanced</component>
+      <component>ChapterOverview (Story 6.2) - Will load characters</component>
+    </existing-components>
+    <convex-queries>
+      <query>api.characters.getCharactersByStory - Existing</query>
+    </convex-queries>
+  </dependencies>
+
+  <integration-points>
+    <current-integration>
+      ChapterOverview loads characters and passes to ChapterNode.
+      ChapterNode displays badges on each scene card.
+    </current-integration>
+    <future-enhancement>
+      Track which characters appear in each scene (not in MVP).
+      Would require scene-character association in schema.
+    </future-enhancement>
+  </integration-points>
+
+  <performance-considerations>
+    <consideration>
+      getCharactersByStory query runs once per story (at ChapterOverview level).
+      Characters prop passed down to all ChapterNodes.
+      No N+1 query problem.
+    </consideration>
+    <consideration>
+      Color calculation is deterministic and cheap (modulo operation).
+      No complex color generation algorithms.
+    </consideration>
+  </performance-considerations>
+
+  <accessibility-considerations>
+    <tooltip>
+      Native title attribute provides screen reader support.
+      Keyboard users can access tooltips.
+    </tooltip>
+    <color>
+      Color coding is supplementary to initials (not sole indicator).
+      Initials provide information even if color-blind.
+    </color>
+  </accessibility-considerations>
+
+  <success-criteria>
+    <criterion>All 6 acceptance criteria pass</criterion>
+    <criterion>Character badges display on all scenes</criterion>
+    <criterion>Initials are correct and readable</criterion>
+    <criterion>Tooltips show full names on hover</criterion>
+    <criterion>Colors are consistent per character</criterion>
+    <criterion>Drag-drop still works with badges</criterion>
+    <criterion>Component follows existing code patterns</criterion>
+    <criterion>TypeScript types are correct and complete</criterion>
+    <criterion>Code is reviewed and approved</criterion>
+  </success-criteria>
+</story-context>
