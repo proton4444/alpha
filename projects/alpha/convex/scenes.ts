@@ -240,3 +240,62 @@ export const testGenerateScene = mutation({
     return { success: true, message: "Scene generation started (Story 3.3 test)" };
   },
 });
+
+/**
+ * Reorder scenes within a chapter
+ * Story 6.4: Drag-drop scene reordering
+ *
+ * Moves a scene to a new position within its chapter and renumbers all scenes.
+ */
+export const reorderScenesInChapter = mutation({
+  args: {
+    chapterId: v.id("chapters"),
+    sceneId: v.id("scenes"),
+    newPosition: v.number(), // 1-indexed position
+  },
+  handler: async (ctx, args) => {
+    // Get all scenes in this chapter, sorted by current scene number
+    const scenes = await ctx.db
+      .query("scenes")
+      .withIndex("by_chapter", (q) => q.eq("chapterId", args.chapterId))
+      .order("asc")
+      .collect();
+
+    // Sort by sceneNumber to ensure correct order
+    scenes.sort((a, b) => a.sceneNumber - b.sceneNumber);
+
+    // Find the scene being moved
+    const sceneIndex = scenes.findIndex(s => s._id === args.sceneId);
+    if (sceneIndex === -1) {
+      throw new Error("Scene not found in chapter");
+    }
+
+    // Validate new position
+    if (args.newPosition < 1 || args.newPosition > scenes.length) {
+      throw new Error(`Invalid position: must be between 1 and ${scenes.length}`);
+    }
+
+    // If position hasn't changed, no-op
+    if (sceneIndex + 1 === args.newPosition) {
+      return { success: true, message: "Scene already at target position" };
+    }
+
+    // Remove scene from current position
+    const [movedScene] = scenes.splice(sceneIndex, 1);
+
+    // Insert at new position (converting from 1-indexed to 0-indexed)
+    scenes.splice(args.newPosition - 1, 0, movedScene);
+
+    // Update sceneNumber for all scenes in the chapter
+    for (let i = 0; i < scenes.length; i++) {
+      await ctx.db.patch(scenes[i]._id, {
+        sceneNumber: i + 1, // 1-indexed
+      });
+    }
+
+    return {
+      success: true,
+      message: `Scene reordered to position ${args.newPosition}`
+    };
+  },
+});

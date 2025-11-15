@@ -1,0 +1,185 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<story-context>
+  <metadata>
+    <story-id>6.1</story-id>
+    <title>ChapterNode Component</title>
+    <developer>Amelia (DEV Agent)</developer>
+    <date>2025-11-15</date>
+    <status>IN PROGRESS</status>
+    <duration>3-4 hours</duration>
+    <complexity>Low</complexity>
+  </metadata>
+
+  <requirements>
+    <overview>
+      Create a reusable ChapterNode component that displays chapter information
+      in a card format with expandable/collapsible scene list. This is the
+      foundational component for Story 6's node-based visual editor.
+    </overview>
+
+    <acceptance-criteria>
+      <criterion id="AC1">
+        <description>Display chapter number and title</description>
+        <verification>Visual inspection of rendered component</verification>
+      </criterion>
+      <criterion id="AC2">
+        <description>Display status breakdown (e.g., "2/3 Complete | 1 Draft | 0 Error")</description>
+        <verification>Component calculates and displays scene status counts</verification>
+      </criterion>
+      <criterion id="AC3">
+        <description>Display progress bar showing completion percentage</description>
+        <verification>Progress bar renders with correct percentage (e.g., "████░░░░ 67%")</verification>
+      </criterion>
+      <criterion id="AC4">
+        <description>Display total word count (e.g., "~3,500 words")</description>
+        <verification>Component sums prose word counts from all scenes</verification>
+      </criterion>
+      <criterion id="AC5">
+        <description>Expand/collapse toggle with ▼/▶ icon</description>
+        <verification>Icon changes based on expanded state</verification>
+      </criterion>
+      <criterion id="AC6">
+        <description>Click card or icon to expand/collapse</description>
+        <verification>Component responds to click events and updates state</verification>
+      </criterion>
+      <criterion id="AC7">
+        <description>Show scene list when expanded</description>
+        <verification>Scene cards render in expanded state</verification>
+      </criterion>
+      <criterion id="AC8">
+        <description>Smooth 150ms animation for expand/collapse</description>
+        <verification>CSS transition applied with 150ms duration</verification>
+      </criterion>
+    </acceptance-criteria>
+  </requirements>
+
+  <technical-design>
+    <component-structure>
+      <component name="ChapterNode" file="src/components/ChapterNode.tsx">
+        <purpose>Display chapter card with expandable scene list</purpose>
+        <props>
+          <prop name="chapter" type="Chapter with scenes" required="true">
+            Chapter object from getStoryTree query
+          </prop>
+          <prop name="isExpanded" type="boolean" required="false" default="false">
+            Controlled expansion state
+          </prop>
+          <prop name="onToggle" type="() => void" required="false">
+            Callback when chapter is expanded/collapsed
+          </prop>
+          <prop name="onSelectScene" type="(sceneId: Id<'scenes'>) => void" required="false">
+            Callback when a scene is selected
+          </prop>
+          <prop name="selectedSceneId" type="Id<'scenes'> | null" required="false">
+            Currently selected scene (for highlighting)
+          </prop>
+        </props>
+      </component>
+    </component-structure>
+
+    <data-flow>
+      <source>Convex query: api.stories.getStoryTree</source>
+      <structure>
+        {
+          story: { _id, title, createdAt },
+          chapters: [
+            {
+              _id,
+              storyId,
+              chapterNumber,
+              title,
+              scenes: [
+                {
+                  _id,
+                  storyId,
+                  chapterId,
+                  sceneNumber,
+                  outline,
+                  prose?,
+                  status: "draft" | "generating" | "complete" | "error",
+                  errorMessage?,
+                  regenerationCount
+                }
+              ]
+            }
+          ]
+        }
+      </structure>
+    </data-flow>
+
+    <calculations>
+      <calculation name="Status Breakdown">
+        Count scenes by status: complete, draft, generating, error
+      </calculation>
+      <calculation name="Progress Percentage">
+        (completeScenes / totalScenes) * 100
+      </calculation>
+      <calculation name="Total Word Count">
+        Sum of all scene prose word counts
+      </calculation>
+    </calculations>
+
+    <styling>
+      <framework>Tailwind CSS</framework>
+      <theme>Dark mode support via dark: prefix</theme>
+      <colors>
+        <color status="complete">#16a34a (green)</color>
+        <color status="draft">#6b7280 (gray)</color>
+        <color status="generating">#3b82f6 (blue)</color>
+        <color status="error">#dc2626 (red)</color>
+      </colors>
+      <animation>
+        transition-all duration-150 ease-in-out
+      </animation>
+    </styling>
+  </technical-design>
+
+  <testing-strategy>
+    <approach>Test-Driven Development (TDD)</approach>
+    <test-file>src/components/tests/ChapterNodeTest.tsx</test-file>
+    <test-type>Interactive component test harness</test-type>
+    <test-scenarios>
+      <scenario>Render collapsed chapter node</scenario>
+      <scenario>Render expanded chapter node with scenes</scenario>
+      <scenario>Toggle expand/collapse interaction</scenario>
+      <scenario>Display correct status breakdown</scenario>
+      <scenario>Display correct progress bar</scenario>
+      <scenario>Display correct word count</scenario>
+      <scenario>Scene selection interaction</scenario>
+    </test-scenarios>
+  </testing-strategy>
+
+  <dependencies>
+    <existing-components>
+      <component>StoryTree.tsx (reference for patterns)</component>
+      <component>SceneEditor.tsx (will integrate later)</component>
+    </existing-components>
+    <convex-queries>
+      <query>api.stories.getStoryTree</query>
+    </convex-queries>
+    <utilities>
+      <utility>countWords function (from StoryTree.tsx)</utility>
+    </utilities>
+  </dependencies>
+
+  <integration-points>
+    <future-integration story="6.2">
+      ChapterOverview will render grid of ChapterNode components
+    </future-integration>
+    <future-integration story="6.3">
+      Scene selection will trigger SceneEditor updates
+    </future-integration>
+    <future-integration story="6.4">
+      Drag-drop functionality will be added to scene cards
+    </future-integration>
+  </integration-points>
+
+  <success-criteria>
+    <criterion>All 8 acceptance criteria pass</criterion>
+    <criterion>Component renders without errors</criterion>
+    <criterion>Animation performs smoothly at 150ms</criterion>
+    <criterion>Component follows existing code patterns</criterion>
+    <criterion>TypeScript types are correct and complete</criterion>
+    <criterion>Code is reviewed and approved</criterion>
+  </success-criteria>
+</story-context>

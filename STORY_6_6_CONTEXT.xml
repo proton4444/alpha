@@ -1,0 +1,293 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<story id="6.6" title="Status Filtering" status="in-progress">
+  <metadata>
+    <developer>Amelia (DEV Agent)</developer>
+    <date>2025-11-15</date>
+    <approach>Test-Driven Development (TDD)</approach>
+    <priority>MVP - Final Story</priority>
+    <estimated_hours>2-3h</estimated_hours>
+  </metadata>
+
+  <summary>
+    Add status filter controls to ChapterOverview allowing users to filter scenes by status (Complete, Draft, Generating, Error). Filters affect scene visibility within chapters without hiding chapters themselves.
+  </summary>
+
+  <acceptance_criteria>
+    <criterion id="AC1">
+      <description>Filter buttons displayed at top of chapter overview (All, Complete, Draft, Generating, Error)</description>
+      <technical_details>
+        - Horizontal button group
+        - Positioned above chapter grid
+        - Clear visual distinction between active and inactive
+        - Dark mode support
+      </technical_details>
+    </criterion>
+
+    <criterion id="AC2">
+      <description>Clicking a filter button shows only scenes with that status</description>
+      <technical_details>
+        - State management for active filter
+        - Scenes filtered by status property
+        - Other status scenes hidden (not removed from DOM)
+        - Filter applies to all chapters
+      </technical_details>
+    </criterion>
+
+    <criterion id="AC3">
+      <description>Scenes with other statuses are hidden from view</description>
+      <technical_details>
+        - CSS display:none or conditional rendering
+        - Preserves scene data in state
+        - No data loss
+        - Smooth transitions
+      </technical_details>
+    </criterion>
+
+    <criterion id="AC4">
+      <description>"All" filter shows all scenes regardless of status</description>
+      <technical_details>
+        - Default filter state
+        - No filtering applied
+        - All scenes visible
+        - Active by default on page load
+      </technical_details>
+    </criterion>
+
+    <criterion id="AC5">
+      <description>Status counts update to reflect filtered view</description>
+      <technical_details>
+        - Status breakdown shows only visible scenes
+        - Progress bar reflects filtered scenes
+        - Word count includes only filtered scenes
+        - Counts recalculate when filter changes
+      </technical_details>
+    </criterion>
+
+    <criterion id="AC6">
+      <description>Filter state persists during chapter expand/collapse</description>
+      <technical_details>
+        - Expanding/collapsing doesn't reset filter
+        - Filter applies to newly expanded chapters
+        - Smooth user experience
+        - No jarring filter resets
+      </technical_details>
+    </criterion>
+
+    <criterion id="AC7">
+      <description>Chapters with no matching scenes show "No scenes match filter" message</description>
+      <technical_details>
+        - Empty state when all scenes filtered out
+        - Clear messaging
+        - Suggests changing filter
+        - Not an error state
+      </technical_details>
+    </criterion>
+
+    <criterion id="AC8">
+      <description>Filter buttons show count of scenes for each status</description>
+      <technical_details>
+        - Badge showing count next to each filter
+        - Updates in real-time as statuses change
+        - Helps users understand distribution
+        - Example: "Complete (12)" or just "12" in badge
+      </technical_details>
+    </criterion>
+  </acceptance_criteria>
+
+  <technical_design>
+    <component name="ChapterOverview">
+      <responsibility>
+        - Render filter controls
+        - Manage filter state
+        - Pass filter to ChapterNode
+        - Calculate status counts across all chapters
+      </responsibility>
+      <state>
+        - activeFilter: "all" | "complete" | "draft" | "generating" | "error"
+      </state>
+      <props>
+        - No new props (internal state only)
+      </props>
+    </component>
+
+    <component name="ChapterNode">
+      <responsibility>
+        - Accept filter prop
+        - Filter scenes array based on activeFilter
+        - Render only matching scenes
+        - Show empty state if no matches
+        - Recalculate stats for filtered scenes
+      </responsibility>
+      <state>
+        - No new state (controlled by parent)
+      </state>
+      <props>
+        - activeFilter?: "all" | "complete" | "draft" | "generating" | "error"
+      </props>
+    </component>
+
+    <component name="StatusFilterBar">
+      <responsibility>
+        - Render filter buttons
+        - Show active state
+        - Display counts per status
+        - Handle click events
+      </responsibility>
+      <new_component>true</new_component>
+      <optional>true (can inline in ChapterOverview)</optional>
+    </component>
+  </technical_design>
+
+  <implementation_notes>
+    <note priority="high">
+      Filter applies to SCENES, not chapters. Chapters remain visible but show filtered scenes.
+    </note>
+    <note priority="high">
+      Default filter is "all" - no filtering on initial load.
+    </note>
+    <note priority="medium">
+      Status counts should reflect ALL scenes across ALL chapters, not just visible/expanded chapters.
+    </note>
+    <note priority="medium">
+      Consider using conditional rendering vs CSS display:none for performance with many scenes.
+    </note>
+    <note priority="low">
+      Future enhancement: Multiple filter selection (AND/OR logic)
+    </note>
+  </implementation_notes>
+
+  <ui_design>
+    <filter_bar>
+      <layout>Horizontal button group, centered or left-aligned</layout>
+      <buttons>
+        <button name="All" active_by_default="true">
+          <styling>Solid background when active, outline when inactive</styling>
+          <count>Total scenes across all statuses</count>
+        </button>
+        <button name="Complete" status="complete">
+          <styling>Green accent, solid when active</styling>
+          <count>Number of complete scenes</count>
+          <icon>✓</icon>
+        </button>
+        <button name="Draft" status="draft">
+          <styling>Slate accent, solid when active</styling>
+          <count>Number of draft scenes</count>
+          <icon>○</icon>
+        </button>
+        <button name="Generating" status="generating">
+          <styling>Blue accent, solid when active</styling>
+          <count>Number of generating scenes</count>
+          <icon>⏳</icon>
+        </button>
+        <button name="Error" status="error">
+          <styling>Red accent, solid when active</styling>
+          <count>Number of error scenes</count>
+          <icon>✗</icon>
+        </button>
+      </buttons>
+      <spacing>1rem gap between buttons</spacing>
+      <position>Above chapter grid, below story header</position>
+    </filter_bar>
+
+    <empty_state>
+      <condition>All scenes in chapter filtered out</condition>
+      <message>"No scenes match the selected filter"</message>
+      <suggestion>"Try selecting 'All' or a different filter"</suggestion>
+      <styling>Subtle, not alarming</styling>
+    </empty_state>
+  </ui_design>
+
+  <testing_strategy>
+    <test_harness>
+      <name>StatusFilterTest</name>
+      <features>
+        - Story selection dropdown
+        - Filter buttons with counts
+        - ChapterWorkspace integration
+        - Visual feedback for active filter
+        - Test instructions
+        - AC verification checklist
+      </features>
+    </test_harness>
+
+    <manual_tests>
+      <test id="1">Click each filter button, verify only matching scenes show</test>
+      <test id="2">Verify "All" filter shows all scenes</test>
+      <test id="3">Verify status counts update correctly</test>
+      <test id="4">Expand/collapse chapters with active filter</test>
+      <test id="5">Check empty state when no scenes match filter</test>
+      <test id="6">Verify filter persists during interactions</test>
+      <test id="7">Check visual styling (active vs inactive buttons)</test>
+      <test id="8">Test with multiple chapters simultaneously</test>
+    </manual_tests>
+  </testing_strategy>
+
+  <edge_cases>
+    <case>Chapter with all scenes of one status → Some filters show empty</case>
+    <case>No scenes in any chapter → All filters show zero, graceful handling</case>
+    <case>Filter active while dragging scene → Filter persists</case>
+    <case>Scene status changes while filter active → UI updates reactively</case>
+    <case>Multiple chapters expanded with different status distributions</case>
+  </edge_cases>
+
+  <performance_considerations>
+    <item>Use conditional rendering for filtered scenes (don't render hidden scenes)</item>
+    <item>Memoize filtered scene arrays to prevent unnecessary recalculations</item>
+    <item>Status count calculation should be efficient (single pass over scenes)</item>
+    <item>Filter state changes should not cause full component re-renders</item>
+  </performance_considerations>
+
+  <accessibility>
+    <item>Filter buttons have clear labels and ARIA roles</item>
+    <item>Active filter indicated via aria-pressed="true"</item>
+    <item>Keyboard navigation between filter buttons (Tab, Arrow keys)</item>
+    <item>Screen readers announce filter changes</item>
+  </accessibility>
+
+  <integration_points>
+    <existing_component name="ChapterOverview">
+      <change>Add filter state and UI</change>
+      <change>Calculate status counts from storyTree</change>
+      <change>Pass activeFilter to ChapterNode</change>
+    </existing_component>
+
+    <existing_component name="ChapterNode">
+      <change>Accept activeFilter prop</change>
+      <change>Filter scenes array before rendering</change>
+      <change>Recalculate stats for filtered scenes</change>
+      <change>Show empty state when no matches</change>
+    </existing_component>
+
+    <no_backend_changes>
+      All filtering happens client-side. No Convex mutations or queries needed.
+    </no_backend_changes>
+  </integration_points>
+
+  <success_metrics>
+    <metric>All 8 AC implemented and verified</metric>
+    <metric>Filter response time &lt; 50ms</metric>
+    <metric>No layout shift when applying filters</metric>
+    <metric>Smooth transitions (150ms)</metric>
+    <metric>Dark mode support</metric>
+    <metric>TypeScript type safety</metric>
+  </success_metrics>
+
+  <dependencies>
+    <dependency>Story 6.1 (ChapterNode) - COMPLETE</dependency>
+    <dependency>Story 6.2 (ChapterOverview) - COMPLETE</dependency>
+    <dependency>Story 6.3 (Scene Interaction) - COMPLETE</dependency>
+    <dependency>Story 6.4 (Drag-Drop) - COMPLETE</dependency>
+    <dependency>Story 6.5 (Character Badges) - COMPLETE</dependency>
+  </dependencies>
+
+  <completion_criteria>
+    <item>All 8 AC pass manual testing</item>
+    <item>Test harness demonstrates all features</item>
+    <item>Code follows existing patterns</item>
+    <item>TypeScript compiles without errors (with Convex running)</item>
+    <item>Dark mode works</item>
+    <item>Implementation report complete</item>
+    <item>Code committed and pushed</item>
+    <item>Ready for code review</item>
+  </completion_criteria>
+</story>

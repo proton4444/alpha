@@ -20,6 +20,12 @@ import { StoryTreeTest } from '@/components/tests/StoryTreeTest'
 import { CharacterCRUDTest } from '@/components/tests/CharacterCRUDTest'
 import { CharacterManager } from '@/components/CharacterManager'
 import { SceneEditor } from '@/components/SceneEditor'
+import { ChapterNodeTest } from '@/components/tests/ChapterNodeTest'
+import { ChapterOverviewTest } from '@/components/tests/ChapterOverviewTest'
+import { ChapterWorkspaceTest } from '@/components/tests/ChapterWorkspaceTest'
+import { CharacterBadgesTest } from '@/components/tests/CharacterBadgesTest'
+import { DragDropTest } from '@/components/tests/DragDropTest'
+import { StatusFilterTest } from '@/components/tests/StatusFilterTest'
 import { useAllStories } from '@/hooks/useConvexQueries'
 
 // Initialize ConvexReactClient as singleton (only once per session)
@@ -228,6 +234,25 @@ function AppContent() {
               </div>
             </div>
 
+            {/* Story 6: Chapter Node-Based UI Tests */}
+            
+            {/* Chapter Node Test - Story 6.1 */}
+            <ChapterNodeTest />
+            
+            {/* Character Badges Test - Story 6.5 */}
+            <CharacterBadgesTest />
+            
+            {/* Drag Drop Test - Story 6.4 */}
+            <DragDropTest />
+            
+            {/* Status Filter Test - Story 6.6 */}
+            <StatusFilterTest />
+            
+            {/* Chapter Overview Test - Story 6.2 */}
+            <ChapterOverviewTest />
+            
+            {/* Chapter Workspace Test - Story 6 Integration */}
+            <ChapterWorkspaceTest />
             {/* shadcn/ui Components Demo - Story 1.5 */}
             <div className="border rounded-lg p-6 bg-slate-50 space-y-4">
               <h3 className="text-xl font-semibold mb-4">shadcn/ui Components Demo</h3>

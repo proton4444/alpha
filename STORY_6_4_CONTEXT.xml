@@ -1,0 +1,240 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<story-context>
+  <metadata>
+    <story-id>6.4</story-id>
+    <title>Drag-Drop Scene Reordering</title>
+    <developer>Amelia (DEV Agent)</developer>
+    <date>2025-11-15</date>
+    <status>IN PROGRESS</status>
+    <duration>4-5 hours</duration>
+    <complexity>Medium</complexity>
+  </metadata>
+
+  <requirements>
+    <overview>
+      Add drag-and-drop functionality to reorder scenes within a chapter.
+      Uses HTML5 Drag and Drop API (no external libraries). Provides
+      visual feedback during drag, updates database on drop, and
+      auto-renumbers scenes.
+    </overview>
+
+    <acceptance-criteria>
+      <criterion id="AC1">
+        <description>Drag handle (⋮⋮) appears on scene card hover</description>
+        <verification>Hover over scene card shows drag handle icon</verification>
+      </criterion>
+      <criterion id="AC2">
+        <description>Grab and drag scene within same chapter</description>
+        <verification>Scene can be dragged using drag handle</verification>
+      </criterion>
+      <criterion id="AC3">
+        <description>Visual feedback: Semi-transparent during drag</description>
+        <verification>Dragged scene appears semi-transparent (opacity 0.5)</verification>
+      </criterion>
+      <criterion id="AC4">
+        <description>Drop zone highlighted when dragging over</description>
+        <verification>Target drop position shows visual indicator</verification>
+      </criterion>
+      <criterion id="AC5">
+        <description>Database updates on drop</description>
+        <verification>Scene order persists after drop (survives refresh)</verification>
+      </criterion>
+      <criterion id="AC6">
+        <description>Scene numbers auto-updated after reorder</description>
+        <verification>Scene numbers reflect new order immediately</verification>
+      </criterion>
+      <criterion id="AC7">
+        <description>Within-chapter only (no cross-chapter dragging)</description>
+        <verification>Cannot drop scene into different chapter</verification>
+      </criterion>
+      <criterion id="AC8">
+        <description>Smooth animations during drag and drop</description>
+        <verification>Transitions are smooth and feel natural</verification>
+      </criterion>
+    </acceptance-criteria>
+  </requirements>
+
+  <technical-design>
+    <drag-drop-api>
+      <api>HTML5 Drag and Drop API</api>
+      <rationale>
+        Native browser API, no dependencies, good performance,
+        widely supported. Matches Story 6 requirement for
+        "no external library".
+      </rationale>
+    </drag-drop-api>
+
+    <component-changes>
+      <component name="ChapterNode">
+        <changes>
+          - Add draggable attribute to scene cards
+          - Add drag handle icon (⋮⋮) visible on hover
+          - Add onDragStart, onDragOver, onDragEnd, onDrop handlers
+          - Add visual feedback during drag (opacity, border)
+          - Add drop zone indicators
+        </changes>
+      </component>
+    </component-changes>
+
+    <convex-mutations>
+      <mutation name="reorderScenesInChapter">
+        <file>convex/scenes.ts</file>
+        <args>
+          <arg>chapterId: Id&lt;'chapters'&gt;</arg>
+          <arg>sceneId: Id&lt;'scenes'&gt;</arg>
+          <arg>newPosition: number (1-indexed)</arg>
+        </args>
+        <logic>
+          1. Get all scenes in chapter, sorted by sceneNumber
+          2. Find scene being moved
+          3. Remove scene from current position
+          4. Insert scene at new position
+          5. Update sceneNumber for all affected scenes
+          6. Batch update to database
+        </logic>
+      </mutation>
+    </convex-mutations>
+
+    <drag-drop-implementation>
+      <state>
+        <state-var name="draggedSceneId" type="Id&lt;'scenes'&gt; | null">
+          Tracks which scene is currently being dragged
+        </state-var>
+        <state-var name="dropTargetIndex" type="number | null">
+          Tracks where the scene will be dropped (for visual indicator)
+        </state-var>
+      </state>
+
+      <event-handlers>
+        <handler name="onDragStart">
+          - Set draggedSceneId
+          - Set dataTransfer with scene data
+          - Add dragging class for opacity
+        </handler>
+        <handler name="onDragOver">
+          - Prevent default to allow drop
+          - Calculate drop position
+          - Update dropTargetIndex for visual indicator
+        </handler>
+        <handler name="onDrop">
+          - Prevent default
+          - Get dragged scene and drop position
+          - Call reorderScenesInChapter mutation
+          - Clear drag state
+        </handler>
+        <handler name="onDragEnd">
+          - Clear draggedSceneId
+          - Clear dropTargetIndex
+          - Remove dragging class
+        </handler>
+      </event-handlers>
+
+      <visual-feedback>
+        <dragging>opacity-50 cursor-grabbing</dragging>
+        <drop-target>border-t-2 border-blue-500</drop-target>
+        <drag-handle>opacity-0 group-hover:opacity-100</drag-handle>
+      </visual-feedback>
+    </drag-drop-implementation>
+
+    <constraints>
+      <constraint>
+        Only allow drops within same chapter (check chapterId)
+      </constraint>
+      <constraint>
+        Disable drag during scene generation (status === 'generating')
+      </constraint>
+      <constraint>
+        Drag handle only visible on hover (reduce visual clutter)
+      </constraint>
+    </constraints>
+
+    <styling>
+      <framework>Tailwind CSS</framework>
+      <drag-handle-icon>⋮⋮ (vertical ellipsis)</drag-handle-icon>
+      <dragging-opacity>0.5</dragging-opacity>
+      <drop-indicator>Blue border-top (2px)</drop-indicator>
+      <animations>transition-all duration-150</animations>
+      <theme>Dark mode support</theme>
+    </styling>
+  </technical-design>
+
+  <testing-strategy>
+    <approach>Test-Driven Development (TDD)</approach>
+    <test-file>src/components/tests/DragDropTest.tsx</test-file>
+    <test-type>Interactive drag-drop test harness</test-type>
+    <test-scenarios>
+      <scenario>Hover to reveal drag handle</scenario>
+      <scenario>Drag scene to new position within chapter</scenario>
+      <scenario>Visual feedback during drag (opacity)</scenario>
+      <scenario>Drop zone highlighting</scenario>
+      <scenario>Scene reordering persists (refresh test)</scenario>
+      <scenario>Scene numbers update correctly</scenario>
+      <scenario>Cannot drag to different chapter</scenario>
+      <scenario>Cannot drag generating scenes</scenario>
+    </test-scenarios>
+  </testing-strategy>
+
+  <dependencies>
+    <existing-components>
+      <component>ChapterNode (Story 6.1) - Will be enhanced</component>
+      <component>ChapterOverview (Story 6.2) - No changes needed</component>
+      <component>ChapterWorkspace (Story 6.3) - No changes needed</component>
+    </existing-components>
+    <convex-mutations>
+      <mutation>NEW: reorderScenesInChapter</mutation>
+    </convex-mutations>
+    <browser-apis>
+      <api>HTML5 Drag and Drop API</api>
+    </browser-apis>
+  </dependencies>
+
+  <integration-points>
+    <current-integration>
+      ChapterNode scenes become draggable.
+      ChapterOverview and ChapterWorkspace work unchanged.
+    </current-integration>
+    <future-integration story="6.5">
+      Character badges will be added to scene cards
+      (should not interfere with drag handle)
+    </future-integration>
+  </integration-points>
+
+  <performance-considerations>
+    <consideration>
+      HTML5 drag-drop is hardware-accelerated and performant.
+      No virtual DOM diffing during drag improves responsiveness.
+    </consideration>
+    <consideration>
+      Batch scene number updates in single transaction
+      to minimize database operations.
+    </consideration>
+    <consideration>
+      Use CSS transitions for smooth visual feedback
+      without JavaScript animation loops.
+    </consideration>
+  </performance-considerations>
+
+  <accessibility-considerations>
+    <keyboard-alternative>
+      Future enhancement: Keyboard shortcuts for reordering
+      (not in MVP scope)
+    </keyboard-alternative>
+    <screen-reader>
+      Drag handle labeled with aria-label="Drag to reorder"
+    </screen-reader>
+    <focus-management>
+      Focus returns to moved scene after drop
+    </focus-management>
+  </accessibility-considerations>
+
+  <success-criteria>
+    <criterion>All 8 acceptance criteria pass</criterion>
+    <criterion>Drag-drop feels smooth and natural</criterion>
+    <criterion>Scene order persists across sessions</criterion>
+    <criterion>No cross-chapter dragging allowed</criterion>
+    <criterion>Visual feedback is clear and helpful</criterion>
+    <criterion>Component follows existing code patterns</criterion>
+    <criterion>TypeScript types are correct and complete</criterion>
+    <criterion>Code is reviewed and approved</criterion>
+  </success-criteria>
+</story-context>
