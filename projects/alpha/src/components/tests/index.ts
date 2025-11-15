@@ -1,12 +1,2 @@
-export { OpenRouterTest } from './OpenRouterTest'
-export { StoryCRUDTest } from './StoryCRUDTest'
-export { ChapterManagementTest } from './ChapterManagementTest'
-export { SceneManagementTest } from './SceneManagementTest'
-export { StoryTreeTest } from './StoryTreeTest'
-export { CharacterCRUDTest } from './CharacterCRUDTest'
-export { ChapterNodeTest } from './ChapterNodeTest'
-export { ChapterOverviewTest } from './ChapterOverviewTest'
-export { ChapterWorkspaceTest } from './ChapterWorkspaceTest'
-export { DragDropTest } from './DragDropTest'
-export { CharacterBadgesTest } from './CharacterBadgesTest'
-export { StatusFilterTest } from './StatusFilterTest'
+// Test components are excluded from production builds
+// This file intentionally left empty to prevent exports of test files
