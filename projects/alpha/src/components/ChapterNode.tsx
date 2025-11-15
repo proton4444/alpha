@@ -84,6 +84,12 @@ interface Character {
 }
 
 /**
+ * Filter Status Type (Story 6.6)
+ */
+type SceneStatus = "draft" | "generating" | "complete" | "error"
+type FilterStatus = "all" | SceneStatus
+
+/**
  * ChapterNode Props
  */
 interface ChapterNodeProps {
@@ -99,10 +105,12 @@ interface ChapterNodeProps {
   selectedSceneId?: Id<"scenes"> | null
   /** Characters in the story (Story 6.5) */
   characters?: Character[]
+  /** Active status filter (Story 6.6) */
+  activeFilter?: FilterStatus
 }
 
 /**
- * ChapterNode Component (Stories 6.1, 6.4, 6.5)
+ * ChapterNode Component (Stories 6.1, 6.4, 6.5, 6.6)
  *
  * Displays a chapter card with:
  * - Chapter number and title
@@ -113,6 +121,7 @@ interface ChapterNodeProps {
  * - Scene list (when expanded)
  * - Drag-drop reordering (Story 6.4)
  * - Character badges on scenes (Story 6.5)
+ * - Status filtering (Story 6.6)
  *
  * Features:
  * - Smooth 150ms animations
@@ -121,6 +130,7 @@ interface ChapterNodeProps {
  * - Scene selection support
  * - Drag-drop scene reordering within chapter (Story 6.4)
  * - Character initials with tooltips (Story 6.5)
+ * - Scene status filtering (Story 6.6)
  */
 export function ChapterNode({
   chapter,
@@ -129,6 +139,7 @@ export function ChapterNode({
   onSelectScene,
   selectedSceneId,
   characters = [],
+  activeFilter = "all",
 }: ChapterNodeProps) {
   const { scenes } = chapter
 
@@ -139,8 +150,13 @@ export function ChapterNode({
   // Convex mutation for reordering (Story 6.4)
   const reorderScenes = useMutation(api.scenes.reorderScenesInChapter)
 
-  // Calculate status breakdown
-  const statusCounts = scenes.reduce(
+  // Filter scenes based on active filter (Story 6.6)
+  const filteredScenes = activeFilter === "all"
+    ? scenes
+    : scenes.filter(scene => scene.status === activeFilter)
+
+  // Calculate status breakdown (using filtered scenes)
+  const statusCounts = filteredScenes.reduce(
     (acc, scene) => {
       acc[scene.status] = (acc[scene.status] || 0) + 1
       return acc
@@ -152,15 +168,15 @@ export function ChapterNode({
   const draftCount = statusCounts.draft || 0
   const generatingCount = statusCounts.generating || 0
   const errorCount = statusCounts.error || 0
-  const totalScenes = scenes.length
+  const totalScenes = filteredScenes.length
 
   // Calculate progress percentage
   const progressPercentage = totalScenes > 0
     ? Math.round((completeCount / totalScenes) * 100)
     : 0
 
-  // Calculate total word count
-  const totalWords = scenes.reduce((sum, scene) => {
+  // Calculate total word count (using filtered scenes)
+  const totalWords = filteredScenes.reduce((sum, scene) => {
     return sum + countWords(scene.prose)
   }, 0)
 
@@ -324,8 +340,8 @@ export function ChapterNode({
         }`}
       >
         <div className="border-t border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 p-3 space-y-2">
-          {scenes.length > 0 ? (
-            scenes.map((scene, index) => {
+          {filteredScenes.length > 0 ? (
+            filteredScenes.map((scene, index) => {
               const isSelected = selectedSceneId === scene._id
               const sceneWords = countWords(scene.prose)
               const isDragging = draggedSceneId === scene._id
@@ -437,7 +453,18 @@ export function ChapterNode({
             })
           ) : (
             <div className="text-xs text-slate-500 dark:text-slate-400 italic text-center py-4">
-              No scenes in this chapter
+              {scenes.length === 0 ? (
+                // No scenes at all in this chapter
+                "No scenes in this chapter"
+              ) : (
+                // Scenes exist but filter hides them all (Story 6.6)
+                <div className="space-y-1">
+                  <div>No scenes match the selected filter</div>
+                  <div className="text-xs text-slate-400 dark:text-slate-500">
+                    Try selecting "All" or a different filter
+                  </div>
+                </div>
+              )}
             </div>
           )}
         </div>
