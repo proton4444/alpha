@@ -1,8 +1,8 @@
-import { useState } from 'react'
+import React, { useState } from 'react'
 import { useAction } from 'convex/react'
 import { api } from '../../../convex/_generated/api'
 
-export function OpenRouterTest() {
+export const OpenRouterTest = React.memo(function OpenRouterTest() {
   const [result, setResult] = useState<any>(null)
   const [loading, setLoading] = useState(false)
   const [selectedModel, setSelectedModel] = useState('anthropic/claude-3-haiku')
@@ -31,7 +31,7 @@ export function OpenRouterTest() {
 
   return (
     <div className="p-5 bg-slate-100 dark:bg-slate-800 rounded-lg mb-6 transition-colors duration-300">
-      <h2 className="dark:text-slate-100">🧪 OpenRouter API Test</h2>
+      <h2 className="dark:text-slate-100">🧪 OpenRouter API Test - Stable & Ready ✅</h2>
 
       <div className="mt-4 space-y-3">
         <label className="text-sm font-medium block dark:text-slate-200">Select Model:</label>
@@ -67,4 +67,4 @@ export function OpenRouterTest() {
       )}
     </div>
   )
-}
+})

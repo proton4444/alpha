@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useMemo, useCallback } from 'react'
 import { ConvexProvider, ConvexReactClient } from 'convex/react'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
@@ -17,12 +17,30 @@ import { ChapterManagementTest } from '@/components/tests/ChapterManagementTest'
 import { SceneManagementTest } from '@/components/tests/SceneManagementTest'
 import { StoryTreeTest } from '@/components/tests/StoryTreeTest'
 
-const convex = new ConvexReactClient(
-  import.meta.env.VITE_CONVEX_URL || 'http://localhost:3210'
-)
+// Initialize ConvexReactClient as singleton (only once per session)
+let convexInstance: ConvexReactClient | null = null
+
+function getConvexClient(): ConvexReactClient {
+  if (!convexInstance) {
+    convexInstance = new ConvexReactClient(
+      import.meta.env.VITE_CONVEX_URL || 'http://localhost:3210'
+    )
+  }
+  return convexInstance
+}
 
 function App() {
   const [isDark, setIsDark] = useState(false)
+  const convex = useMemo(() => getConvexClient(), [])
+
+  const updateTheme = useCallback((dark: boolean) => {
+    if (dark) {
+      document.documentElement.classList.add('dark')
+    } else {
+      document.documentElement.classList.remove('dark')
+    }
+    localStorage.setItem('theme', dark ? 'dark' : 'light')
+  }, [])
 
   useEffect(() => {
     // Load theme preference from localStorage
@@ -31,16 +49,7 @@ function App() {
     const isDarkMode = savedTheme ? savedTheme === 'dark' : prefersDark
     setIsDark(isDarkMode)
     updateTheme(isDarkMode)
-  }, [])
-
-  const updateTheme = (dark: boolean) => {
-    if (dark) {
-      document.documentElement.classList.add('dark')
-    } else {
-      document.documentElement.classList.remove('dark')
-    }
-    localStorage.setItem('theme', dark ? 'dark' : 'light')
-  }
+  }, [updateTheme])
 
   const toggleTheme = () => {
     const newIsDark = !isDark

@@ -1,11 +1,11 @@
-import { useState } from 'react'
+import React, { useState } from 'react'
 import { useMutation } from 'convex/react'
 import { api } from '../../../convex/_generated/api'
 import { Button } from '@/components/ui/button'
 import { Textarea } from '@/components/ui/textarea'
 import { useAllStories, useChaptersByStory, useScenesByChapter, useScene } from '@/hooks/useConvexQueries'
 
-export function SceneManagementTest() {
+export const SceneManagementTest = React.memo(function SceneManagementTest() {
   const [selectedStoryId, setSelectedStoryId] = useState<string | null>(null)
   const [selectedChapterId, setSelectedChapterId] = useState<string | null>(null)
   const [selectedSceneId, setSelectedSceneId] = useState<string | null>(null)
@@ -217,4 +217,4 @@ export function SceneManagementTest() {
       </div>
     </div>
   )
-}
+})

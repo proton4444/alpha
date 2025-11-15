@@ -1,9 +1,9 @@
-import { useState } from 'react'
+import React, { useState } from 'react'
 import { StoryTree } from '@/components/StoryTree'
 import { useAllStories } from '@/hooks/useConvexQueries'
 import type { Id } from '../../../convex/_generated/dataModel'
 
-export function StoryTreeTest() {
+export const StoryTreeTest = React.memo(function StoryTreeTest() {
   const [selectedStoryId, setSelectedStoryId] = useState<Id<"stories"> | null>(null)
   const [selectedSceneId, setSelectedSceneId] = useState<Id<"scenes"> | null>(null)
 
@@ -73,4 +73,4 @@ export function StoryTreeTest() {
       </div>
     </div>
   )
-}
+})

@@ -1,11 +1,11 @@
-import { useState } from 'react'
+import React, { useState } from 'react'
 import { useMutation } from 'convex/react'
 import { api } from '../../../convex/_generated/api'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { useAllStories, useStory } from '@/hooks/useConvexQueries'
 
-export function StoryCRUDTest() {
+export const StoryCRUDTest = React.memo(function StoryCRUDTest() {
   const [newStoryTitle, setNewStoryTitle] = useState('')
   const [selectedStoryId, setSelectedStoryId] = useState<string | null>(null)
   const [updateTitle, setUpdateTitle] = useState('')
@@ -154,4 +154,4 @@ export function StoryCRUDTest() {
       </div>
     </div>
   )
-}
+})

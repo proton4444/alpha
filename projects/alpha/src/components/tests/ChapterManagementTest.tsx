@@ -1,11 +1,11 @@
-import { useState } from 'react'
+import React, { useState } from 'react'
 import { useMutation } from 'convex/react'
 import { api } from '../../../convex/_generated/api'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { useAllStories, useChaptersByStory } from '@/hooks/useConvexQueries'
 
-export function ChapterManagementTest() {
+export const ChapterManagementTest = React.memo(function ChapterManagementTest() {
   const [selectedStoryId, setSelectedStoryId] = useState<string | null>(null)
   const [selectedChapterId, setSelectedChapterId] = useState<string | null>(null)
   const [newChapterTitle, setNewChapterTitle] = useState('')
@@ -115,4 +115,4 @@ export function ChapterManagementTest() {
       </div>
     </div>
   )
-}
+})
