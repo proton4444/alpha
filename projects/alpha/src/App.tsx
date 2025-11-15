@@ -11,6 +11,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from '@/components/ui/dialog'
+import { Workspace } from '@/components/Workspace'
 import { OpenRouterTest } from '@/components/tests/OpenRouterTest'
 import { StoryCRUDTest } from '@/components/tests/StoryCRUDTest'
 import { ChapterManagementTest } from '@/components/tests/ChapterManagementTest'
@@ -35,6 +36,7 @@ function getConvexClient(): ConvexReactClient {
 
 function AppContent() {
   const [isDark, setIsDark] = useState(false)
+  const [showTestComponents, setShowTestComponents] = useState(false)
   const [selectedStoryId, setSelectedStoryId] = useState<string | null>(null)
   const [selectedSceneId, setSelectedSceneId] = useState<string | null>(null)
   const stories = useAllStories()
@@ -63,21 +65,64 @@ function AppContent() {
     updateTheme(newIsDark)
   }
 
+  // Story 5.1: Production workspace view (default)
+  if (!showTestComponents) {
+    return (
+      <div className="relative h-screen">
+        {/* Theme Toggle (floating) */}
+        <button
+          onClick={toggleTheme}
+          className="fixed top-4 right-4 z-50 p-2 rounded-lg bg-slate-200 dark:bg-slate-700 hover:bg-slate-300 dark:hover:bg-slate-600 transition-colors shadow-lg"
+          title={isDark ? 'Switch to light theme' : 'Switch to dark theme'}
+        >
+          {isDark ? '☀️' : '🌙'}
+        </button>
+
+        {/* Test Components Toggle (floating) */}
+        <button
+          onClick={() => setShowTestComponents(true)}
+          className="fixed bottom-4 right-4 z-50 p-3 rounded-lg bg-purple-600 hover:bg-purple-700 text-white transition-colors shadow-lg text-sm font-medium"
+          title="Show test components for development"
+        >
+          🧪 Dev Tools
+        </button>
+
+        {/* Production Workspace */}
+        <Workspace />
+      </div>
+    )
+  }
+
+  // Test Components view
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 dark:from-slate-950 dark:to-slate-900 transition-colors duration-300">
         <div className="container mx-auto py-12 px-4">
           <div className="bg-white dark:bg-slate-900 rounded-lg shadow-lg p-8 max-w-2xl mx-auto transition-colors duration-300">
             <div className="flex justify-between items-center mb-6">
-              <h1 className="text-4xl font-bold text-slate-900 dark:text-slate-100 mb-0">
-                Narrative Canvas Platform
-              </h1>
-              <button
-                onClick={toggleTheme}
-                className="p-2 rounded-lg bg-slate-200 dark:bg-slate-700 hover:bg-slate-300 dark:hover:bg-slate-600 transition-colors"
-                title={isDark ? 'Switch to light theme' : 'Switch to dark theme'}
-              >
-                {isDark ? '☀️' : '🌙'}
-              </button>
+              <div className="flex items-center gap-3">
+                <h1 className="text-4xl font-bold text-slate-900 dark:text-slate-100 mb-0">
+                  Narrative Canvas Platform
+                </h1>
+                <span className="text-xs px-2 py-1 rounded bg-orange-100 dark:bg-orange-900 text-orange-800 dark:text-orange-200 font-medium">
+                  TEST MODE
+                </span>
+              </div>
+              <div className="flex items-center gap-2">
+                <button
+                  onClick={() => setShowTestComponents(false)}
+                  className="p-2 rounded-lg bg-purple-600 hover:bg-purple-700 text-white transition-colors text-sm font-medium"
+                  title="Return to production workspace"
+                >
+                  ← Workspace
+                </button>
+                <button
+                  onClick={toggleTheme}
+                  className="p-2 rounded-lg bg-slate-200 dark:bg-slate-700 hover:bg-slate-300 dark:hover:bg-slate-600 transition-colors"
+                  title={isDark ? 'Switch to light theme' : 'Switch to dark theme'}
+                >
+                  {isDark ? '☀️' : '🌙'}
+                </button>
+              </div>
             </div>
 
             {/* OpenRouter API Test */}
@@ -93,10 +138,13 @@ function AppContent() {
 
             <div className="bg-blue-50 dark:bg-blue-950 border border-blue-200 dark:border-blue-800 rounded p-4 mb-6">
               <p className="text-blue-900 dark:text-blue-100 text-sm">
-                <strong>Environment:</strong> development
+                <strong>Environment:</strong> development (test mode)
               </p>
               <p className="text-blue-900 dark:text-blue-100 text-sm">
-                <strong>Status:</strong> Stories 4.5 & 4.6 - Scene Editor with Accept/Regenerate/Edit Actions implemented
+                <strong>Status:</strong> Story 5.1 - Split-Screen Workspace with Responsive Design implemented
+              </p>
+              <p className="text-blue-700 dark:text-blue-300 text-xs mt-2">
+                💡 Click "← Workspace" above to view the production split-screen layout
               </p>
             </div>
 
