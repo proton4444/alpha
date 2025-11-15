@@ -1,0 +1,262 @@
+STORY 6: NODE-BASED VISUAL EDITOR - WIREFRAMES
+================================================
+
+WIREFRAME 1: Story 6.1 - Chapter Node Component
+===============================================
+
+DEFAULT STATE (Collapsed):
++--------------------------------------+
+| [v] Chapter 3: The Revelation       |
+|-------------------------------------|
+| 2/3 Complete | 1 Draft | 0 Error   |
+|                                     |
+| Progress: [=====___] 67% complete  |
+| Word Count: ~3,500 words            |
++--------------------------------------+
+
+EXPANDED STATE:
++--------------------------------------+
+| [v] Chapter 3: The Revelation       |
+|-------------------------------------|
+| 2/3 Complete | 1 Draft | 0 Error   |
+| Progress: [=====___] 67%            |
+| Word Count: ~3,500 words            |
+|-------------------------------------|
+| [=] [*] Scene 1: Decision Time      |
+|     [M][S] 109 words               |
+|                                     |
+| [=] [*] Scene 2: Confrontation     |
+|     [M][S] 111 words               |
+|                                     |
+| [=] [ ] Scene 3: Resolution (Draft) |
+|     [M][S] outline only            |
++--------------------------------------+
+
+HOVER STATE:
+On scene card, drag handle appears: [::] (vertically dotted)
+On chapter card, hover effect shows: subtle shadow/lift
+
+
+WIREFRAME 2: Story 6.2 - Chapter Overview Layout
+================================================
+
+DESKTOP (3-4 per row):
+
++-------- Story Navigator --------+
+| All | Complete | Draft | Generating | Error
+
++--------+  +--------+  +--------+  +--------+
+| Ch 1   |  | Ch 2   |  | Ch 3   |  | Ch 4   |
+| 2/2 C  |  | 1/3 D  |  | 0/2 D  |  | 3/3 C  |
++--------+  +--------+  +--------+  +--------+
+
++--------+  +--------+  +--------+  +--------+
+| Ch 5   |  | Ch 6   |  | Ch 7   |  | Ch 8   |
+| 1/3 D  |  | 2/2 C  |  | 1/1 C  |  | 2/3 D  |
++--------+  +--------+  +--------+  +--------+
+
+[Ch 1 expanded]
+| V Chapter 1: The Beginning
+|   Scene 1: Intro [M] 200 wds
+|   Scene 2: Setup [M][S] 250 wds
+
++--------+  +--------+  +--------+
+| Ch 2   |  | Ch 3   |  | Ch 4   |
+| 1/3 D  |  | 0/2 D  |  | 3/3 C  |
++--------+  +--------+  +--------+
+
+
+TABLET (2-3 per row):
+
++--------+  +--------+  +--------+
+| Ch 1   |  | Ch 2   |  | Ch 3   |
+| 2/2 C  |  | 1/3 D  |  | 0/2 D  |
++--------+  +--------+  +--------+
+
++--------+  +--------+  +--------+
+| Ch 4   |  | Ch 5   |  | Ch 6   |
+| 3/3 C  |  | 1/3 D  |  | 2/2 C  |
++--------+  +--------+  +--------+
+
+
+WIREFRAME 3: Story 6.3 - Scene Interaction
+===========================================
+
+SCENE LIST (in expanded chapter):
++----------------------------------+
+| [::] [*] Scene 1: Decision      |
+|     [M][S] 109 words            |  <- selected/highlighted
+|                                 |
+| [::] [ ] Scene 2: Confrontation |
+|     [M][S] 111 words            |
+|                                 |
+| [::] [ ] Scene 3: Resolution    |
+|     (draft - no prose yet)       |
++----------------------------------+
+
+CLICK SCENE -> SceneEditor updates (Story 4.6):
+Left Panel (unchanged) | Right Panel (SceneEditor)
+                       | Scene 1
+                       | --------
+                       | Outline: Marcus and Silas...
+                       | 
+                       | [Generate] [Accept] [Regenerate] [Edit]
+
+
+WIREFRAME 4: Story 6.4 - Drag-Drop Reorder
+===========================================
+
+HOVER ON SCENE - drag handle appears:
++----------------------------------+
+| [::] [*] Scene 1: Decision      |
+|     [M][S] 109 words            |
++----------------------------------+
+  ^^
+  drag handle
+
+DURING DRAG:
++----------------------------------+
+| [::] [*] Scene 1 (semi-trans)   |  <- dragging (opacity 0.5)
+|     [M][S] 109 words            |
+|                                 |
+| [::] [ ] Scene 2 [DROP ZONE]    |  <- potential drop location
+|     [M][S] 111 words            |
++----------------------------------+
+
+AFTER DROP:
++----------------------------------+
+| [::] [*] Scene 2: Confrontation |  <- reordered
+|     [M][S] 111 words            |
+|                                 |
+| [::] [ ] Scene 1: Decision      |  <- was Scene 1, now Scene 2
+|     [M][S] 109 words            |
++----------------------------------+
+
+Scene numbers update automatically
+Database persists change
+
+
+WIREFRAME 5: Story 6.5 - Character Visualization
+================================================
+
+SCENE CARD WITH CHARACTERS:
++----------------------------------+
+| [::] [*] Scene 1: Decision      |
+|     [M][S]              109 wds  |
+|      ^  ^                        |
+|      |  +-- Character badges     |
+|      +------ Drag handle         |
++----------------------------------+
+
+HOVER ON CHARACTER BADGE:
+[M] -> tooltip "Marcus"
+[S] -> tooltip "Silas"
+
+
+WIREFRAME 6: Story 6.6 - Status Filtering
+==========================================
+
+FILTER BUTTONS (at top):
+[All] [✓ Complete] [○ Draft] [⏳ Generating] [✗ Error]
+  ^
+  active filter
+
+WITH FILTER ACTIVE ([Draft]):
+Show only chapters with Draft status:
++--------+  +--------+  +--------+
+| Ch 2   |  | Ch 5   |  | Ch 7   |
+| 1/3 D  |  | 1/3 D  |  | 2/3 D  |
++--------+  +--------+  +--------+
+
+Other chapters hidden/grayed out
+
+
+WIREFRAME 7: Story 6.7 - Zoom & Pan
+====================================
+
+ZOOM CONTROLS (bottom right):
+[- ] 100%  [+]  [Fit]
+ ^          ^    ^
+ zoom out  zoom in | fit to screen
+
+ZOOM LEVELS:
+50%, 75%, 100%, 125%, 150%, 200%
+
+MOUSE WHEEL:
+Ctrl + scroll wheel -> zoom in/out
+Drag background -> pan across zoomed view
+
+MINIMAP (optional, top right):
++---+
+|[#]|  <- bird's eye view of all chapters
++---+  click to jump to location
+
+
+WIREFRAME 8: Story 6.8 - Search & Navigation
+=============================================
+
+SEARCH BOX (top left):
+[Search chapters/scenes...] X
+
+SEARCH RESULTS:
+Search: "Decision"
+
+Results:
+  Chapter 1
+    Scene 1: Decision Time [M][S]
+    -> Click to jump to it
+
+  Chapter 5
+    Scene 2: Decision Point [S]
+    -> Click to jump to it
+
+KEYBOARD SHORTCUT:
+Ctrl+F on Windows / Cmd+F on Mac -> open search box
+
+
+COMPREHENSIVE LAYOUT OVERVIEW
+=============================
+
+DESKTOP FULL LAYOUT:
++-------- Header --------+
+| Narrative Canvas | Shortcuts | Theme |
++---------------------+
+| FILTERS:             |
+| All | Complete | Draft | Generating | Error |
++---------------------+
+|                      |  +-------- EDITOR ----+
+| CHAPTER OVERVIEW:    |  | Scene Editor       |
+|                      |  | (Story 4.6)        |
+| [Ch1][Ch2][Ch3]      |  |                    |
+| [Ch4][Ch5][Ch6]      |  | Outline:           |
+|                      |  | [textarea with     |
+| [Ch1 EXPANDED]       |  |  autosave]         |
+|  Sc1: ... [M][S]     |  |                    |
+|  Sc2: ... [M][S]     |  | [Generate] buttons |
+|  Sc3: ... [ ][S]     |  | [Accept] [Regen]   |
+|                      |  |                    |
+| [Ch7][Ch8][Ch9]      |  +--------------------+
++---------------------+
+
+Search box: top left
+Zoom controls: bottom right
+Theme toggle: top right
+
+
+RESPONSIVE BEHAVIOR
+====================
+
+TABLET:
+- 2-3 chapters per row
+- Smaller card padding
+- Touch-friendly tap targets (44px min)
+
+MOBILE:
+- 1 chapter per row
+- Full screen width
+- Touch drag support
+- Consider list fallback if performance issues
+
+=================================================
+END OF WIREFRAMES
+=================================================
