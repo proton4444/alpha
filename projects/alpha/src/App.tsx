@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { ConvexProvider, ConvexReactClient, useMutation, useAction, useQuery } from 'convex/react'
 import { api } from '../convex/_generated/api'
 import { Button } from '@/components/ui/button'
@@ -22,13 +22,21 @@ const convex = new ConvexReactClient(
 function TestComponent() {
   const [result, setResult] = useState<any>(null)
   const [loading, setLoading] = useState(false)
+  const [selectedModel, setSelectedModel] = useState('anthropic/claude-3-haiku')
 
   const testOpenRouter = useAction(api.actions.openrouter.testOpenRouterConnection)
+
+  const models = [
+    { id: 'anthropic/claude-3-haiku', name: '🔷 Claude 3 Haiku' },
+    { id: 'deepseek/deepseek-chat-v3.1:free', name: '🔍 DeepSeek Chat v3.1' },
+    { id: 'moonshotai/kimi-k2-thinking', name: '🧠 Moonshot Kimi K2 Thinking' },
+    { id: 'mistralai/mistral-7b-instruct:free', name: '🎯 Mistral 7B' },
+  ]
 
   const handleTest = async () => {
     setLoading(true)
     try {
-      const response = await testOpenRouter()
+      const response = await testOpenRouter({ model: selectedModel })
       setResult(response)
       console.log('Test result:', response)
     } catch (error) {
@@ -39,24 +47,38 @@ function TestComponent() {
   }
 
   return (
-    <div style={{ padding: '20px', backgroundColor: '#f0f0f0', borderRadius: '8px', margin: '20px' }}>
-      <h2>🧪 OpenRouter API Test</h2>
+    <div className="p-5 bg-slate-100 dark:bg-slate-800 rounded-lg mb-6 transition-colors duration-300">
+      <h2 className="dark:text-slate-100">🧪 OpenRouter API Test</h2>
+
+      <div className="mt-4 space-y-3">
+        <label className="text-sm font-medium block dark:text-slate-200">Select Model:</label>
+        <select
+          value={selectedModel}
+          onChange={(e) => setSelectedModel(e.target.value)}
+          className="w-full p-2 rounded border dark:bg-slate-700 dark:text-slate-100 dark:border-slate-600"
+        >
+          {models.map((model) => (
+            <option key={model.id} value={model.id}>
+              {model.name}
+            </option>
+          ))}
+        </select>
+      </div>
+
       <button
         onClick={handleTest}
         disabled={loading}
-        style={{ padding: '10px 20px', fontSize: '16px', cursor: 'pointer' }}
+        className="mt-4 px-5 py-2 bg-blue-600 hover:bg-blue-700 dark:bg-blue-700 dark:hover:bg-blue-600 text-white rounded transition-colors disabled:opacity-50"
       >
         {loading ? 'Testing...' : 'Test OpenRouter Connection'}
       </button>
 
       {result && (
-        <pre style={{
-          marginTop: '20px',
-          padding: '10px',
-          backgroundColor: result.success ? '#d4edda' : '#f8d7da',
-          borderRadius: '4px',
-          overflow: 'auto'
-        }}>
+        <pre className={`mt-5 p-3 rounded overflow-auto text-sm transition-colors ${
+          result.success
+            ? 'bg-green-100 dark:bg-green-900 text-green-900 dark:text-green-100'
+            : 'bg-red-100 dark:bg-red-900 text-red-900 dark:text-red-100'
+        }`}>
           {JSON.stringify(result, null, 2)}
         </pre>
       )}
@@ -122,29 +144,30 @@ function StoryCRUDTest() {
   }
 
   return (
-    <div className="border rounded-lg p-6 bg-slate-50 space-y-4 mb-6">
+    <div className="border dark:border-slate-700 rounded-lg p-6 bg-slate-50 dark:bg-slate-800 space-y-4 mb-6 transition-colors duration-300">
       <h3 className="text-xl font-semibold mb-4">📚 Story CRUD Test (Story 2.1)</h3>
 
       {/* Create Story */}
       <div className="space-y-2">
-        <label className="text-sm font-medium block">Create New Story:</label>
+        <label className="text-sm font-medium block dark:text-slate-200">Create New Story:</label>
         <div className="flex gap-2">
           <Input
             placeholder="Story title..."
             value={newStoryTitle}
             onChange={(e) => setNewStoryTitle(e.target.value)}
             onKeyPress={(e) => e.key === 'Enter' && handleCreate()}
+            className="dark:bg-slate-700 dark:text-slate-100 dark:border-slate-600"
           />
           <Button onClick={handleCreate}>Create</Button>
         </div>
-        <p className="text-xs text-muted-foreground">
+        <p className="text-xs text-muted-foreground dark:text-slate-400">
           Creates story with 24 auto-generated chapters
         </p>
       </div>
 
       {/* Story List */}
       <div className="space-y-2">
-        <label className="text-sm font-medium block">
+        <label className="text-sm font-medium block dark:text-slate-200">
           Stories ({stories.length}):
         </label>
         <div className="space-y-2 max-h-40 overflow-y-auto">
@@ -153,13 +176,13 @@ function StoryCRUDTest() {
               key={story._id}
               className={`p-3 rounded border cursor-pointer transition-colors ${
                 selectedStoryId === story._id
-                  ? 'bg-blue-100 border-blue-300'
-                  : 'bg-white hover:bg-slate-50'
+                  ? 'bg-blue-100 dark:bg-blue-900 border-blue-300 dark:border-blue-700'
+                  : 'bg-white dark:bg-slate-700 hover:bg-slate-50 dark:hover:bg-slate-600'
               }`}
               onClick={() => setSelectedStoryId(story._id)}
             >
               <div className="flex justify-between items-center">
-                <span className="font-medium">{story.title}</span>
+                <span className="font-medium dark:text-slate-100">{story.title}</span>
                 <Button
                   variant="destructive"
                   size="sm"
@@ -177,7 +200,7 @@ function StoryCRUDTest() {
             </div>
           ))}
           {stories.length === 0 && (
-            <p className="text-sm text-muted-foreground italic">
+            <p className="text-sm text-muted-foreground dark:text-slate-400 italic">
               No stories yet. Create one above!
             </p>
           )}
@@ -186,8 +209,8 @@ function StoryCRUDTest() {
 
       {/* Update Selected Story */}
       {selectedStory && (
-        <div className="space-y-2 border-t pt-4">
-          <label className="text-sm font-medium block">
+        <div className="space-y-2 border-t dark:border-slate-700 pt-4">
+          <label className="text-sm font-medium block dark:text-slate-200">
             Update "{selectedStory.title}":
           </label>
           <div className="flex gap-2">
@@ -205,7 +228,7 @@ function StoryCRUDTest() {
       )}
 
       {/* Success Indicators */}
-      <div className="text-xs space-y-1 pt-2 border-t">
+      <div className="text-xs space-y-1 pt-2 border-t dark:border-slate-700 dark:text-slate-300">
         <p>✅ createStory - creates story + 24 chapters</p>
         <p>✅ getStory - retrieves story by ID</p>
         <p>✅ getAllStories - lists all stories</p>
@@ -246,20 +269,20 @@ function ChapterManagementTest() {
   }
 
   return (
-    <div className="border rounded-lg p-6 bg-slate-50 space-y-4 mb-6">
-      <h3 className="text-xl font-semibold mb-4">📖 Chapter Management Test (Story 2.2)</h3>
+    <div className="border dark:border-slate-700 rounded-lg p-6 bg-slate-50 dark:bg-slate-800 space-y-4 mb-6 transition-colors duration-300">
+      <h3 className="text-xl font-semibold mb-4 dark:text-slate-100">📖 Chapter Management Test (Story 2.2)</h3>
 
       {/* Select Story */}
       <div className="space-y-2">
-        <label className="text-sm font-medium block">Select a Story:</label>
+        <label className="text-sm font-medium block dark:text-slate-200">Select a Story:</label>
         <div className="space-y-2 max-h-32 overflow-y-auto">
           {stories.map((story) => (
             <div
               key={story._id}
               className={`p-2 rounded border cursor-pointer transition-colors ${
                 selectedStoryId === story._id
-                  ? 'bg-blue-100 border-blue-300'
-                  : 'bg-white hover:bg-slate-50'
+                  ? 'bg-blue-100 dark:bg-blue-900 border-blue-300 dark:border-blue-700'
+                  : 'bg-white dark:bg-slate-700 hover:bg-slate-50 dark:hover:bg-slate-600'
               }`}
               onClick={() => {
                 setSelectedStoryId(story._id)
@@ -270,7 +293,7 @@ function ChapterManagementTest() {
             </div>
           ))}
           {stories.length === 0 && (
-            <p className="text-sm text-muted-foreground italic">
+            <p className="text-sm text-muted-foreground dark:text-slate-400 italic">
               Create a story first using the test above
             </p>
           )}
@@ -624,31 +647,66 @@ function StoryTreeTest() {
 }
 
 function App() {
+  const [isDark, setIsDark] = useState(false)
+
+  useEffect(() => {
+    // Load theme preference from localStorage
+    const savedTheme = localStorage.getItem('theme')
+    const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches
+    const isDarkMode = savedTheme ? savedTheme === 'dark' : prefersDark
+    setIsDark(isDarkMode)
+    updateTheme(isDarkMode)
+  }, [])
+
+  const updateTheme = (dark: boolean) => {
+    if (dark) {
+      document.documentElement.classList.add('dark')
+    } else {
+      document.documentElement.classList.remove('dark')
+    }
+    localStorage.setItem('theme', dark ? 'dark' : 'light')
+  }
+
+  const toggleTheme = () => {
+    const newIsDark = !isDark
+    setIsDark(newIsDark)
+    updateTheme(newIsDark)
+  }
+
   return (
     <ConvexProvider client={convex}>
-      <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100">
+      <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 dark:from-slate-950 dark:to-slate-900 transition-colors duration-300">
         <div className="container mx-auto py-12 px-4">
-          <div className="bg-white rounded-lg shadow-lg p-8 max-w-2xl mx-auto">
-            <h1 className="text-4xl font-bold text-slate-900 mb-4">
-              Narrative Canvas Platform
-            </h1>
+          <div className="bg-white dark:bg-slate-900 rounded-lg shadow-lg p-8 max-w-2xl mx-auto transition-colors duration-300">
+            <div className="flex justify-between items-center mb-6">
+              <h1 className="text-4xl font-bold text-slate-900 dark:text-slate-100 mb-0">
+                Narrative Canvas Platform
+              </h1>
+              <button
+                onClick={toggleTheme}
+                className="p-2 rounded-lg bg-slate-200 dark:bg-slate-700 hover:bg-slate-300 dark:hover:bg-slate-600 transition-colors"
+                title={isDark ? 'Switch to light theme' : 'Switch to dark theme'}
+              >
+                {isDark ? '☀️' : '🌙'}
+              </button>
+            </div>
 
             {/* Test Component */}
             <TestComponent />
 
             {/* Rest of app */}
-            <div className="text-slate-600 mb-6 space-y-3">
+            <div className="text-slate-600 dark:text-slate-400 mb-6 space-y-3">
               <p className="text-lg">✅ React 18.2+ with TypeScript 5.9+</p>
               <p className="text-lg">✅ Vite 7.2+ development server</p>
               <p className="text-lg">✅ Convex backend ready</p>
               <p className="text-lg">✅ Tailwind CSS 4.0 configured</p>
             </div>
 
-            <div className="bg-blue-50 border border-blue-200 rounded p-4 mb-6">
-              <p className="text-blue-900 text-sm">
+            <div className="bg-blue-50 dark:bg-blue-950 border border-blue-200 dark:border-blue-800 rounded p-4 mb-6">
+              <p className="text-blue-900 dark:text-blue-100 text-sm">
                 <strong>Environment:</strong> development
               </p>
-              <p className="text-blue-900 text-sm">
+              <p className="text-blue-900 dark:text-blue-100 text-sm">
                 <strong>Status:</strong> Story 2.4 - Story Tree Visualization implemented
               </p>
             </div>

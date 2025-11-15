@@ -141,7 +141,7 @@ export const generateWithClaude = action({
     })
 
     const request: OpenRouterRequest = {
-      model: 'anthropic/claude-3.5-sonnet',
+      model: 'moonshotai/kimi-k2:free',
       messages,
       temperature: args.temperature ?? 1,
       max_tokens: args.maxTokens ?? 2048,
@@ -180,11 +180,13 @@ export const generateWithClaude = action({
  * Returns API status and token usage
  */
 export const testOpenRouterConnection = action({
-  args: {},
-  handler: async (_ctx) => {
+  args: {
+    model: v.optional(v.string()),
+  },
+  handler: async (_ctx, args) => {
     try {
       const response = await callOpenRouterWithRetry({
-        model: 'anthropic/claude-3.5-sonnet',
+        model: args.model || 'moonshotai/kimi-k2:free',
         messages: [
           {
             role: 'user',
@@ -238,7 +240,7 @@ export async function generateToonResponse(
   })
 
   const request: OpenRouterRequest = {
-    model: 'anthropic/claude-3.5-sonnet',
+    model: 'moonshotai/kimi-k2:free',
     messages,
     temperature: 1,
     max_tokens: 500, // TOON responses are compact

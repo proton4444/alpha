@@ -9,8 +9,11 @@
  */
 
 import type * as actions_openrouter from "../actions/openrouter.js";
+import type * as chapters from "../chapters.js";
 import type * as example from "../example.js";
 import type * as lib_parseToon from "../lib/parseToon.js";
+import type * as scenes from "../scenes.js";
+import type * as stories from "../stories.js";
 
 import type {
   ApiFromModules,
@@ -20,8 +23,11 @@ import type {
 
 declare const fullApi: ApiFromModules<{
   "actions/openrouter": typeof actions_openrouter;
+  chapters: typeof chapters;
   example: typeof example;
   "lib/parseToon": typeof lib_parseToon;
+  scenes: typeof scenes;
+  stories: typeof stories;
 }>;
 
 /**
