@@ -15,8 +15,8 @@ import 'reactflow/dist/style.css'
 import './canvas.css'
 
 import { useQuery } from 'convex/react'
-import { api } from '@/convex/_generated/api'
-import { Id } from '@/convex/_generated/dataModel'
+import { api } from '../../../convex/_generated/api'
+import { Id } from '../../../convex/_generated/dataModel'
 
 import { SceneNode } from './SceneNode'
 import { ChapterNode } from './ChapterNode'
