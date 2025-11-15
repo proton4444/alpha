@@ -23,6 +23,7 @@ export const SceneManagementTest = React.memo(function SceneManagementTest() {
   const updateScene = useMutation(api.scenes.updateScene)
   const deleteScene = useMutation(api.scenes.deleteScene)
   const testGenerateScene = useMutation(api.scenes.testGenerateScene)
+  const requestSceneGeneration = useMutation(api.scenes.requestSceneGeneration)
 
   const handleCreateScene = async () => {
     if (!selectedStoryId || !selectedChapterId || !newSceneOutline.trim()) return
@@ -79,6 +80,28 @@ export const SceneManagementTest = React.memo(function SceneManagementTest() {
       alert('Story 3.3 Test: Scene generation started! Watch status change to "complete" and prose appear.')
     } catch (error) {
       console.error('Failed to test generation:', error)
+      alert(String(error))
+    }
+  }
+
+  const handleRequestGeneration = async () => {
+    if (!selectedSceneId || !selectedScene) return
+
+    const outline = prompt('Enter scene outline (1-2000 chars):', selectedScene.outline || '')
+    if (!outline || !outline.trim()) {
+      alert('Outline is required')
+      return
+    }
+
+    try {
+      const result = await requestSceneGeneration({
+        sceneId: selectedSceneId as any,
+        outline: outline,
+      })
+      console.log('Story 4.1: Generation requested:', result)
+      alert('Story 4.1: Scene generation started! UI returns immediately. Watch status change and prose appear.')
+    } catch (error) {
+      console.error('Failed to request generation:', error)
       alert(String(error))
     }
   }
@@ -235,6 +258,24 @@ export const SceneManagementTest = React.memo(function SceneManagementTest() {
               Triggers generateScene action. Loads all story characters and generates placeholder prose.
             </p>
           </div>
+
+          {/* Story 4.1 Request Generation Button */}
+          <div className="pt-3 border-t">
+            <p className="text-xs font-medium mb-2 text-green-600">
+              ✨ Story 4.1: Non-blocking Scene Generation
+            </p>
+            <Button
+              onClick={handleRequestGeneration}
+              variant="default"
+              size="sm"
+              className="w-full"
+            >
+              Request Scene Generation
+            </Button>
+            <p className="text-xs text-muted-foreground mt-1">
+              Uses scheduler pattern. UI returns immediately. Status updates to "generating" → "complete".
+            </p>
+          </div>
         </div>
       )}
 
@@ -246,6 +287,7 @@ export const SceneManagementTest = React.memo(function SceneManagementTest() {
         <p>✅ deleteScene - removes scene</p>
         <p>✅ Initial status: draft, regenerationCount: 0</p>
         <p className="text-blue-600 font-semibold pt-1 border-t mt-1">✅ Story 3.3: Character integration via generateScene action</p>
+        <p className="text-green-600 font-semibold">✅ Story 4.1: Non-blocking requestSceneGeneration with scheduler pattern</p>
       </div>
     </div>
   )

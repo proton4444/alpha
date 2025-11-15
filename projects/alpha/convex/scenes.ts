@@ -162,11 +162,52 @@ export const updateSceneStatus = mutation({
 });
 
 /**
+ * Request scene generation with non-blocking scheduler pattern
+ * Story 4.1: Production-ready mutation for scene prose generation
+ *
+ * This mutation implements the non-blocking pattern:
+ * 1. Updates scene outline
+ * 2. Sets status to "generating"
+ * 3. Schedules generateScene action asynchronously
+ * 4. Returns immediately (UI doesn't freeze)
+ *
+ * The UI can continue to operate while the action runs in the background.
+ * Status updates happen via Convex's reactive queries.
+ */
+export const requestSceneGeneration = mutation({
+  args: {
+    sceneId: v.id("scenes"),
+    outline: v.string(),
+  },
+  handler: async (ctx, args) => {
+    // Validate outline length (1-2000 characters)
+    if (args.outline.length < 1 || args.outline.length > 2000) {
+      throw new Error("Scene outline must be between 1 and 2000 characters");
+    }
+
+    // Update the scene with the new outline and set status to generating
+    await ctx.db.patch(args.sceneId, {
+      outline: args.outline,
+      status: "generating",
+    });
+
+    // Schedule the generateScene action to run immediately (non-blocking)
+    // The action will run asynchronously and update the scene when complete
+    await ctx.scheduler.runAfter(0, internal.actions.generateScene.generateScene, {
+      sceneId: args.sceneId,
+    });
+
+    // Return immediately - UI doesn't wait for AI response
+    return { success: true };
+  },
+});
+
+/**
  * Test scene generation with character integration
  * Story 3.3: Demonstrates character loading during scene generation
  *
  * This is a test mutation that triggers the generateScene action.
- * Full implementation in Story 4.1 will use scheduler pattern.
+ * Use requestSceneGeneration for production code (Story 4.1).
  */
 export const testGenerateScene = mutation({
   args: {
