@@ -15,7 +15,7 @@
 import { internalAction } from "../_generated/server";
 import { api } from "../_generated/api";
 import { v } from "convex/values";
-import { generateToonResponse } from "./openrouter";
+import { generateToonResponse, generateTextResponse } from "./openrouter";
 
 /**
  * Character Agent - Analyze scene and characters, return TOON guidance
@@ -87,6 +87,64 @@ Analyze this scene and the characters involved. Return character perspective and
 }
 
 /**
+ * Scene Writer Agent - Generate narrative prose using character guidance
+ * Story 4.3: Implements Scene Writer Agent integration
+ *
+ * @param sceneOutline - The outline of the scene to generate
+ * @param toonGuidance - Parsed TOON guidance from Character Agent
+ * @returns Generated narrative prose (300-500 words)
+ */
+async function callSceneWriterAgent(
+  sceneOutline: string,
+  toonGuidance: Record<string, string>
+): Promise<string> {
+  // Construct system prompt for Scene Writer Agent
+  const systemPrompt = `You are a Scene Writer Agent. Generate narrative prose (300-500 words).
+
+Your task is to write compelling narrative prose based on the scene outline and character guidance provided. The prose should be vivid, engaging, and appropriate for the scene's emotional tone and perspective.
+
+Word count requirement: 300-500 words
+
+Return ONLY the narrative prose, no meta-commentary or explanations.`;
+
+  // Format character guidance for inclusion in the prompt
+  const guidanceText = Object.entries(toonGuidance)
+    .map(([key, value]) => `- ${key.charAt(0).toUpperCase() + key.slice(1)}: ${value}`)
+    .join("\n");
+
+  // Construct user prompt with scene outline and character guidance
+  const userPrompt = `Scene Outline:
+${sceneOutline}
+
+Character Guidance:
+${guidanceText}
+
+Generate narrative prose (300-500 words) for this scene. Use the character guidance to inform:
+- The emotional atmosphere and character feelings (emotional)
+- The narrative perspective and whose thoughts we follow (pov)
+- The writing style and sentence structure (voice)
+- Physical descriptions of character reactions and body language (physical)
+
+Write vivid, engaging prose that brings this scene to life.`;
+
+  console.log(`[callSceneWriterAgent] Calling Scene Writer Agent`);
+  console.log(`[callSceneWriterAgent] TOON guidance:`, toonGuidance);
+
+  // Call OpenRouter with Claude 3.5 Sonnet
+  // Using higher max_tokens for prose generation (300-500 words ≈ 400-700 tokens)
+  const prose = await generateTextResponse(
+    userPrompt,
+    systemPrompt,
+    "anthropic/claude-3.5-sonnet",
+    1000 // Max tokens for 300-500 word response
+  );
+
+  console.log(`[callSceneWriterAgent] ✅ Scene Writer Agent generated ${prose.split(/\s+/).length} words`);
+
+  return prose;
+}
+
+/**
  * Generate scene prose using AI agents
  *
  * This action implements the complete AI generation pipeline:
@@ -107,6 +165,14 @@ Analyze this scene and the characters involved. Return character perspective and
  * - ✅ Specifies required fields: emotional, pov, voice, physical
  * - ✅ Calls OpenRouter with anthropic/claude-3.5-sonnet
  * - ✅ Returns parsed TOON object
+ *
+ * Story 4.3 Acceptance Criteria Met:
+ * - ✅ Scene Writer accepts scene outline and TOON guidance
+ * - ✅ Parses/formats TOON output for prompt inclusion
+ * - ✅ Constructs prompt with 300-500 word requirement
+ * - ✅ Includes character guidance (emotional, pov, voice, physical)
+ * - ✅ Calls OpenRouter with anthropic/claude-3.5-sonnet
+ * - ✅ Returns generated prose as plain text
  *
  * @param sceneId - The scene to generate prose for
  */
@@ -155,14 +221,14 @@ export const generateScene = internalAction({
       const toonGuidance = await callCharacterAgent(scene.outline, characters);
       console.log(`[generateScene] ✅ Character Agent returned TOON guidance:`, toonGuidance);
 
-      // Step 4: Call Scene Writer Agent (Story 4.3 - to be implemented)
-      // For now, use placeholder prose that demonstrates TOON integration
-      console.log(`[generateScene] Step 4: Scene Writer Agent (Story 4.3 placeholder)`);
-      const placeholderProse = generatePlaceholderProseWithToon(scene, characters, toonGuidance);
+      // Step 4: Call Scene Writer Agent (Story 4.3)
+      console.log(`[generateScene] Step 4: Calling Scene Writer Agent for prose generation...`);
+      const prose = await callSceneWriterAgent(scene.outline, toonGuidance);
+      console.log(`[generateScene] ✅ Scene Writer Agent generated prose (${prose.split(/\s+/).length} words)`);
 
       await ctx.runMutation(api.scenes.updateScene, {
         sceneId: args.sceneId,
-        prose: placeholderProse,
+        prose: prose,
       });
 
       // Update status to complete
@@ -171,14 +237,15 @@ export const generateScene = internalAction({
         status: "complete",
       });
 
-      console.log(`[generateScene] ✅ Scene generation complete (Story 4.2: Character Agent integration working)`);
+      console.log(`[generateScene] ✅ Scene generation complete (Stories 4.2 & 4.3: Full AI pipeline working)`);
 
       return {
         success: true,
         sceneId: args.sceneId,
         charactersLoaded: characters.length,
         toonGuidance,
-        message: "Story 4.2: Character Agent integration complete. TOON guidance generated successfully.",
+        proseWordCount: prose.split(/\s+/).length,
+        message: "Stories 4.2 & 4.3: Complete AI generation pipeline successful. Character Agent + Scene Writer working.",
       };
     } catch (error) {
       console.error(`[generateScene] ❌ Error:`, error);
@@ -194,49 +261,3 @@ export const generateScene = internalAction({
     }
   },
 });
-
-/**
- * Temporary: Generate placeholder prose with TOON guidance
- *
- * Story 4.2: Demonstrates that Character Agent TOON output is successfully
- * generated and available for use by Scene Writer Agent.
- *
- * This will be replaced by actual Scene Writer Agent in Story 4.3.
- */
-function generatePlaceholderProseWithToon(
-  scene: { outline: string; sceneNumber: number },
-  characters: Array<{ name: string }>,
-  toonGuidance: Record<string, string>
-): string {
-  const characterNames = characters.map((c) => c.name).join(", ");
-
-  // Format TOON guidance for display
-  const toonDisplay = Object.entries(toonGuidance)
-    .map(([key, value]) => `${key}: ${value}`)
-    .join("\n");
-
-  return `[Story 4.2: Character Agent Integration Complete]
-
-Scene ${scene.sceneNumber} - ${scene.outline}
-
-✅ Character Agent TOON Guidance:
-${toonDisplay}
-
-${characters.length > 0
-    ? `This scene features the following characters: ${characterNames}
-
-The Character Agent has analyzed the scene and characters to generate TOON guidance with:
-- Emotional states: ${toonGuidance.emotional || "N/A"}
-- Point of view: ${toonGuidance.pov || "N/A"}
-- Narrative voice: ${toonGuidance.voice || "N/A"}
-- Physical reactions: ${toonGuidance.physical || "N/A"}
-
-In Story 4.3, the Scene Writer Agent will use this TOON guidance to generate 300-500 word narrative prose with consistent character voices and perspectives.`
-    : `No characters have been created for this story yet.
-
-The Character Agent has still provided TOON guidance based on the scene outline.
-
-In Story 4.3, the Scene Writer Agent will use this guidance to generate narrative prose.`}
-
-[Story 4.2 Complete - Awaiting Story 4.3 Scene Writer Agent]`;
-}

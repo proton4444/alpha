@@ -258,3 +258,50 @@ export async function generateToonResponse(
   // Parse the TOON format response into a typed object
   return parseToon(toonText)
 }
+
+/**
+ * Helper function to call OpenRouter and get plain text response
+ * Used by Scene Writer Agent integration (Story 4.3)
+ *
+ * @param prompt - The prompt to send to the model
+ * @param systemPrompt - Optional system prompt for guiding response
+ * @param model - OpenRouter model to use (defaults to free model)
+ * @param maxTokens - Maximum tokens for response (default 2048)
+ * @returns Plain text response from the model
+ */
+export async function generateTextResponse(
+  prompt: string,
+  systemPrompt?: string,
+  model: string = 'moonshotai/kimi-k2:free',
+  maxTokens: number = 2048
+): Promise<string> {
+  const messages = []
+
+  if (systemPrompt) {
+    messages.push({
+      role: 'system' as const,
+      content: systemPrompt,
+    })
+  }
+
+  messages.push({
+    role: 'user' as const,
+    content: prompt,
+  })
+
+  const request: OpenRouterRequest = {
+    model,
+    messages,
+    temperature: 1,
+    max_tokens: maxTokens,
+  }
+
+  const response = await callOpenRouterWithRetry(request)
+  const text = response.choices[0]?.message?.content
+
+  if (!text) {
+    throw new Error('No text response from OpenRouter')
+  }
+
+  return text
+}
