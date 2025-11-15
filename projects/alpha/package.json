@@ -4,7 +4,7 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "build": "convex codegen && tsc -b && vite build",
+    "build": "tsc -b && vite build",
     "convex:dev": "convex dev",
     "dev": "vite",
     "lint": "eslint src",
