@@ -172,3 +172,56 @@ export const getStoryTree = query({
     };
   },
 });
+
+/**
+ * Delete all stories and characters (utility for cleaning test data)
+ * WARNING: This deletes ALL data in the database!
+ */
+export const deleteAllData = mutation({
+  handler: async (ctx) => {
+    // Get all stories
+    const allStories = await ctx.db.query("stories").collect();
+
+    // Delete each story (cascading delete will handle chapters and scenes)
+    for (const story of allStories) {
+      // Find all chapters for this story
+      const chapters = await ctx.db
+        .query("chapters")
+        .withIndex("by_story", (q) => q.eq("storyId", story._id))
+        .collect();
+
+      // Delete all scenes and chapters
+      for (const chapter of chapters) {
+        // Find all scenes for this chapter
+        const scenes = await ctx.db
+          .query("scenes")
+          .withIndex("by_chapter", (q) => q.eq("chapterId", chapter._id))
+          .collect();
+
+        // Delete all scenes
+        for (const scene of scenes) {
+          await ctx.db.delete(scene._id);
+        }
+
+        // Delete the chapter
+        await ctx.db.delete(chapter._id);
+      }
+
+      // Delete the story
+      await ctx.db.delete(story._id);
+    }
+
+    // Get all characters
+    const allCharacters = await ctx.db.query("characters").collect();
+
+    // Delete each character
+    for (const character of allCharacters) {
+      await ctx.db.delete(character._id);
+    }
+
+    return {
+      deletedStories: allStories.length,
+      deletedCharacters: allCharacters.length,
+    };
+  },
+});
