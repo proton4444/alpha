@@ -26,6 +26,7 @@ import { ChapterWorkspaceTest } from '@/components/tests/ChapterWorkspaceTest'
 import { CharacterBadgesTest } from '@/components/tests/CharacterBadgesTest'
 import { DragDropTest } from '@/components/tests/DragDropTest'
 import { StatusFilterTest } from '@/components/tests/StatusFilterTest'
+import { DataCleanupTest } from '@/components/tests/DataCleanupTest'
 import { useAllStories } from '@/hooks/useConvexQueries'
 
 // Initialize ConvexReactClient as singleton (only once per session)
@@ -153,6 +154,9 @@ function AppContent() {
                 💡 Click "← Workspace" above to view the production split-screen layout
               </p>
             </div>
+
+            {/* Data Cleanup Utility - Clear test data */}
+            <DataCleanupTest />
 
             {/* Story CRUD Test - Story 2.1 */}
             <StoryCRUDTest />
