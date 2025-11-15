@@ -116,6 +116,8 @@ export function Workspace() {
             <span className="text-xs px-2 py-1 rounded bg-purple-100 dark:bg-purple-900 text-purple-800 dark:text-purple-200 font-medium transition-colors duration-200">
               PoC
             </span>
+            {/* Deployment Test Indicator - Black Square */}
+            <div className="w-8 h-8 bg-black" title="Deployment test indicator" />
           </div>
 
           <div className="flex items-center gap-3">
