@@ -3,6 +3,7 @@ import { useMutation } from 'convex/react'
 import { api } from '../../convex/_generated/api'
 import { Button } from '@/components/ui/button'
 import { Textarea } from '@/components/ui/textarea'
+import { GenerationStatus, GenerationError } from '@/components/GenerationStatus'
 import { useScene } from '@/hooks/useConvexQueries'
 import type { Id } from '../../convex/_generated/dataModel'
 
@@ -243,34 +244,20 @@ export const SceneEditor: React.FC<SceneEditorProps> = ({ sceneId }) => {
         </Button>
       </div>
 
-      {/* Generation Status Display */}
+      {/* Generation Status Display (Story 5.4) */}
       {scene.status === 'generating' && (
-        <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 text-center">
-          <div className="flex items-center justify-center gap-2 mb-2">
-            <div className="w-4 h-4 border-2 border-blue-600 border-t-transparent rounded-full animate-spin"></div>
-            <span className="text-sm font-medium text-blue-900">
-              Generating scene prose...
-            </span>
-          </div>
-          <p className="text-xs text-blue-700">
-            AI is crafting your scene with character guidance (~5-10 seconds)
-          </p>
+        <div className="border border-purple-200 dark:border-purple-800 rounded-lg bg-white dark:bg-slate-800">
+          <GenerationStatus sceneNumber={scene.sceneNumber} />
         </div>
       )}
 
-      {/* Error Display */}
+      {/* Error Display (Story 5.4) */}
       {scene.status === 'error' && scene.errorMessage && (
-        <div className="bg-red-50 border border-red-200 rounded-lg p-4">
-          <p className="text-sm font-medium text-red-900 mb-2">⚠ Generation Error</p>
-          <p className="text-xs text-red-700">{scene.errorMessage}</p>
-          <Button
-            onClick={handleRegenerate}
-            variant="destructive"
-            size="sm"
-            className="mt-3"
-          >
-            Retry
-          </Button>
+        <div className="border border-red-200 dark:border-red-800 rounded-lg bg-white dark:bg-slate-800">
+          <GenerationError
+            errorMessage={scene.errorMessage}
+            onRetry={handleRegenerate}
+          />
         </div>
       )}
 
