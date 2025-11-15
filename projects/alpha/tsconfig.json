@@ -28,6 +28,6 @@
     "noFallthroughCasesInSwitch": true
   },
   "include": ["src", "convex"],
-  "exclude": ["src/**/*.test.tsx", "src/components/tests/**/*"],
+  "exclude": ["src/**/*.test.tsx", "src/components/tests/**/*", "convex/**/*.test.ts"],
   "references": [{ "path": "./tsconfig.node.json" }]
 }
