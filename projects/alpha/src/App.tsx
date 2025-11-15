@@ -16,6 +16,9 @@ import { StoryCRUDTest } from '@/components/tests/StoryCRUDTest'
 import { ChapterManagementTest } from '@/components/tests/ChapterManagementTest'
 import { SceneManagementTest } from '@/components/tests/SceneManagementTest'
 import { StoryTreeTest } from '@/components/tests/StoryTreeTest'
+import { CharacterCRUDTest } from '@/components/tests/CharacterCRUDTest'
+import { CharacterManager } from '@/components/CharacterManager'
+import { useAllStories } from '@/hooks/useConvexQueries'
 
 // Initialize ConvexReactClient as singleton (only once per session)
 let convexInstance: ConvexReactClient | null = null
@@ -31,7 +34,9 @@ function getConvexClient(): ConvexReactClient {
 
 function App() {
   const [isDark, setIsDark] = useState(false)
+  const [selectedStoryId, setSelectedStoryId] = useState<string | null>(null)
   const convex = useMemo(() => getConvexClient(), [])
+  const stories = useAllStories()
 
   const updateTheme = useCallback((dark: boolean) => {
     if (dark) {
@@ -91,7 +96,7 @@ function App() {
                 <strong>Environment:</strong> development
               </p>
               <p className="text-blue-900 dark:text-blue-100 text-sm">
-                <strong>Status:</strong> Story 2.4 - Story Tree Visualization implemented
+                <strong>Status:</strong> Story 3.3 - Character Selection for Scene Context implemented
               </p>
             </div>
 
@@ -106,6 +111,12 @@ function App() {
 
             {/* Story Tree Test - Story 2.4 */}
             <StoryTreeTest />
+
+            {/* Character CRUD Test - Story 3.1 */}
+            <CharacterCRUDTest />
+
+            {/* CharacterManager Production UI - Story 3.2 */}
+            {selectedStoryId && <CharacterManager storyId={selectedStoryId} onSelectStory={setSelectedStoryId} />}
 
             {/* shadcn/ui Components Demo - Story 1.5 */}
             <div className="border rounded-lg p-6 bg-slate-50 space-y-4">
