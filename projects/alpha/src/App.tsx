@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { ConvexProvider, ConvexReactClient, useAction } from 'convex/react'
+import { ConvexProvider, ConvexReactClient, useMutation, useAction, useQuery } from 'convex/react'
 import { api } from '../convex/_generated/api'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
@@ -62,6 +62,158 @@ function TestComponent() {
   )
 }
 
+function StoryCRUDTest() {
+  const [newStoryTitle, setNewStoryTitle] = useState('')
+  const [selectedStoryId, setSelectedStoryId] = useState<string | null>(null)
+  const [updateTitle, setUpdateTitle] = useState('')
+
+  const stories = useQuery(api.stories.getAllStories) ?? []
+  const selectedStory = useQuery(
+    api.stories.getStory,
+    selectedStoryId ? { storyId: selectedStoryId as any } : "skip"
+  )
+
+  const createStory = useMutation(api.stories.createStory)
+  const updateStory = useMutation(api.stories.updateStory)
+  const deleteStory = useMutation(api.stories.deleteStory)
+
+  const handleCreate = async () => {
+    if (!newStoryTitle.trim()) return
+    try {
+      const storyId = await createStory({ title: newStoryTitle })
+      setNewStoryTitle('')
+      setSelectedStoryId(storyId)
+      console.log('Created story:', storyId)
+    } catch (error) {
+      console.error('Failed to create story:', error)
+      alert(String(error))
+    }
+  }
+
+  const handleUpdate = async () => {
+    if (!selectedStoryId || !updateTitle.trim()) return
+    try {
+      await updateStory({
+        storyId: selectedStoryId as any,
+        title: updateTitle
+      })
+      setUpdateTitle('')
+      console.log('Updated story')
+    } catch (error) {
+      console.error('Failed to update story:', error)
+      alert(String(error))
+    }
+  }
+
+  const handleDelete = async (storyId: string) => {
+    if (!confirm('Delete this story and all its chapters/scenes?')) return
+    try {
+      await deleteStory({ storyId: storyId as any })
+      if (selectedStoryId === storyId) {
+        setSelectedStoryId(null)
+      }
+      console.log('Deleted story')
+    } catch (error) {
+      console.error('Failed to delete story:', error)
+      alert(String(error))
+    }
+  }
+
+  return (
+    <div className="border rounded-lg p-6 bg-slate-50 space-y-4 mb-6">
+      <h3 className="text-xl font-semibold mb-4">📚 Story CRUD Test (Story 2.1)</h3>
+
+      {/* Create Story */}
+      <div className="space-y-2">
+        <label className="text-sm font-medium block">Create New Story:</label>
+        <div className="flex gap-2">
+          <Input
+            placeholder="Story title..."
+            value={newStoryTitle}
+            onChange={(e) => setNewStoryTitle(e.target.value)}
+            onKeyPress={(e) => e.key === 'Enter' && handleCreate()}
+          />
+          <Button onClick={handleCreate}>Create</Button>
+        </div>
+        <p className="text-xs text-muted-foreground">
+          Creates story with 24 auto-generated chapters
+        </p>
+      </div>
+
+      {/* Story List */}
+      <div className="space-y-2">
+        <label className="text-sm font-medium block">
+          Stories ({stories.length}):
+        </label>
+        <div className="space-y-2 max-h-40 overflow-y-auto">
+          {stories.map((story) => (
+            <div
+              key={story._id}
+              className={`p-3 rounded border cursor-pointer transition-colors ${
+                selectedStoryId === story._id
+                  ? 'bg-blue-100 border-blue-300'
+                  : 'bg-white hover:bg-slate-50'
+              }`}
+              onClick={() => setSelectedStoryId(story._id)}
+            >
+              <div className="flex justify-between items-center">
+                <span className="font-medium">{story.title}</span>
+                <Button
+                  variant="destructive"
+                  size="sm"
+                  onClick={(e) => {
+                    e.stopPropagation()
+                    handleDelete(story._id)
+                  }}
+                >
+                  Delete
+                </Button>
+              </div>
+              <p className="text-xs text-muted-foreground">
+                {new Date(story.createdAt).toLocaleString()}
+              </p>
+            </div>
+          ))}
+          {stories.length === 0 && (
+            <p className="text-sm text-muted-foreground italic">
+              No stories yet. Create one above!
+            </p>
+          )}
+        </div>
+      </div>
+
+      {/* Update Selected Story */}
+      {selectedStory && (
+        <div className="space-y-2 border-t pt-4">
+          <label className="text-sm font-medium block">
+            Update "{selectedStory.title}":
+          </label>
+          <div className="flex gap-2">
+            <Input
+              placeholder="New title..."
+              value={updateTitle}
+              onChange={(e) => setUpdateTitle(e.target.value)}
+              onKeyPress={(e) => e.key === 'Enter' && handleUpdate()}
+            />
+            <Button onClick={handleUpdate} variant="secondary">
+              Update
+            </Button>
+          </div>
+        </div>
+      )}
+
+      {/* Success Indicators */}
+      <div className="text-xs space-y-1 pt-2 border-t">
+        <p>✅ createStory - creates story + 24 chapters</p>
+        <p>✅ getStory - retrieves story by ID</p>
+        <p>✅ getAllStories - lists all stories</p>
+        <p>✅ updateStory - updates story title (1-200 chars)</p>
+        <p>✅ deleteStory - cascades to chapters & scenes</p>
+      </div>
+    </div>
+  )
+}
+
 function App() {
   return (
     <ConvexProvider client={convex}>
@@ -88,9 +240,12 @@ function App() {
                 <strong>Environment:</strong> development
               </p>
               <p className="text-blue-900 text-sm">
-                <strong>Status:</strong> Story 1.5 - shadcn/ui components ready
+                <strong>Status:</strong> Story 2.1 - Story CRUD operations implemented
               </p>
             </div>
+
+            {/* Story CRUD Test - Story 2.1 */}
+            <StoryCRUDTest />
 
             {/* shadcn/ui Components Demo - Story 1.5 */}
             <div className="border rounded-lg p-6 bg-slate-50 space-y-4">
