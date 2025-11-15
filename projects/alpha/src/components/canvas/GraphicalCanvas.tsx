@@ -33,9 +33,9 @@ export function GraphicalCanvas() {
   const [selectedSceneId, setSelectedSceneId] = useState<Id<'scenes'> | null>(null)
 
   // Fetch data
-  const stories = useQuery(api.stories.list)
+  const stories = useQuery(api.stories.getAllStories)
   const storyTree = useQuery(
-    api.storyTree.getStoryTree,
+    api.stories.getStoryTree,
     selectedStoryId ? { storyId: selectedStoryId } : 'skip'
   )
   const characters = useQuery(
