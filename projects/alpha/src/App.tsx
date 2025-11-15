@@ -3,8 +3,6 @@ import { ConvexProvider, ConvexReactClient } from 'convex/react'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Textarea } from '@/components/ui/textarea'
-
-// Rebuild trigger
 import {
   Dialog,
   DialogContent,
