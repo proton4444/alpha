@@ -13,6 +13,7 @@ import {
 } from '@/components/ui/dialog'
 import { Workspace } from '@/components/Workspace'
 import { GraphicalCanvas } from '@/components/canvas/GraphicalCanvas'
+import { GraphicalCanvasDemo } from '@/components/canvas/GraphicalCanvasDemo'
 import { CharacterManager } from '@/components/CharacterManager'
 import { SceneEditor } from '@/components/SceneEditor'
 import { useAllStories } from '@/hooks/useConvexQueries'
@@ -93,7 +94,7 @@ function AppContent() {
         </button>
 
         {/* Main view - Canvas or Workspace */}
-        {useGraphicalCanvas ? <GraphicalCanvas /> : <Workspace />}
+        {useGraphicalCanvas ? <GraphicalCanvasDemo /> : <Workspace />}
       </div>
     )
   }
