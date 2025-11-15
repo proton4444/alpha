@@ -17,7 +17,8 @@
     /* Path alias */
     "baseUrl": ".",
     "paths": {
-      "@/*": ["./src/*"]
+      "@/*": ["./src/*"],
+      "@/convex/*": ["./convex/*"]
     },
 
     /* Linting */
@@ -26,7 +27,7 @@
     "noUnusedParameters": true,
     "noFallthroughCasesInSwitch": true
   },
-  "include": ["src"],
+  "include": ["src", "convex"],
   "exclude": ["src/**/*.test.tsx", "src/components/tests/**/*"],
   "references": [{ "path": "./tsconfig.node.json" }]
 }
