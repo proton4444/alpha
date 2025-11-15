@@ -1,0 +1,194 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<story-context>
+  <metadata>
+    <story-id>6.2</story-id>
+    <title>Chapter Overview Grid Layout</title>
+    <developer>Amelia (DEV Agent)</developer>
+    <date>2025-11-15</date>
+    <status>IN PROGRESS</status>
+    <duration>3-4 hours</duration>
+    <complexity>Low-Medium</complexity>
+  </metadata>
+
+  <requirements>
+    <overview>
+      Create a ChapterOverview component that displays all chapters in a
+      responsive grid layout. Integrates multiple ChapterNode components
+      with coordinated expand/collapse behavior (one chapter open at a time).
+    </overview>
+
+    <acceptance-criteria>
+      <criterion id="AC1">
+        <description>Display chapters in a CSS grid layout</description>
+        <verification>Grid renders with proper spacing and alignment</verification>
+      </criterion>
+      <criterion id="AC2">
+        <description>Show 3-4 chapters per row on desktop (1920px)</description>
+        <verification>Grid columns adjust based on viewport width</verification>
+      </criterion>
+      <criterion id="AC3">
+        <description>Use 1rem gap between chapter cards</description>
+        <verification>Consistent spacing between all grid items</verification>
+      </criterion>
+      <criterion id="AC4">
+        <description>Responsive layout adapts to tablet and mobile</description>
+        <verification>Grid collapses to 2-3 columns (tablet) and 1 column (mobile)</verification>
+      </criterion>
+      <criterion id="AC5">
+        <description>Only one chapter expanded at a time</description>
+        <verification>Expanding a chapter automatically collapses others</verification>
+      </criterion>
+      <criterion id="AC6">
+        <description>Clicking another chapter collapses the previous one</description>
+        <verification>State management ensures exclusive expansion</verification>
+      </criterion>
+      <criterion id="AC7">
+        <description>Scroll position preserved during expand/collapse</description>
+        <verification>Page doesn't jump when chapters expand/collapse</verification>
+      </criterion>
+      <criterion id="AC8">
+        <description>Smooth animations for collapse/expand transitions</description>
+        <verification>Leverages ChapterNode's 150ms animations</verification>
+      </criterion>
+    </acceptance-criteria>
+  </requirements>
+
+  <technical-design>
+    <component-structure>
+      <component name="ChapterOverview" file="src/components/ChapterOverview.tsx">
+        <purpose>Grid container for ChapterNode components with coordinated state</purpose>
+        <props>
+          <prop name="storyId" type="Id<'stories'>" required="true">
+            ID of the story to display chapters for
+          </prop>
+          <prop name="onSelectScene" type="(sceneId: Id<'scenes'>) => void" required="false">
+            Callback when a scene is selected (bubbles up from ChapterNode)
+          </prop>
+          <prop name="selectedSceneId" type="Id<'scenes'> | null" required="false">
+            Currently selected scene (passed down to ChapterNodes)
+          </prop>
+        </props>
+        <state>
+          <state-var name="expandedChapterId" type="Id<'chapters'> | null">
+            Tracks which single chapter is currently expanded
+          </state-var>
+        </state>
+      </component>
+    </component-structure>
+
+    <data-flow>
+      <source>Convex query: api.stories.getStoryTree</source>
+      <flow>
+        ChapterOverview (fetches data)
+          → Maps chapters array
+          → Renders ChapterNode for each chapter
+          → Passes isExpanded={chapter._id === expandedChapterId}
+          → Handles onToggle to update expandedChapterId
+          → Bubbles scene selection to parent
+      </flow>
+    </data-flow>
+
+    <state-management>
+      <pattern>Single Source of Truth</pattern>
+      <implementation>
+        - ChapterOverview maintains expandedChapterId state
+        - Each ChapterNode receives isExpanded as derived prop
+        - onToggle callback updates state to toggle or switch chapters
+        - When toggling same chapter: expandedChapterId = null
+        - When toggling different chapter: expandedChapterId = newChapterId
+      </implementation>
+    </state-management>
+
+    <styling>
+      <framework>Tailwind CSS</framework>
+      <grid-configuration>
+        grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4
+      </grid-configuration>
+      <responsive-breakpoints>
+        <breakpoint name="mobile" max="768px">1 column</breakpoint>
+        <breakpoint name="tablet" min="768px" max="1024px">2 columns</breakpoint>
+        <breakpoint name="desktop" min="1024px" max="1280px">3 columns</breakpoint>
+        <breakpoint name="large-desktop" min="1280px">4 columns</breakpoint>
+      </responsive-breakpoints>
+      <theme>Dark mode support via dark: prefix</theme>
+    </styling>
+
+    <scroll-preservation>
+      <approach>CSS-based (no JavaScript scroll manipulation)</approach>
+      <rationale>
+        ChapterNode uses max-height transitions instead of height,
+        which allows smooth animations without scroll jumps.
+        Browser handles scroll position naturally.
+      </rationale>
+    </scroll-preservation>
+  </technical-design>
+
+  <testing-strategy>
+    <approach>Test-Driven Development (TDD)</approach>
+    <test-file>src/components/tests/ChapterOverviewTest.tsx</test-file>
+    <test-type>Interactive component test harness</test-type>
+    <test-scenarios>
+      <scenario>Render grid with multiple chapters</scenario>
+      <scenario>Verify responsive grid columns</scenario>
+      <scenario>Expand single chapter</scenario>
+      <scenario>Expand different chapter (collapses previous)</scenario>
+      <scenario>Toggle same chapter (collapse)</scenario>
+      <scenario>Scene selection propagation</scenario>
+      <scenario>Loading state handling</scenario>
+      <scenario>Empty state (no chapters)</scenario>
+    </test-scenarios>
+  </testing-strategy>
+
+  <dependencies>
+    <existing-components>
+      <component>ChapterNode (Story 6.1)</component>
+      <component>StoryTree (reference for patterns)</component>
+      <component>Workspace (integration point)</component>
+    </existing-components>
+    <convex-queries>
+      <query>api.stories.getStoryTree</query>
+    </convex-queries>
+    <utilities>
+      <utility>None required</utility>
+    </utilities>
+  </dependencies>
+
+  <integration-points>
+    <current-integration>
+      ChapterOverview can be used as a replacement or alternative view
+      to StoryTree in the Workspace left panel
+    </current-integration>
+    <future-integration story="6.3">
+      Scene selection will trigger SceneEditor updates in Workspace
+    </future-integration>
+    <future-integration story="6.6">
+      Status filtering will be added as a parent component wrapper
+    </future-integration>
+  </integration-points>
+
+  <performance-considerations>
+    <consideration>
+      Grid layout with 24 chapters (typical story size)
+      should render smoothly. Expand/collapse animations
+      use CSS transitions for 60fps performance.
+    </consideration>
+    <consideration>
+      Only one chapter expanded at a time reduces DOM size
+      and prevents performance degradation with many scenes.
+    </consideration>
+    <consideration>
+      CSS Grid is hardware-accelerated and efficient for
+      large grids compared to flexbox alternatives.
+    </consideration>
+  </performance-considerations>
+
+  <success-criteria>
+    <criterion>All 8 acceptance criteria pass</criterion>
+    <criterion>Component renders without errors</criterion>
+    <criterion>Grid layout is responsive across breakpoints</criterion>
+    <criterion>One-chapter-at-a-time behavior works correctly</criterion>
+    <criterion>Component follows existing code patterns</criterion>
+    <criterion>TypeScript types are correct and complete</criterion>
+    <criterion>Code is reviewed and approved</criterion>
+  </success-criteria>
+</story-context>
