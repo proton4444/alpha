@@ -16,6 +16,7 @@ import { StoryCRUDTest } from '@/components/tests/StoryCRUDTest'
 import { ChapterManagementTest } from '@/components/tests/ChapterManagementTest'
 import { SceneManagementTest } from '@/components/tests/SceneManagementTest'
 import { StoryTreeTest } from '@/components/tests/StoryTreeTest'
+import { CharacterCRUDTest } from '@/components/tests/CharacterCRUDTest'
 
 const convex = new ConvexReactClient(
   import.meta.env.VITE_CONVEX_URL || 'http://localhost:3210'
@@ -82,12 +83,15 @@ function App() {
                 <strong>Environment:</strong> development
               </p>
               <p className="text-blue-900 dark:text-blue-100 text-sm">
-                <strong>Status:</strong> Story 2.4 - Story Tree Visualization implemented
+                <strong>Status:</strong> Story 3.1 - Character CRUD Operations implemented
               </p>
             </div>
 
             {/* Story CRUD Test - Story 2.1 */}
             <StoryCRUDTest />
+
+            {/* Character CRUD Test - Story 3.1 */}
+            <CharacterCRUDTest />
 
             {/* Chapter Management Test - Story 2.2 */}
             <ChapterManagementTest />
