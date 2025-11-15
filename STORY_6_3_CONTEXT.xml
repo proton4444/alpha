@@ -1,0 +1,200 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<story-context>
+  <metadata>
+    <story-id>6.3</story-id>
+    <title>Scene Interaction with SceneEditor</title>
+    <developer>Amelia (DEV Agent)</developer>
+    <date>2025-11-15</date>
+    <status>IN PROGRESS</status>
+    <duration>2-3 hours</duration>
+    <complexity>Low</complexity>
+  </metadata>
+
+  <requirements>
+    <overview>
+      Integrate ChapterOverview with SceneEditor to create a complete
+      chapter-centric editing workflow. Enable scene selection via click
+      and keyboard navigation within expanded chapters.
+    </overview>
+
+    <acceptance-criteria>
+      <criterion id="AC1">
+        <description>Click scene card to select it</description>
+        <verification>Scene selection state updates on click</verification>
+      </criterion>
+      <criterion id="AC2">
+        <description>Selection triggers SceneEditor update</description>
+        <verification>SceneEditor displays selected scene's content</verification>
+      </criterion>
+      <criterion id="AC3">
+        <description>Selected scene visually highlighted</description>
+        <verification>Selected scene card has distinct visual style (already in ChapterNode)</verification>
+      </criterion>
+      <criterion id="AC4">
+        <description>Arrow key navigation within chapter</description>
+        <verification>Up/Down arrows navigate between scenes in expanded chapter</verification>
+      </criterion>
+      <criterion id="AC5">
+        <description>Integration with existing SceneEditor (Story 4.6)</description>
+        <verification>SceneEditor features (generate, accept, edit) work seamlessly</verification>
+      </criterion>
+      <criterion id="AC6">
+        <description>Scene selection persists across chapter expand/collapse</description>
+        <verification>Selected scene remains selected when toggling chapters</verification>
+      </criterion>
+    </acceptance-criteria>
+  </requirements>
+
+  <technical-design>
+    <component-structure>
+      <component name="ChapterWorkspace" file="src/components/ChapterWorkspace.tsx">
+        <purpose>Integrates ChapterOverview with SceneEditor in split-screen layout</purpose>
+        <props>
+          <prop name="storyId" type="Id<'stories'>" required="true">
+            ID of the story to display
+          </prop>
+        </props>
+        <state>
+          <state-var name="selectedSceneId" type="Id<'scenes'> | null">
+            Currently selected scene for editing
+          </state-var>
+        </state>
+      </component>
+    </component-structure>
+
+    <integration-pattern>
+      <layout>Split-screen similar to Workspace component</layout>
+      <left-panel>
+        ChapterOverview component (40% width)
+        - Displays all chapters in grid
+        - Handles scene selection
+        - Passes selectedSceneId for highlighting
+      </left-panel>
+      <right-panel>
+        SceneEditor component (60% width)
+        - Displays selected scene
+        - Allows editing, generation, accept/regenerate
+        - Reuses existing Story 4.6 component
+      </right-panel>
+    </integration-pattern>
+
+    <keyboard-navigation>
+      <implementation>
+        Within ChapterWorkspace:
+        - Track currently expanded chapter
+        - Build list of scenes in expanded chapter
+        - ArrowUp: Navigate to previous scene in chapter
+        - ArrowDown: Navigate to next scene in chapter
+        - Disable when typing in inputs/textareas
+      </implementation>
+      <scope>
+        Navigation restricted to scenes within the currently
+        expanded chapter (not across all chapters)
+      </scope>
+    </keyboard-navigation>
+
+    <data-flow>
+      <flow>
+        User clicks scene in ChapterOverview
+          → onSelectScene(sceneId) called
+          → selectedSceneId state updated in ChapterWorkspace
+          → ChapterOverview re-renders with new selectedSceneId
+          → Scene highlighted in ChapterNode
+          → SceneEditor receives new sceneId prop
+          → SceneEditor loads and displays scene data
+      </flow>
+    </data-flow>
+
+    <styling>
+      <framework>Tailwind CSS</framework>
+      <layout-classes>
+        flex flex-col md:flex-row h-screen
+      </layout-classes>
+      <panel-sizing>
+        Left: md:w-[40%]
+        Right: md:w-[60%]
+      </panel-sizing>
+      <theme>Dark mode support via dark: prefix</theme>
+    </styling>
+  </technical-design>
+
+  <testing-strategy>
+    <approach>Integration Testing</approach>
+    <test-file>src/components/tests/ChapterWorkspaceTest.tsx</test-file>
+    <test-type>Interactive integration test harness</test-type>
+    <test-scenarios>
+      <scenario>Select story to load chapters</scenario>
+      <scenario>Click scene to select it</scenario>
+      <scenario>Verify SceneEditor updates with scene data</scenario>
+      <scenario>Verify scene is visually highlighted</scenario>
+      <scenario>Use arrow keys to navigate within chapter</scenario>
+      <scenario>Expand different chapter and test navigation</scenario>
+      <scenario>Edit scene outline in SceneEditor</scenario>
+      <scenario>Generate prose from outline</scenario>
+    </test-scenarios>
+  </testing-strategy>
+
+  <dependencies>
+    <existing-components>
+      <component>ChapterOverview (Story 6.2) - Required</component>
+      <component>ChapterNode (Story 6.1) - Used by ChapterOverview</component>
+      <component>SceneEditor (Story 4.6) - Required</component>
+      <component>Workspace (reference for layout pattern)</component>
+    </existing-components>
+    <convex-queries>
+      <query>api.stories.getStoryTree - Used by ChapterOverview</query>
+      <query>useScene hook - Used by SceneEditor</query>
+    </convex-queries>
+  </dependencies>
+
+  <integration-points>
+    <current-integration>
+      ChapterWorkspace can be used as:
+      - Standalone chapter-centric editing view
+      - Alternative to Workspace for chapter-focused editing
+      - Demonstration of ChapterOverview + SceneEditor integration
+    </current-integration>
+    <future-integration story="6.4">
+      Drag-drop reordering will be added to scenes within chapters
+    </future-integration>
+    <workspace-integration>
+      Workspace could offer view toggle:
+      - List view (current StoryNavigationPanel)
+      - Chapter view (ChapterOverview)
+    </workspace-integration>
+  </integration-points>
+
+  <keyboard-shortcuts>
+    <shortcut key="ArrowUp">Navigate to previous scene in chapter</shortcut>
+    <shortcut key="ArrowDown">Navigate to next scene in chapter</shortcut>
+    <shortcut key="Escape">Deselect current scene</shortcut>
+    <note>
+      Shortcuts disabled when typing in inputs/textareas.
+      Only active when a chapter is expanded.
+    </note>
+  </keyboard-shortcuts>
+
+  <scene-highlighting>
+    <implementation>
+      ChapterNode already implements scene highlighting:
+      - Line 239-244 in ChapterNode.tsx
+      - Selected scene gets ring-2 ring-blue-500 class
+      - Shadow increases for emphasis
+    </implementation>
+    <verification>
+      AC3 is already satisfied by Story 6.1 implementation.
+      No additional work needed.
+    </verification>
+  </scene-highlighting>
+
+  <success-criteria>
+    <criterion>All 6 acceptance criteria pass</criterion>
+    <criterion>Scene selection works via click</criterion>
+    <criterion>SceneEditor updates when scene selected</criterion>
+    <criterion>Keyboard navigation works within chapter</criterion>
+    <criterion>Integration is seamless with no conflicts</criterion>
+    <criterion>Component follows existing patterns (Workspace)</criterion>
+    <criterion>TypeScript types are correct and complete</criterion>
+    <criterion>Code is reviewed and approved</criterion>
+  </success-criteria>
+</story-context>
