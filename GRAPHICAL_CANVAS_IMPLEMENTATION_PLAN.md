@@ -1,4 +1,5 @@
 # Graphical Canvas Implementation Plan
+
 ## Transform Narrative Canvas Platform into Beautiful Node-Based Visual Editor
 
 **Status**: 📋 **READY FOR IMPLEMENTATION**  
@@ -26,6 +27,7 @@ Transform the Narrative Canvas Platform from a **text-based split-screen interfa
 ## 📊 Current State vs. Desired State
 
 ### Current State (Split-Screen)
+
 ```
 ┌─────────────────────────────────────────────────┐
 │ Header: "Narrative Canvas" | Dark Mode Toggle  │
@@ -44,6 +46,7 @@ Transform the Narrative Canvas Platform from a **text-based split-screen interfa
 ```
 
 ### Desired State (Graphical Canvas)
+
 ```
 ┌─────────────────────────────────────────────────┐
 │ Header | Story: "My Epic" | 🔍 Zoom | 🎨 Filter │
@@ -146,24 +149,24 @@ Scene Editor Modal (overlay when node clicked)
 
 ```typescript
 // Position calculation
-const CHAPTER_WIDTH = 200
-const CHAPTER_HEIGHT = 100
-const SCENE_WIDTH = 160
-const SCENE_HEIGHT = 120
-const HORIZONTAL_SPACING = 50
-const VERTICAL_SPACING = 80
+const CHAPTER_WIDTH = 200;
+const CHAPTER_HEIGHT = 100;
+const SCENE_WIDTH = 160;
+const SCENE_HEIGHT = 120;
+const HORIZONTAL_SPACING = 50;
+const VERTICAL_SPACING = 80;
 
 // Chapter positions: grid layout
 chapterNode.position = {
   x: (chapterIndex % 4) * (CHAPTER_WIDTH + HORIZONTAL_SPACING),
-  y: Math.floor(chapterIndex / 4) * (CHAPTER_HEIGHT + VERTICAL_SPACING)
-}
+  y: Math.floor(chapterIndex / 4) * (CHAPTER_HEIGHT + VERTICAL_SPACING),
+};
 
 // Scene positions: below their chapter
 sceneNode.position = {
-  x: chapterNode.position.x + (sceneIndex * (SCENE_WIDTH + 20)),
-  y: chapterNode.position.y + CHAPTER_HEIGHT + VERTICAL_SPACING
-}
+  x: chapterNode.position.x + sceneIndex * (SCENE_WIDTH + 20),
+  y: chapterNode.position.y + CHAPTER_HEIGHT + VERTICAL_SPACING,
+};
 ```
 
 ---
@@ -176,36 +179,36 @@ sceneNode.position = {
 const colors = {
   // Status colors
   draft: {
-    bg: '#E2E8F0',      // slate-200
-    border: '#94A3B8',  // slate-400
-    text: '#1E293B'     // slate-900
+    bg: '#E2E8F0', // slate-200
+    border: '#94A3B8', // slate-400
+    text: '#1E293B', // slate-900
   },
   generating: {
-    bg: '#DBEAFE',      // blue-100
-    border: '#3B82F6',  // blue-500
-    text: '#1E3A8A'     // blue-900
+    bg: '#DBEAFE', // blue-100
+    border: '#3B82F6', // blue-500
+    text: '#1E3A8A', // blue-900
   },
   complete: {
-    bg: '#D1FAE5',      // green-100
-    border: '#10B981',  // green-500
-    text: '#065F46'     // green-900
+    bg: '#D1FAE5', // green-100
+    border: '#10B981', // green-500
+    text: '#065F46', // green-900
   },
   error: {
-    bg: '#FEE2E2',      // red-100
-    border: '#EF4444',  // red-500
-    text: '#991B1B'     // red-900
+    bg: '#FEE2E2', // red-100
+    border: '#EF4444', // red-500
+    text: '#991B1B', // red-900
   },
-  
+
   // Node types
   story: {
-    bg: '#FAF5FF',      // purple-50
-    border: '#9333EA'   // purple-600
+    bg: '#FAF5FF', // purple-50
+    border: '#9333EA', // purple-600
   },
   chapter: {
-    bg: '#FDF4FF',      // fuchsia-50
-    border: '#C026D3'   // fuchsia-600
-  }
-}
+    bg: '#FDF4FF', // fuchsia-50
+    border: '#C026D3', // fuchsia-600
+  },
+};
 ```
 
 ### Typography
@@ -215,8 +218,8 @@ const typography = {
   sceneTitle: 'text-sm font-semibold',
   sceneStats: 'text-xs text-slate-600',
   chapterTitle: 'text-base font-bold',
-  statusBadge: 'text-xs font-medium px-2 py-0.5 rounded-full'
-}
+  statusBadge: 'text-xs font-medium px-2 py-0.5 rounded-full',
+};
 ```
 
 ### Node Shadows & Effects
@@ -233,7 +236,7 @@ const typography = {
 }
 
 .scene-node.selected {
-  box-shadow: 0 0 0 2px #9333EA;
+  box-shadow: 0 0 0 2px #9333ea;
 }
 
 .generating-node {
@@ -250,21 +253,22 @@ const typography = {
 **File**: `projects/alpha/src/components/canvas/SceneNode.tsx`
 
 **Component Structure**:
+
 ```tsx
-import { memo } from 'react'
-import { Handle, Position } from 'reactflow'
+import { memo } from 'react';
+import { Handle, Position } from 'reactflow';
 
 interface SceneNodeProps {
   data: {
-    sceneNumber: number
-    outline: string
-    prose?: string
-    status: 'draft' | 'generating' | 'complete' | 'error'
-    regenerationCount: number
-    characters: { _id: string; name: string }[]
-    wordCount: number
-    onClick: () => void
-  }
+    sceneNumber: number;
+    outline: string;
+    prose?: string;
+    status: 'draft' | 'generating' | 'complete' | 'error';
+    regenerationCount: number;
+    characters: { _id: string; name: string }[];
+    wordCount: number;
+    onClick: () => void;
+  };
 }
 
 export const SceneNode = memo(({ data }: SceneNodeProps) => {
@@ -272,15 +276,15 @@ export const SceneNode = memo(({ data }: SceneNodeProps) => {
     draft: 'bg-slate-200 border-slate-400 text-slate-900',
     generating: 'bg-blue-100 border-blue-500 text-blue-900 animate-pulse',
     complete: 'bg-green-100 border-green-500 text-green-900',
-    error: 'bg-red-100 border-red-500 text-red-900'
-  }
+    error: 'bg-red-100 border-red-500 text-red-900',
+  };
 
   const statusIcons = {
     draft: '📝',
     generating: '⏳',
     complete: '✓',
-    error: '⚠️'
-  }
+    error: '⚠️',
+  };
 
   return (
     <div
@@ -303,33 +307,19 @@ export const SceneNode = memo(({ data }: SceneNodeProps) => {
       </div>
 
       {/* Outline preview */}
-      <p className="text-xs line-clamp-2 mb-2 opacity-75">
-        {data.outline}
-      </p>
+      <p className="text-xs line-clamp-2 mb-2 opacity-75">{data.outline}</p>
 
       {/* Footer: stats and badges */}
       <div className="flex flex-wrap gap-1 text-xs">
         {/* Word count */}
-        {data.wordCount > 0 && (
-          <span className="px-1.5 py-0.5 bg-slate-200 rounded">
-            {data.wordCount}w
-          </span>
-        )}
+        {data.wordCount > 0 && <span className="px-1.5 py-0.5 bg-slate-200 rounded">{data.wordCount}w</span>}
 
         {/* Regeneration count */}
-        {data.regenerationCount > 0 && (
-          <span className="px-1.5 py-0.5 bg-yellow-200 rounded">
-            ×{data.regenerationCount}
-          </span>
-        )}
+        {data.regenerationCount > 0 && <span className="px-1.5 py-0.5 bg-yellow-200 rounded">×{data.regenerationCount}</span>}
 
         {/* Character initials */}
         {data.characters.slice(0, 3).map((char, i) => (
-          <span
-            key={char._id}
-            className={`px-1.5 py-0.5 rounded ${getCharacterColor(i)}`}
-            title={char.name}
-          >
+          <span key={char._id} className={`px-1.5 py-0.5 rounded ${getCharacterColor(i)}`} title={char.name}>
             {char.name[0]}
           </span>
         ))}
@@ -338,8 +328,8 @@ export const SceneNode = memo(({ data }: SceneNodeProps) => {
       {/* Output handle (bottom) */}
       <Handle type="source" position={Position.Bottom} className="w-2 h-2" />
     </div>
-  )
-})
+  );
+});
 
 // Helper function for character colors
 function getCharacterColor(index: number): string {
@@ -348,13 +338,14 @@ function getCharacterColor(index: number): string {
     'bg-pink-200 text-pink-800',
     'bg-blue-200 text-blue-800',
     'bg-green-200 text-green-800',
-    'bg-orange-200 text-orange-800'
-  ]
-  return colors[index % colors.length]
+    'bg-orange-200 text-orange-800',
+  ];
+  return colors[index % colors.length];
 }
 ```
 
 **Acceptance Criteria**:
+
 - [x] Displays scene number and outline preview
 - [x] Color-coded by status (draft/generating/complete/error)
 - [x] Shows word count if prose exists
@@ -371,22 +362,23 @@ function getCharacterColor(index: number): string {
 **File**: `projects/alpha/src/components/canvas/ChapterNode.tsx`
 
 **Component Structure**:
+
 ```tsx
-import { memo } from 'react'
-import { Handle, Position } from 'reactflow'
+import { memo } from 'react';
+import { Handle, Position } from 'reactflow';
 
 interface ChapterNodeProps {
   data: {
-    chapterNumber: number
-    title: string
-    sceneCount: number
-    completedCount: number
-    totalWords: number
-  }
+    chapterNumber: number;
+    title: string;
+    sceneCount: number;
+    completedCount: number;
+    totalWords: number;
+  };
 }
 
 export const ChapterNode = memo(({ data }: ChapterNodeProps) => {
-  const progress = (data.completedCount / data.sceneCount) * 100
+  const progress = (data.completedCount / data.sceneCount) * 100;
 
   return (
     <div className="chapter-node w-48 rounded-xl border-2 border-fuchsia-600 bg-fuchsia-50 p-4 shadow-md">
@@ -394,40 +386,34 @@ export const ChapterNode = memo(({ data }: ChapterNodeProps) => {
 
       {/* Chapter header */}
       <div className="mb-2">
-        <div className="text-xs text-fuchsia-600 font-medium">
-          Chapter {data.chapterNumber}
-        </div>
-        <div className="text-sm font-bold text-fuchsia-900">
-          {data.title}
-        </div>
+        <div className="text-xs text-fuchsia-600 font-medium">Chapter {data.chapterNumber}</div>
+        <div className="text-sm font-bold text-fuchsia-900">{data.title}</div>
       </div>
 
       {/* Progress bar */}
       <div className="mb-2">
         <div className="flex justify-between text-xs text-fuchsia-700 mb-1">
-          <span>{data.completedCount}/{data.sceneCount} scenes</span>
+          <span>
+            {data.completedCount}/{data.sceneCount} scenes
+          </span>
           <span>{Math.round(progress)}%</span>
         </div>
         <div className="w-full h-2 bg-fuchsia-200 rounded-full overflow-hidden">
-          <div
-            className="h-full bg-fuchsia-600 transition-all duration-300"
-            style={{ width: `${progress}%` }}
-          />
+          <div className="h-full bg-fuchsia-600 transition-all duration-300" style={{ width: `${progress}%` }} />
         </div>
       </div>
 
       {/* Stats */}
-      <div className="text-xs text-fuchsia-700">
-        {data.totalWords > 0 && <span>{data.totalWords.toLocaleString()} words</span>}
-      </div>
+      <div className="text-xs text-fuchsia-700">{data.totalWords > 0 && <span>{data.totalWords.toLocaleString()} words</span>}</div>
 
       <Handle type="source" position={Position.Bottom} className="w-3 h-3" />
     </div>
-  )
-})
+  );
+});
 ```
 
 **Acceptance Criteria**:
+
 - [x] Displays chapter number and title
 - [x] Shows scene count and completion progress
 - [x] Progress bar visual (0-100%)
@@ -442,8 +428,9 @@ export const ChapterNode = memo(({ data }: ChapterNodeProps) => {
 **File**: `projects/alpha/src/components/canvas/GraphicalCanvas.tsx`
 
 **Full Implementation**:
+
 ```tsx
-import { useCallback, useEffect, useMemo, useState } from 'react'
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import ReactFlow, {
   Background,
   Controls,
@@ -455,73 +442,67 @@ import ReactFlow, {
   addEdge,
   Connection,
   ConnectionMode,
-  Panel
-} from 'reactflow'
-import 'reactflow/dist/style.css'
-import './canvas.css'
+  Panel,
+} from 'reactflow';
+import 'reactflow/dist/style.css';
+import './canvas.css';
 
-import { useQuery } from 'convex/react'
-import { api } from '@/convex/_generated/api'
-import { Id } from '@/convex/_generated/dataModel'
+import { useQuery } from 'convex/react';
+import { api } from '@/convex/_generated/api';
+import { Id } from '@/convex/_generated/dataModel';
 
-import { SceneNode } from './SceneNode'
-import { ChapterNode } from './ChapterNode'
+import { SceneNode } from './SceneNode';
+import { ChapterNode } from './ChapterNode';
 
 // Register custom node types
 const nodeTypes = {
   scene: SceneNode,
-  chapter: ChapterNode
-}
+  chapter: ChapterNode,
+};
 
 export function GraphicalCanvas() {
-  const [selectedStoryId, setSelectedStoryId] = useState<Id<'stories'> | null>(null)
-  const [selectedSceneId, setSelectedSceneId] = useState<Id<'scenes'> | null>(null)
+  const [selectedStoryId, setSelectedStoryId] = useState<Id<'stories'> | null>(null);
+  const [selectedSceneId, setSelectedSceneId] = useState<Id<'scenes'> | null>(null);
 
   // Fetch data
-  const stories = useQuery(api.stories.list)
-  const storyTree = useQuery(
-    api.storyTree.getStoryTree,
-    selectedStoryId ? { storyId: selectedStoryId } : 'skip'
-  )
-  const characters = useQuery(
-    api.characters.getCharactersByStory,
-    selectedStoryId ? { storyId: selectedStoryId } : 'skip'
-  )
+  const stories = useQuery(api.stories.list);
+  const storyTree = useQuery(api.storyTree.getStoryTree, selectedStoryId ? { storyId: selectedStoryId } : 'skip');
+  const characters = useQuery(api.characters.getCharactersByStory, selectedStoryId ? { storyId: selectedStoryId } : 'skip');
 
   // React Flow state
-  const [nodes, setNodes, onNodesChange] = useNodesState([])
-  const [edges, setEdges, onEdgesChange] = useEdgesState([])
+  const [nodes, setNodes, onNodesChange] = useNodesState([]);
+  const [edges, setEdges, onEdgesChange] = useEdgesState([]);
 
   // Auto-select first story if none selected
   useEffect(() => {
     if (!selectedStoryId && stories && stories.length > 0) {
-      setSelectedStoryId(stories[0]._id)
+      setSelectedStoryId(stories[0]._id);
     }
-  }, [stories, selectedStoryId])
+  }, [stories, selectedStoryId]);
 
   // Transform data to nodes and edges
   useEffect(() => {
-    if (!storyTree || !characters) return
+    if (!storyTree || !characters) return;
 
-    const newNodes: Node[] = []
-    const newEdges: Edge[] = []
+    const newNodes: Node[] = [];
+    const newEdges: Edge[] = [];
 
-    const CHAPTER_WIDTH = 200
-    const CHAPTER_SPACING_X = 260
-    const CHAPTER_SPACING_Y = 400
-    const SCENE_WIDTH = 160
-    const SCENE_SPACING = 20
+    const CHAPTER_WIDTH = 200;
+    const CHAPTER_SPACING_X = 260;
+    const CHAPTER_SPACING_Y = 400;
+    const SCENE_WIDTH = 160;
+    const SCENE_SPACING = 20;
 
     // Create chapter nodes
     storyTree.chapters.forEach((chapter, chapterIndex) => {
-      const chapterX = (chapterIndex % 4) * CHAPTER_SPACING_X
-      const chapterY = Math.floor(chapterIndex / 4) * CHAPTER_SPACING_Y
+      const chapterX = (chapterIndex % 4) * CHAPTER_SPACING_X;
+      const chapterY = Math.floor(chapterIndex / 4) * CHAPTER_SPACING_Y;
 
       // Chapter node
-      const completedScenes = chapter.scenes.filter(s => s.status === 'complete').length
+      const completedScenes = chapter.scenes.filter((s) => s.status === 'complete').length;
       const totalWords = chapter.scenes.reduce((sum, s) => {
-        return sum + (s.prose ? s.prose.split(/\s+/).length : 0)
-      }, 0)
+        return sum + (s.prose ? s.prose.split(/\s+/).length : 0);
+      }, 0);
 
       newNodes.push({
         id: `chapter-${chapter._id}`,
@@ -532,20 +513,18 @@ export function GraphicalCanvas() {
           title: chapter.title,
           sceneCount: chapter.scenes.length,
           completedCount: completedScenes,
-          totalWords
-        }
-      })
+          totalWords,
+        },
+      });
 
       // Scene nodes (below chapter)
       chapter.scenes.forEach((scene, sceneIndex) => {
-        const sceneX = chapterX + (sceneIndex * (SCENE_WIDTH + SCENE_SPACING))
-        const sceneY = chapterY + 150
+        const sceneX = chapterX + sceneIndex * (SCENE_WIDTH + SCENE_SPACING);
+        const sceneY = chapterY + 150;
 
-        const sceneCharacters = characters.filter(char =>
-          scene.prose?.includes(char.name) || scene.outline.includes(char.name)
-        )
+        const sceneCharacters = characters.filter((char) => scene.prose?.includes(char.name) || scene.outline.includes(char.name));
 
-        const wordCount = scene.prose ? scene.prose.split(/\s+/).length : 0
+        const wordCount = scene.prose ? scene.prose.split(/\s+/).length : 0;
 
         newNodes.push({
           id: `scene-${scene._id}`,
@@ -559,10 +538,10 @@ export function GraphicalCanvas() {
             regenerationCount: scene.regenerationCount,
             characters: sceneCharacters,
             wordCount,
-            onClick: () => setSelectedSceneId(scene._id)
+            onClick: () => setSelectedSceneId(scene._id),
           },
-          selected: selectedSceneId === scene._id
-        })
+          selected: selectedSceneId === scene._id,
+        });
 
         // Edge from chapter to scene
         newEdges.push({
@@ -573,21 +552,18 @@ export function GraphicalCanvas() {
           animated: scene.status === 'generating',
           style: {
             stroke: scene.status === 'complete' ? '#10B981' : '#94A3B8',
-            strokeWidth: 2
-          }
-        })
-      })
-    })
+            strokeWidth: 2,
+          },
+        });
+      });
+    });
 
-    setNodes(newNodes)
-    setEdges(newEdges)
-  }, [storyTree, characters, selectedSceneId, setNodes, setEdges])
+    setNodes(newNodes);
+    setEdges(newEdges);
+  }, [storyTree, characters, selectedSceneId, setNodes, setEdges]);
 
   // Handle connection creation (optional feature)
-  const onConnect = useCallback(
-    (params: Connection) => setEdges((eds) => addEdge(params, eds)),
-    [setEdges]
-  )
+  const onConnect = useCallback((params: Connection) => setEdges((eds) => addEdge(params, eds)), [setEdges]);
 
   return (
     <div className="w-full h-screen">
@@ -625,12 +601,12 @@ export function GraphicalCanvas() {
         <Controls />
         <MiniMap
           nodeColor={(node) => {
-            if (node.type === 'chapter') return '#C026D3'
-            const status = node.data?.status
-            if (status === 'complete') return '#10B981'
-            if (status === 'generating') return '#3B82F6'
-            if (status === 'error') return '#EF4444'
-            return '#94A3B8'
+            if (node.type === 'chapter') return '#C026D3';
+            const status = node.data?.status;
+            if (status === 'complete') return '#10B981';
+            if (status === 'generating') return '#3B82F6';
+            if (status === 'error') return '#EF4444';
+            return '#94A3B8';
           }}
           nodeStrokeWidth={3}
           zoomable
@@ -660,11 +636,12 @@ export function GraphicalCanvas() {
         </div>
       )}
     </div>
-  )
+  );
 }
 ```
 
 **Acceptance Criteria**:
+
 - [x] Displays all chapters and scenes as nodes
 - [x] Auto-layout in hierarchical grid (4 chapters per row)
 - [x] Edges connect chapters to their scenes
@@ -690,7 +667,7 @@ export function GraphicalCanvas() {
 
 .react-flow__node.selected .scene-node,
 .react-flow__node.selected .chapter-node {
-  box-shadow: 0 0 0 3px #9333EA;
+  box-shadow: 0 0 0 3px #9333ea;
 }
 
 .react-flow__edge.animated {
@@ -715,12 +692,12 @@ export function GraphicalCanvas() {
 }
 
 .react-flow__background {
-  background-color: #F8FAFC;
+  background-color: #f8fafc;
 }
 
 /* Dark mode support */
 .dark .react-flow__background {
-  background-color: #0F172A;
+  background-color: #0f172a;
 }
 
 .dark .react-flow__edge-path {
@@ -738,21 +715,18 @@ export function GraphicalCanvas() {
 
 ```tsx
 // Add import at top
-import { GraphicalCanvas } from '@/components/canvas/GraphicalCanvas'
+import { GraphicalCanvas } from '@/components/canvas/GraphicalCanvas';
 
 // Replace the Workspace section (around line 60-90) with:
 function App() {
-  const [showTestComponents, setShowTestComponents] = useState(false)
-  const [useGraphicalCanvas, setUseGraphicalCanvas] = useState(true)
+  const [showTestComponents, setShowTestComponents] = useState(false);
+  const [useGraphicalCanvas, setUseGraphicalCanvas] = useState(true);
 
   return (
     <ConvexProvider client={convex}>
       <div className="min-h-screen bg-slate-50 dark:bg-slate-900">
         {/* Theme toggle button */}
-        <button
-          onClick={toggleTheme}
-          className="fixed top-4 right-16 z-50 p-2 rounded-lg bg-white dark:bg-slate-800 shadow-lg"
-        >
+        <button onClick={toggleTheme} className="fixed top-4 right-16 z-50 p-2 rounded-lg bg-white dark:bg-slate-800 shadow-lg">
           {theme === 'dark' ? '☀️' : '🌙'}
         </button>
 
@@ -774,11 +748,7 @@ function App() {
         </button>
 
         {/* Main view */}
-        {useGraphicalCanvas ? (
-          <GraphicalCanvas />
-        ) : (
-          <Workspace />
-        )}
+        {useGraphicalCanvas ? <GraphicalCanvas /> : <Workspace />}
 
         {/* Test components modal (existing code) */}
         {showTestComponents && (
@@ -788,11 +758,12 @@ function App() {
         )}
       </div>
     </ConvexProvider>
-  )
+  );
 }
 ```
 
 **Acceptance Criteria**:
+
 - [x] GraphicalCanvas is default view
 - [x] Toggle button to switch between Canvas and Text (Workspace) views
 - [x] Toggle persists during session
@@ -842,6 +813,7 @@ function App() {
    - [x] Controls styled for dark mode
 
 **Polish Items**:
+
 - Add loading spinner while data fetches
 - Add empty state message ("No stories yet")
 - Add keyboard shortcuts (Escape to close modal, etc.)
@@ -857,30 +829,23 @@ function App() {
 ### Recommended Sequence (Fastest Path to Working Canvas)
 
 **Day 1 (6-8 hours)**:
+
 1. ✅ Install React Flow (`npm install reactflow`) - 5 min
 2. ✅ Create `SceneNode.tsx` - 2-3 hours
 3. ✅ Create `ChapterNode.tsx` - 1-2 hours
 4. ✅ Create `GraphicalCanvas.tsx` (basic version) - 3-4 hours
 5. ✅ Test basic rendering and layout - 30 min
 
-**Day 2 (4-6 hours)**:
-6. ✅ Add canvas.css styling - 30 min
-7. ✅ Modify App.tsx to use GraphicalCanvas - 30 min
-8. ✅ Add scene editor modal integration - 1-2 hours
-9. ✅ Test all interactions - 1 hour
-10. ✅ Polish and fix bugs - 2-3 hours
+**Day 2 (4-6 hours)**: 6. ✅ Add canvas.css styling - 30 min 7. ✅ Modify App.tsx to use GraphicalCanvas - 30 min 8. ✅ Add scene editor modal integration - 1-2 hours 9. ✅ Test all interactions - 1 hour 10. ✅ Polish and fix bugs - 2-3 hours
 
-**Day 3 (2-4 hours)** (Optional enhancements):
-11. ✅ Add context menu on right-click - 1-2 hours
-12. ✅ Add keyboard shortcuts - 1 hour
-13. ✅ Add tooltips on hover - 30 min
-14. ✅ Final testing and deployment - 1-2 hours
+**Day 3 (2-4 hours)** (Optional enhancements): 11. ✅ Add context menu on right-click - 1-2 hours 12. ✅ Add keyboard shortcuts - 1 hour 13. ✅ Add tooltips on hover - 30 min 14. ✅ Final testing and deployment - 1-2 hours
 
 ---
 
 ## 📦 Dependencies
 
 ### Already Installed ✅
+
 - React 18.2
 - Tailwind CSS 4.0
 - Convex 1.29.1
@@ -888,9 +853,11 @@ function App() {
 - Vite 7.2.2
 
 ### Newly Installed ✅
+
 - reactflow (latest version ~11.x)
 
 ### No Additional Dependencies Needed
+
 - All styling via Tailwind
 - All state management via React hooks
 - All data via Convex queries
@@ -902,28 +869,33 @@ function App() {
 After implementation, the platform should have:
 
 ✅ **Beautiful Visual Canvas**
+
 - Stunning node-based interface
 - Professional design (Figma/Miro quality)
 - Smooth animations and transitions
 
 ✅ **Full Functionality**
+
 - All scenes and chapters visible as nodes
 - Click to edit scenes
 - Real-time status updates
 - Character and word count displays
 
 ✅ **Excellent UX**
+
 - Intuitive drag, zoom, pan controls
 - Minimap for navigation
 - Responsive to screen sizes
 - Dark mode support
 
 ✅ **Performance**
+
 - Handles 100+ nodes smoothly
 - No lag during interactions
 - Fast initial render
 
 ✅ **Accessibility**
+
 - Keyboard navigation works
 - Screen reader compatible (basic)
 - High contrast in dark mode
@@ -933,8 +905,10 @@ After implementation, the platform should have:
 ## 🐛 Potential Issues & Solutions
 
 ### Issue 1: Performance with Many Nodes
+
 **Problem**: React Flow may lag with 100+ nodes  
 **Solution**: Enable virtualization in React Flow settings:
+
 ```tsx
 <ReactFlow
   nodesDraggable={true}
@@ -950,16 +924,20 @@ After implementation, the platform should have:
 ```
 
 ### Issue 2: Nodes Overlapping
+
 **Problem**: Auto-layout may cause scene nodes to overlap  
 **Solution**: Adjust spacing constants in GraphicalCanvas:
+
 ```typescript
-const SCENE_SPACING = 30 // increase from 20
-const CHAPTER_SPACING_Y = 500 // increase from 400
+const SCENE_SPACING = 30; // increase from 20
+const CHAPTER_SPACING_Y = 500; // increase from 400
 ```
 
 ### Issue 3: Scene Editor Modal Not Opening
+
 **Problem**: Click event not triggering on node  
 **Solution**: Ensure `onClick` is passed correctly in data and called in SceneNode:
+
 ```tsx
 // In GraphicalCanvas
 data: {
@@ -971,11 +949,13 @@ data: {
 ```
 
 ### Issue 4: Dark Mode Edges Not Visible
+
 **Problem**: Edge color too dark on dark background  
 **Solution**: Add dark mode edge styling in canvas.css:
+
 ```css
 .dark .react-flow__edge-path {
-  stroke: #64748B; /* lighter slate color */
+  stroke: #64748b; /* lighter slate color */
   stroke-width: 2;
 }
 ```
@@ -985,6 +965,7 @@ data: {
 ## 📚 Additional Features (Post-MVP)
 
 ### Phase 2 Enhancements (Optional)
+
 1. **Context Menu** - Right-click for delete/duplicate/edit
 2. **Keyboard Shortcuts** - Arrow keys to navigate nodes
 3. **Search/Filter** - Find scenes by character or status
@@ -1001,6 +982,7 @@ data: {
 ### Scene Node States
 
 **Draft Scene Node**:
+
 ```
 ┌─────────────────────┐
 │ Scene 3        📝   │
@@ -1014,6 +996,7 @@ Gray bg, slate border
 ```
 
 **Generating Scene Node**:
+
 ```
 ┌─────────────────────┐
 │ Scene 5        ⏳   │  ← pulsing animation
@@ -1027,6 +1010,7 @@ Blue bg, animated pulse
 ```
 
 **Complete Scene Node**:
+
 ```
 ┌─────────────────────┐
 │ Scene 1        ✓    │
@@ -1040,6 +1024,7 @@ Green bg, checkmark icon
 ```
 
 **Error Scene Node**:
+
 ```
 ┌─────────────────────┐
 │ Scene 7        ⚠️   │
@@ -1074,15 +1059,18 @@ Before submitting/deploying:
 ## 🔗 Useful Resources
 
 **React Flow Documentation**:
+
 - Official Docs: https://reactflow.dev/
 - Examples: https://reactflow.dev/examples
 - API Reference: https://reactflow.dev/api-reference
 
 **Tailwind CSS**:
+
 - Docs: https://tailwindcss.com/docs
 - Color Palette: https://tailwindcss.com/docs/customizing-colors
 
 **Convex**:
+
 - Queries: https://docs.convex.dev/client/react
 - TypeScript: https://docs.convex.dev/using/typing
 

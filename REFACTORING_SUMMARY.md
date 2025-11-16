@@ -1,6 +1,7 @@
 # App.tsx Refactoring Summary
 
 ## 🎯 Objective
+
 Eliminate the monolithic 782-line App.tsx file that was causing HMR performance issues and resource exhaustion due to redundant Convex query subscriptions.
 
 ---
@@ -8,11 +9,13 @@ Eliminate the monolithic 782-line App.tsx file that was causing HMR performance 
 ## 📊 Before vs. After
 
 ### **File Size Reduction**
+
 - **Before:** 782 lines (monolithic)
 - **After:** 157 lines (modular)
 - **Reduction:** 625 lines (80% decrease)
 
 ### **Convex Query Subscriptions**
+
 - **Before:** 10 concurrent subscriptions with 4 redundant `getAllStories()` calls
 - **After:** 1 shared subscription via custom hooks (eliminates redundancy)
 
@@ -21,14 +24,15 @@ Eliminate the monolithic 782-line App.tsx file that was causing HMR performance 
 ## 🏗️ Refactoring Architecture
 
 ### **1. Shared Query Hooks** (`src/hooks/useConvexQueries.ts`)
+
 Created centralized hooks to eliminate redundant Convex subscriptions:
 
 ```typescript
-- useAllStories()           // Single getAllStories() subscription
-- useStory()                // Single story lookup
-- useChaptersByStory()      // Chapters by story
-- useScenesByChapter()      // Scenes by chapter
-- useScene()                // Single scene lookup
+-useAllStories() - // Single getAllStories() subscription
+  useStory() - // Single story lookup
+  useChaptersByStory() - // Chapters by story
+  useScenesByChapter() - // Scenes by chapter
+  useScene(); // Single scene lookup
 ```
 
 **Impact:** Reduced from 4 redundant `getAllStories()` calls to 1 shared subscription.
@@ -40,6 +44,7 @@ Created centralized hooks to eliminate redundant Convex subscriptions:
 Extracted 5 test components into separate files:
 
 #### `src/components/tests/`
+
 1. **OpenRouterTest.tsx** (66 lines)
    - OpenRouter API testing with model selector
 
@@ -62,7 +67,9 @@ Extracted 5 test components into separate files:
 ---
 
 ### **3. Refactored App.tsx** (157 lines)
+
 Simplified to a clean orchestrator:
+
 - Theme management (dark/light mode)
 - Component imports and layout
 - No direct Convex queries (all delegated to child components)
@@ -72,6 +79,7 @@ Simplified to a clean orchestrator:
 ## ✅ Benefits
 
 ### **Performance Improvements**
+
 1. **HMR Efficiency**
    - File changes no longer trigger re-evaluation of entire 782-line file
    - Only affected components reload during HMR
@@ -89,6 +97,7 @@ Simplified to a clean orchestrator:
 ---
 
 ### **Developer Experience**
+
 1. **Maintainability**
    - Each test component is self-contained
    - Clear separation of concerns
@@ -127,6 +136,7 @@ src/
 ## 🔍 Verification
 
 ### Query Redundancy Eliminated
+
 ```bash
 # Before: getAllStories() called in 4 different components
 grep -r "useQuery.*getAllStories" src/
@@ -136,6 +146,7 @@ src/hooks/useConvexQueries.ts
 ```
 
 ### File Size Comparison
+
 ```bash
 # Before: 782 lines
 wc -l src/App.tsx.old  # 782
@@ -149,6 +160,7 @@ wc -l src/App.tsx      # 157
 ## 🚀 Next Steps
 
 ### Recommended Follow-ups:
+
 1. **Extract shadcn/ui Demo** - Move components demo to separate file (~50 lines)
 2. **Add React.memo()** - Memoize test components to prevent unnecessary re-renders
 3. **Lazy Loading** - Use React.lazy() for test components (further reduce initial bundle)
@@ -159,11 +171,13 @@ wc -l src/App.tsx      # 157
 ## 📝 Migration Notes
 
 ### For Developers:
+
 - **No Breaking Changes** - All functionality preserved
 - **Import Updates** - Components now imported from `@/components/tests/*`
 - **Shared Hooks** - Use `useConvexQueries.ts` for new components requiring story data
 
 ### For Testing:
+
 - Existing E2E tests should continue to work unchanged
 - Component-level tests now possible with isolated test files
 
@@ -172,6 +186,7 @@ wc -l src/App.tsx      # 157
 ## ✨ Summary
 
 This refactoring successfully:
+
 - ✅ Reduced App.tsx from 782 to 157 lines (80% reduction)
 - ✅ Eliminated 4 redundant `getAllStories()` query subscriptions
 - ✅ Modularized 5 test components into separate files

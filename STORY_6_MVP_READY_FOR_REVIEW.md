@@ -48,23 +48,27 @@ All 6 stories implemented, tested, documented, and ready for production.
 ### Key Features
 
 ✅ **Five Filter Buttons with Dynamic Counts**
+
 ```
 [All: 24] [Complete: 12] [Draft: 8] [Generating: 3] [Error: 1]
 ```
 
 ✅ **Real-Time Filtering**
+
 - Click filter → scenes update instantly
 - Counts recalculate
 - Word counts update
 - Empty states when needed
 
 ✅ **Filter Persistence**
+
 - Active during expand/collapse
 - Remains during scene editing
 - Consistent across chapters
 - Smooth user experience
 
 ✅ **Smart Empty States**
+
 - "No scenes in this chapter"
 - "No scenes match filter"
 - Suggests corrective action
@@ -82,11 +86,13 @@ All 6 stories implemented, tested, documented, and ready for production.
 ### Files & Documentation
 
 **Components** (3 files):
+
 - ChapterNode.tsx (474 lines)
 - ChapterOverview.tsx (296 lines)
 - ChapterWorkspace.tsx (6.6 KB)
 
 **Test Harnesses** (6 files):
+
 - ChapterNodeTest.tsx
 - ChapterOverviewTest.tsx
 - ChapterWorkspaceTest.tsx
@@ -95,6 +101,7 @@ All 6 stories implemented, tested, documented, and ready for production.
 - StatusFilterTest.tsx ← NEW
 
 **Documentation** (13 files):
+
 - 6 STORY_6_X_CONTEXT.xml files
 - 6 STORY_6_X_IMPLEMENTATION_REPORT.md files
 - STORY_6_MVP_COMPLETION.md (this summary)
@@ -106,6 +113,7 @@ All 6 stories implemented, tested, documented, and ready for production.
 **Branch**: `claude/story-6-1-chapter-node-01VAZzcWMCctu5QNVRKQGpAm`
 
 **Latest Commits**:
+
 - `[MVP COMPLETE]` Implement Story 6.6: Status Filtering
 - `[FEATURE]` Implement Story 6.5: Character Badges
 - `[STORY 6.4]` Implement Drag-Drop Scene Reordering
@@ -114,6 +122,7 @@ All 6 stories implemented, tested, documented, and ready for production.
 - `[STORY 6.1]` Implement ChapterNode Component
 
 **Statistics**:
+
 - 24+ files changed
 - 5000+ insertions
 - 7 coherent commits
@@ -124,23 +133,27 @@ All 6 stories implemented, tested, documented, and ready for production.
 ## How to Review
 
 ### Step 1: Checkout Branch
+
 ```bash
 git checkout claude/story-6-1-chapter-node-01VAZzcWMCctu5QNVRKQGpAm
 ```
 
 ### Step 2: Examine Key Files
+
 - `projects/alpha/src/components/ChapterNode.tsx` - Scene cards
 - `projects/alpha/src/components/ChapterOverview.tsx` - Grid + filtering
 - `projects/alpha/src/components/ChapterWorkspace.tsx` - Workspace
 
 ### Step 3: Read Documentation
+
 - `STORY_6_6_IMPLEMENTATION_REPORT.md` - Latest story details
 - `STORY_6_MVP_COMPLETION.md` - Complete summary
 - Individual context/report files for each story
 
 ### Step 4: Test Interactively
+
 - Launch dev server: `npm run dev`
-- Open to `/dev-tools` 
+- Open to `/dev-tools`
 - Find and run test harnesses:
   - ChapterNodeTest
   - ChapterOverviewTest
@@ -156,10 +169,12 @@ git checkout claude/story-6-1-chapter-node-01VAZzcWMCctu5QNVRKQGpAm
 ### Recommended: Option C - Toggle View
 
 Add view selector in header:
+
 - **Tree View** (Story 5) ← Current default
 - **Grid View** (Story 6) ← New option
 
 Benefits:
+
 - No breaking changes
 - Users can choose preference
 - Both views use same data
@@ -169,12 +184,14 @@ Benefits:
 ### Alternative Options
 
 **Option A**: New Route
+
 - Keep Story 5 as default
 - Add `/grid` route
 - Zero breaking changes
 - Users find new view via navigation
 
 **Option B**: Replace Tree View
+
 - Story 6 becomes new default
 - Remove tree view
 - Better UX
@@ -185,6 +202,7 @@ Benefits:
 ## Approval Checklist
 
 **Code Review**:
+
 - [ ] Component architecture reviewed
 - [ ] TypeScript types correct
 - [ ] React patterns followed
@@ -194,6 +212,7 @@ Benefits:
 - [ ] Code style consistent
 
 **Testing**:
+
 - [ ] All 6 test harnesses work
 - [ ] Manual testing complete
 - [ ] Drag-drop verified
@@ -203,6 +222,7 @@ Benefits:
 - [ ] Empty states show
 
 **Integration**:
+
 - [ ] Integration strategy chosen
 - [ ] App.tsx modifications planned
 - [ ] No API changes needed
@@ -227,14 +247,14 @@ Benefits:
 
 ## Performance Verified
 
-| Operation | Target | Result |
-|-----------|--------|--------|
-| Page load | <2s | 1.5s |
-| Grid render | <500ms | 300ms |
-| Filter apply | <100ms | 50ms |
-| Chapter expand | <300ms | 150ms |
-| Drag start | <100ms | 50ms |
-| Drop reorder | <300ms | 200ms |
+| Operation      | Target | Result |
+| -------------- | ------ | ------ |
+| Page load      | <2s    | 1.5s   |
+| Grid render    | <500ms | 300ms  |
+| Filter apply   | <100ms | 50ms   |
+| Chapter expand | <300ms | 150ms  |
+| Drag start     | <100ms | 50ms   |
+| Drop reorder   | <300ms | 200ms  |
 
 ---
 

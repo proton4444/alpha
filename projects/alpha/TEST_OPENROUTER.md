@@ -8,10 +8,11 @@ Once you have both servers running (`npm run dev` and `npm run convex:dev`), tes
 
 1. Go to: https://dashboard.convex.dev
 2. Select your project
-3. Go to **Functions** → **Actions** 
+3. Go to **Functions** → **Actions**
 4. Find `testOpenRouterConnection`
-5. Click **Call** 
+5. Click **Call**
 6. Should return:
+
 ```json
 {
   "success": true,
@@ -30,7 +31,7 @@ import { api } from '../convex/_generated/api'
 
 export default function App() {
   const testConnection = useMutation(api.actions.testOpenRouterConnection)
-  
+
   const handleTest = async () => {
     const result = await testConnection()
     console.log('Test result:', result)
@@ -53,8 +54,8 @@ Then click the button on your app at http://localhost:5173
 In browser DevTools (F12 → Console):
 
 ```javascript
-const { testOpenRouterConnection } = window.ConvexClient
-await testOpenRouterConnection()
+const { testOpenRouterConnection } = window.ConvexClient;
+await testOpenRouterConnection();
 ```
 
 ---
@@ -62,6 +63,7 @@ await testOpenRouterConnection()
 ## Expected Results
 
 ### Success Response
+
 ```json
 {
   "success": true,
@@ -73,20 +75,24 @@ await testOpenRouterConnection()
 ### Common Errors
 
 **Error: "OPENROUTER_API_KEY environment variable not set"**
+
 - Solution: Make sure you added the API key to Convex Settings → Environment Variables
 - Key name must be: `OPENROUTER_API_KEY`
 
 **Error: "401 Unauthorized"**
+
 - Solution: Check your OpenRouter API key is correct
 - Go to: https://openrouter.ai/account/api_keys
 - Make sure it's a valid, active key
 
 **Error: "429 Too Many Requests"**
+
 - Solution: Rate limited by OpenRouter
 - The code will retry automatically with exponential backoff
 - Wait a few seconds and try again
 
 **Error: "Network error" or "fetch failed"**
+
 - Solution: Check your internet connection
 - Make sure Convex backend is running: `npm run convex:dev`
 
@@ -118,7 +124,7 @@ await testOpenRouterConnection()
 ✅ Token usage tracking  
 ✅ API key from Convex environment (never hardcoded)  
 ✅ Support for system prompts  
-✅ Temperature and max_tokens customization  
+✅ Temperature and max_tokens customization
 
 ---
 

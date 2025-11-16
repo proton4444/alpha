@@ -23,6 +23,7 @@ The Narrative Canvas Platform consists of two main components:
 - **Backend**: Convex serverless backend (deployed to Convex Cloud)
 
 **Recommended Platform**: Vercel
+
 - Zero-config deployment for Vite projects
 - Excellent performance and CDN
 - Built-in environment variable management
@@ -53,11 +54,13 @@ Before deploying, ensure you have:
 ### Required Software
 
 1. **Node.js** (v18 or higher)
+
    ```bash
    node --version  # Should be v18.0.0 or higher
    ```
 
 2. **npm** (comes with Node.js)
+
    ```bash
    npm --version
    ```
@@ -89,12 +92,14 @@ npx convex deploy --prod
 ```
 
 **What this does**:
+
 - Creates a production Convex deployment
 - Uploads your schema and backend functions
 - Provisions a production database
 - Generates a production deployment URL
 
 **Expected output**:
+
 ```
 ✔ Deploying...
 ✔ Deployment complete!
@@ -111,6 +116,7 @@ Copy the deployment URL from the output. You'll need this for the frontend deplo
 ### Step 4: Verify Convex Deployment
 
 Visit the Convex Dashboard:
+
 - Go to: https://dashboard.convex.dev
 - Select your project
 - Verify that your deployment is active
@@ -154,11 +160,12 @@ Vercel should auto-detect these settings, but verify:
 
 In the "Environment Variables" section:
 
-| Name | Value |
-|------|-------|
+| Name              | Value                                                       |
+| ----------------- | ----------------------------------------------------------- |
 | `VITE_CONVEX_URL` | Your Convex deployment URL from Step 3 of Convex deployment |
 
 **Example**:
+
 ```
 VITE_CONVEX_URL=https://happy-animal-123.convex.cloud
 ```
@@ -172,6 +179,7 @@ VITE_CONVEX_URL=https://happy-animal-123.convex.cloud
 3. Vercel will provide a deployment URL
 
 **Expected output**:
+
 ```
 ✓ Build complete
 ✓ Deployment complete
@@ -228,13 +236,14 @@ vercel --prod
 
 The application requires the following environment variable:
 
-| Variable | Description | Example | Required |
-|----------|-------------|---------|----------|
-| `VITE_CONVEX_URL` | Production Convex deployment URL | `https://happy-animal-123.convex.cloud` | ✅ Yes |
+| Variable          | Description                      | Example                                 | Required |
+| ----------------- | -------------------------------- | --------------------------------------- | -------- |
+| `VITE_CONVEX_URL` | Production Convex deployment URL | `https://happy-animal-123.convex.cloud` | ✅ Yes   |
 
 ### Setting Environment Variables in Vercel
 
 **Via Dashboard**:
+
 1. Go to your project in Vercel Dashboard
 2. Navigate to **Settings** → **Environment Variables**
 3. Add `VITE_CONVEX_URL` with your Convex deployment URL
@@ -242,11 +251,13 @@ The application requires the following environment variable:
 5. Click **Save**
 
 **Via CLI**:
+
 ```bash
 vercel env add VITE_CONVEX_URL production
 ```
 
 **Redeploy after adding environment variables**:
+
 ```bash
 vercel --prod
 ```
@@ -278,6 +289,7 @@ Visit your Vercel deployment URL (e.g., `https://narrative-canvas.vercel.app`)
 **Expected**: You should see Convex successfully connecting to your backend.
 
 **Error indicators**:
+
 - "Failed to connect to Convex"
 - "Invalid Convex URL"
 - Network errors to convex.cloud
@@ -310,11 +322,13 @@ Test the main features of your application:
 ### Step 4: Monitor Deployment
 
 **Vercel Dashboard**:
+
 - Check deployment logs for errors
 - Monitor function execution times
 - Review build logs if there are issues
 
 **Convex Dashboard**:
+
 - Monitor database queries
 - Check function execution logs
 - Review error logs
@@ -328,6 +342,7 @@ Test the main features of your application:
 **Symptom**: Deployment fails during the build step
 
 **Solutions**:
+
 1. Check build logs in Vercel dashboard
 2. Verify all dependencies are in `package.json`
 3. Ensure TypeScript compiles locally: `npm run build`
@@ -343,6 +358,7 @@ npm run build
 **Symptom**: Application loads but shows Convex connection errors
 
 **Solutions**:
+
 1. Verify `VITE_CONVEX_URL` environment variable is set
 2. Check that the URL format is correct (should start with `https://`)
 3. Ensure Convex deployment is active (check Convex dashboard)
@@ -356,6 +372,7 @@ npm run build
 **Symptom**: Environment variable seems not to be loaded
 
 **Solutions**:
+
 1. Ensure variable name starts with `VITE_` (required for Vite)
 2. Redeploy after adding environment variables
 3. Clear Vercel build cache and redeploy
@@ -368,6 +385,7 @@ npm run build
 **Solution**: This should be handled by `vercel.json` rewrites. Verify that `vercel.json` is committed to your repository.
 
 The rewrite rule in `vercel.json`:
+
 ```json
 "rewrites": [
   {
@@ -382,6 +400,7 @@ The rewrite rule in `vercel.json`:
 **Symptom**: First page load is slow
 
 **Solutions**:
+
 1. Verify Vercel Edge Network is being used (check response headers)
 2. Consider enabling Vercel's Edge Functions if needed
 3. Optimize bundle size: `npm run build` and check `dist` folder size
@@ -392,6 +411,7 @@ The rewrite rule in `vercel.json`:
 **Symptom**: Database queries fail or return errors
 
 **Solutions**:
+
 1. Check Convex dashboard for error logs
 2. Verify database schema is deployed: `npx convex deploy --prod`
 3. Check that indexes are created if using complex queries
@@ -460,6 +480,7 @@ Create `/home/user/alpha/projects/alpha/netlify.toml`:
 ### Automatic Deployments with Vercel
 
 Once connected to GitHub, Vercel automatically:
+
 - Deploys on every push to main branch (Production)
 - Creates preview deployments for pull requests
 - Runs build checks on all commits
@@ -467,11 +488,13 @@ Once connected to GitHub, Vercel automatically:
 ### Managing Deployments
 
 **Rollback to Previous Deployment**:
+
 1. Go to Vercel Dashboard → Your Project → Deployments
 2. Find the deployment you want to rollback to
 3. Click "..." → "Promote to Production"
 
 **Environment-Specific Deployments**:
+
 - Production: Deployed from `main` branch
 - Preview: Deployed from pull requests
 - Development: Local development environment
@@ -483,6 +506,7 @@ Once connected to GitHub, Vercel automatically:
 ### Vercel Analytics
 
 Enable Vercel Analytics for insights:
+
 1. Go to Project Settings → Analytics
 2. Enable Analytics
 3. View real-time and historical data
@@ -490,6 +514,7 @@ Enable Vercel Analytics for insights:
 ### Convex Monitoring
 
 Monitor backend performance:
+
 1. Go to Convex Dashboard
 2. View function execution times
 3. Monitor database query performance
@@ -500,18 +525,23 @@ Monitor backend performance:
 ## Security Considerations
 
 ### Environment Variables
+
 - Never commit `.env` files to version control
 - Use Vercel's environment variable management
 - Rotate secrets periodically
 
 ### CORS and Security Headers
+
 Security headers are configured in `vercel.json`:
+
 - `X-Frame-Options: SAMEORIGIN`
 - `X-Content-Type-Options: nosniff`
 - `Referrer-Policy: strict-origin-when-cross-origin`
 
 ### API Keys
+
 If you add OpenRouter API integration (Story 4):
+
 - Store API keys in Convex environment variables
 - Never expose API keys in frontend code
 - Use Convex actions for API calls (server-side only)
@@ -521,19 +551,23 @@ If you add OpenRouter API integration (Story 4):
 ## Cost Considerations
 
 ### Vercel Free Tier
+
 - Unlimited personal projects
 - 100 GB bandwidth per month
 - Automatic SSL certificates
 - Edge Network included
 
 ### Convex Free Tier
+
 - 1 GB database storage
 - 1 GB file storage
 - 1,000,000 function calls per month
 - Suitable for small to medium projects
 
 ### When to Upgrade
+
 Consider upgrading when:
+
 - Traffic exceeds free tier limits
 - Need advanced features (Teams, Analytics, etc.)
 - Require additional compute resources
@@ -544,15 +578,18 @@ Consider upgrading when:
 ## Support and Resources
 
 ### Documentation
+
 - **Vercel**: https://vercel.com/docs
 - **Convex**: https://docs.convex.dev
 - **Vite**: https://vitejs.dev
 
 ### Community
+
 - **Convex Discord**: https://convex.dev/community
 - **Vercel Discord**: https://vercel.com/discord
 
 ### Getting Help
+
 - Check deployment logs in Vercel Dashboard
 - Check function logs in Convex Dashboard
 - Review this guide's troubleshooting section

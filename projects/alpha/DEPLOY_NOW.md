@@ -14,12 +14,14 @@ npx convex deploy --prod
 ```
 
 **What happens:**
+
 1. Browser opens for Convex login
 2. Login with Google/GitHub
 3. Choose "Create new project" or select existing
 4. Wait 1-2 minutes for deployment
 
 **CRITICAL:** When it finishes, you'll see:
+
 ```
 ✓ Deployment complete!
   https://happy-animal-123.convex.cloud
@@ -34,6 +36,7 @@ npx convex deploy --prod
 ### **Option A: Via Vercel Dashboard** (Easiest)
 
 1. **Push code to GitHub:**
+
    ```bash
    git push origin main
    ```
@@ -128,19 +131,25 @@ vercel --prod
 ## **Common Issues**
 
 ### ❌ "Convex connection failed"
+
 **Solution:** Check `VITE_CONVEX_URL` environment variable
+
 - Go to Vercel project settings
 - Environment Variables
 - Verify URL is correct (no trailing slash)
 - Redeploy if you changed it
 
 ### ❌ "Build failed"
+
 **Solution:** Check build logs
+
 - Missing environment variable
 - TypeScript errors (expected if Convex not deployed first)
 
 ### ❌ "404 on page refresh"
+
 **Solution:** Already fixed in `vercel.json`
+
 - Rewrites configured for client-side routing
 
 ---
@@ -148,6 +157,7 @@ vercel --prod
 ## **Deployment Checklist**
 
 Before deploying:
+
 - [x] Tailwind CSS v4 fix applied
 - [x] Story 6 MVP complete (all 6 stories)
 - [x] Test harnesses created
@@ -155,6 +165,7 @@ Before deploying:
 - [x] Documentation complete
 
 After deploying:
+
 - [ ] Convex backend deployed
 - [ ] Frontend deployed to Vercel
 - [ ] Environment variable set
@@ -168,24 +179,26 @@ After deploying:
 
 After deployment, save these URLs:
 
-| Service | URL | Purpose |
-|---------|-----|---------|
-| **Production Site** | https://your-app.vercel.app | Share with users |
-| **Convex Backend** | https://your-name.convex.cloud | API endpoint |
-| **Convex Dashboard** | https://dashboard.convex.dev | Monitor backend |
-| **Vercel Dashboard** | https://vercel.com/dashboard | Manage deployments |
+| Service              | URL                            | Purpose            |
+| -------------------- | ------------------------------ | ------------------ |
+| **Production Site**  | https://your-app.vercel.app    | Share with users   |
+| **Convex Backend**   | https://your-name.convex.cloud | API endpoint       |
+| **Convex Dashboard** | https://dashboard.convex.dev   | Monitor backend    |
+| **Vercel Dashboard** | https://vercel.com/dashboard   | Manage deployments |
 
 ---
 
 ## **Monitoring**
 
 **Convex Dashboard:**
+
 - View real-time function calls
 - Check database tables
 - Monitor errors
 - See usage metrics
 
 **Vercel Dashboard:**
+
 - View deployment logs
 - Check analytics
 - Monitor performance
@@ -214,6 +227,7 @@ After deployment, save these URLs:
 ## **Cost**
 
 **FREE TIER:**
+
 - Convex: 1M function calls/month
 - Vercel: 100GB bandwidth/month
 - Total: $0/month

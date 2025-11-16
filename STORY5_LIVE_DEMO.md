@@ -9,13 +9,16 @@
 The Narrative Canvas Platform now features a professional split-screen workspace with all Story 5 features:
 
 ### Story 5.1: Split-Screen Layout
+
 - **Left Panel (30%)**: Story Navigator with chapters and scenes
 - **Right Panel (70%)**: Scene Editor with outline and prose
 - **Independent scrolling**: Each panel scrolls independently
 - **Professional header**: "Narrative Canvas" branding + shortcuts + theme toggle
 
 ### Story 5.2: Keyboard Shortcuts
+
 Available shortcuts documented in help modal:
+
 - Up Arrow: Navigate to previous scene
 - Down Arrow: Navigate to next scene
 - Left Arrow: Collapse current chapter
@@ -23,7 +26,9 @@ Available shortcuts documented in help modal:
 - ?: Toggle keyboard shortcuts help modal
 
 ### Story 5.3: Visual Status Indicators
+
 Scenes show status badges:
+
 - ✓ Complete (Green): Scene has accepted prose
 - ⏳ Generating (Blue): Scene being generated
 - Draft (Gray): Scene outline without prose
@@ -31,13 +36,16 @@ Scenes show status badges:
 - Word counts displayed (109 words, 111 words)
 
 ### Story 5.4: GenerationStatus Component
+
 Shows two-step progress during AI generation:
+
 - Step 1: Character Agent Analysis
 - Step 2: Scene Writer Generation
 - Progress bar with time estimates
 - Error handling and recovery
 
 ### Story 5.5: Visual Polish
+
 - Dark mode (default): Professional slate-900 background
 - Light mode: Clean light theme via toggle (☀️/🌙)
 - Professional color palette
@@ -48,11 +56,13 @@ Shows two-step progress during AI generation:
 ## Live Demo - Test Story
 
 **Story**: "Multi-Character Story"
+
 - Chapters: 24 auto-generated
 - Scenes: Multiple per chapter with generated AI prose
 - Characters: Marcus and Silas with character-aware prose
 
 Scene 1 shown in demo:
+
 - Outline: Decision about trust with dangerous secret
 - Status: ✓ Complete (109 words)
 - Prose: AI-generated narrative with both characters
@@ -61,6 +71,7 @@ Scene 1 shown in demo:
 ## Technical Status
 
 All components implemented and tested:
+
 - Workspace.tsx: Split-screen layout
 - StoryNavigationPanel.tsx: Left sidebar navigation
 - GenerationStatus.tsx: Progress feedback
@@ -69,6 +80,7 @@ All components implemented and tested:
 - App.tsx: Integrated workspace
 
 Technologies:
+
 - React 18 + TypeScript + Vite
 - Convex real-time database
 - Tailwind CSS 4.0

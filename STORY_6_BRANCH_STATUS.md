@@ -63,6 +63,7 @@ The Story 6 branch contains a complete, production-ready implementation of Stori
 ### How to Review
 
 1. **Checkout the branch**:
+
    ```bash
    git checkout claude/story-6-1-chapter-node-01VAZzcWMCctu5QNVRKQGpAm
    ```

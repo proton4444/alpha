@@ -49,7 +49,7 @@ export default [
     },
     plugins: {
       '@typescript-eslint': typescript,
-      'react': react,
+      react: react,
       'react-hooks': reactHooks,
     },
     rules: {
@@ -82,13 +82,6 @@ export default [
     },
   },
   {
-    ignores: [
-      'dist/**',
-      'node_modules/**',
-      'convex/_generated/**',
-      '**/*.config.js',
-      '**/*.config.ts',
-      'vite.config.ts',
-    ],
+    ignores: ['dist/**', 'node_modules/**', 'convex/_generated/**', '**/*.config.js', '**/*.config.ts', 'vite.config.ts'],
   },
 ];

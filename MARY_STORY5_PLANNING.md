@@ -1,10 +1,11 @@
 # Story 5: Split-Screen Workspace & UX Polish
+
 ## Mary's Strategic Analysis & Planning Document
 
 **Status**: PLANNING  
 **Epic**: Story 5.1 - 5.5  
 **Context**: After Stories 1-4.6 completion  
-**Date**: 2025-11-15  
+**Date**: 2025-11-15
 
 ---
 
@@ -19,12 +20,14 @@ Story 5 focuses on **workspace optimization and UX polish**, moving from the cur
 ## Current State (Stories 1-4.6)
 
 ### What We Have Now
+
 - ✅ Story/Chapter/Scene CRUD (Stories 2.1-2.3)
 - ✅ Character management (Stories 3.1-3.3)
 - ✅ AI generation pipeline (Stories 4.1-4.3)
 - ✅ Scene editor with prose workflow (Stories 4.5-4.6)
 
 ### What's Missing
+
 - ❌ Professional workspace layout
 - ❌ Unified scene/story navigation
 - ❌ Keyboard shortcuts
@@ -32,6 +35,7 @@ Story 5 focuses on **workspace optimization and UX polish**, moving from the cur
 - ❌ Polished design
 
 ### Current UI Structure
+
 ```
 App.tsx (vertical scroll)
 ├── OpenRouter Test
@@ -52,6 +56,7 @@ App.tsx (vertical scroll)
 ## Story 5: Split-Screen Workspace Vision
 
 ### New UI Structure (After Story 5)
+
 ```
 App.tsx (split-screen layout)
 ├── Header (navigation, theme toggle)
@@ -80,6 +85,7 @@ App.tsx (split-screen layout)
 ### Acceptance Criteria
 
 ✅ **Left Panel - StoryTree (30% width)**
+
 - Display story tree with chapters and scenes
 - Show character list for current story
 - Show scene status badges
@@ -87,30 +93,35 @@ App.tsx (split-screen layout)
 - Click to select scene
 
 ✅ **Right Panel - SceneEditor (70% width)**
+
 - Display full SceneEditor component
 - Takes remaining 70% of screen width
 - Full height with scrolling
 - Professional spacing and margins
 
 ✅ **Split-Screen Layout**
+
 - Horizontal split using CSS Grid or Flexbox
 - Fixed left panel width (30%)
 - Flexible right panel (70%)
 - Proper separator/gap between panels
 
 ✅ **Independent Scrolling**
+
 - Left panel scrolls independently
 - Right panel scrolls independently
 - No scroll interference
 - Overflow hidden properly
 
 ✅ **Responsive Design**
+
 - **Desktop** (> 1200px): 30/70 split
 - **Tablet** (768px - 1200px): 25/75 or stacked columns
 - **Mobile** (< 768px): Full-width stacked (tree above, editor below)
 - Touch-friendly button sizes on mobile
 
 ✅ **Polish Elements**
+
 - Clean header/navigation area
 - Theme toggle (dark/light mode)
 - Professional spacing (Tailwind)
@@ -119,13 +130,14 @@ App.tsx (split-screen layout)
 ### Implementation Approach
 
 **Layout Structure**:
+
 ```tsx
 <div className="flex h-screen">
   {/* Left Panel - StoryTree (30%) */}
   <div className="w-3/10 border-r overflow-y-auto bg-slate-50">
     <StoryNavigationPanel />
   </div>
-  
+
   {/* Right Panel - SceneEditor (70%) */}
   <div className="w-7/10 overflow-y-auto">
     <SceneEditor />
@@ -134,6 +146,7 @@ App.tsx (split-screen layout)
 ```
 
 **Responsive Breakpoints**:
+
 ```tsx
 // Mobile: full-width stacked
 <div className="flex flex-col md:flex-row h-screen">
@@ -149,6 +162,7 @@ App.tsx (split-screen layout)
 ### Mary's Analysis: Strategic Considerations
 
 **Pros of Split-Screen**:
+
 - ✅ Professional appearance (like VS Code, Figma)
 - ✅ Context always visible (story structure on left)
 - ✅ Efficient use of screen space
@@ -156,12 +170,14 @@ App.tsx (split-screen layout)
 - ✅ Clear information hierarchy
 
 **Potential Issues**:
+
 - ⚠️ Requires minimum screen width (~1024px recommended)
 - ⚠️ Mobile users need stacked layout
 - ⚠️ Left panel might feel cramped on small screens
 - ⚠️ Performance with large stories (100+ scenes)
 
 **Mitigations**:
+
 - ✅ Responsive design handles mobile (Story 5.1)
 - ✅ Collapsible chapters reduce visual clutter
 - ✅ Virtual scrolling if needed later (performance)
@@ -176,6 +192,7 @@ App.tsx (split-screen layout)
 **Purpose**: Power users can navigate using keyboard
 
 **Shortcuts**:
+
 - **↑ Arrow Up**: Select previous scene
 - **↓ Arrow Down**: Select next scene
 - **← Arrow Left**: Collapse/expand chapter
@@ -185,23 +202,25 @@ App.tsx (split-screen layout)
 - **Ctrl+E** (or **⌘+E**): Toggle edit mode on prose
 
 **Implementation**:
+
 ```tsx
 useEffect(() => {
   const handleKeyDown = (e: KeyboardEvent) => {
-    if (e.key === 'ArrowUp') selectPreviousScene()
-    else if (e.key === 'ArrowDown') selectNextScene()
-    else if (e.key === 'ArrowLeft') collapseChapter()
-    else if (e.key === 'ArrowRight') expandChapter()
-    else if (e.key === 'Enter') generateProse()
-    else if ((e.ctrlKey || e.metaKey) && e.key === 's') saveScene()
-  }
-  
-  window.addEventListener('keydown', handleKeyDown)
-  return () => window.removeEventListener('keydown', handleKeyDown)
-}, [selectedSceneId])
+    if (e.key === 'ArrowUp') selectPreviousScene();
+    else if (e.key === 'ArrowDown') selectNextScene();
+    else if (e.key === 'ArrowLeft') collapseChapter();
+    else if (e.key === 'ArrowRight') expandChapter();
+    else if (e.key === 'Enter') generateProse();
+    else if ((e.ctrlKey || e.metaKey) && e.key === 's') saveScene();
+  };
+
+  window.addEventListener('keydown', handleKeyDown);
+  return () => window.removeEventListener('keydown', handleKeyDown);
+}, [selectedSceneId]);
 ```
 
 **Acceptance Criteria**:
+
 - ✅ Arrow keys navigate scenes
 - ✅ Enter generates prose
 - ✅ Keyboard hints shown in UI (tooltip or help)
@@ -217,6 +236,7 @@ useEffect(() => {
 **Current State**: SceneEditor shows status badges, but StoryTree doesn't
 
 **Enhancements**:
+
 ```
 StoryTree Scene List:
 ├── Scene 1: The Beginning [✓ COMPLETE]
@@ -227,33 +247,35 @@ StoryTree Scene List:
 ```
 
 **Visual Design**:
+
 - **Draft** (Gray): `bg-gray-300 text-gray-800`
 - **Generating** (Blue with animation): `bg-blue-500 text-white animate-pulse`
 - **Complete** (Green checkmark): `bg-green-500 text-white`
 - **Error** (Red warning): `bg-red-500 text-white`
 
 **Additional Badges**:
+
 - Prose word count (small gray text): "487 words"
 - Regeneration count: "Regen ×3" (if regenerated)
 - Character involvement: Small character initials/avatars
 
 **Implementation**:
+
 ```tsx
 <div className="scene-item flex justify-between items-center p-2">
-  <span className="scene-number">Scene {scene.sceneNumber}: {scene.title}</span>
+  <span className="scene-number">
+    Scene {scene.sceneNumber}: {scene.title}
+  </span>
   <div className="badges flex gap-1">
     <StatusBadge status={scene.status} />
-    {scene.regenerationCount > 0 && (
-      <span className="text-xs bg-yellow-100">Regen ×{scene.regenerationCount}</span>
-    )}
-    {scene.prose && (
-      <span className="text-xs text-slate-500">{proseWordCount(scene.prose)} words</span>
-    )}
+    {scene.regenerationCount > 0 && <span className="text-xs bg-yellow-100">Regen ×{scene.regenerationCount}</span>}
+    {scene.prose && <span className="text-xs text-slate-500">{proseWordCount(scene.prose)} words</span>}
   </div>
 </div>
 ```
 
 **Acceptance Criteria**:
+
 - ✅ Status badges visible in StoryTree
 - ✅ Color-coded by status
 - ✅ Word count displayed
@@ -271,6 +293,7 @@ StoryTree Scene List:
 **Enhancement**: Dedicated component showing generation pipeline
 
 **Component Display**:
+
 ```
 🤖 AI Generation in Progress (Scene 3)
 
@@ -287,6 +310,7 @@ Press Esc to cancel (data will be saved)
 ```
 
 **Features**:
+
 - ✅ Step-by-step progress (Character Agent → Scene Writer)
 - ✅ Loaded characters shown
 - ✅ Progress bar (estimated time remaining)
@@ -295,71 +319,60 @@ Press Esc to cancel (data will be saved)
 - ✅ Graceful error message if generation fails
 
 **Implementation**:
+
 ```tsx
 interface GenerationStatusProps {
-  sceneId: string
-  currentStep: 1 | 2  // Character Agent or Scene Writer
-  characters: Character[]
-  elapsedTime: number
-  isError?: boolean
-  errorMessage?: string
+  sceneId: string;
+  currentStep: 1 | 2; // Character Agent or Scene Writer
+  characters: Character[];
+  elapsedTime: number;
+  isError?: boolean;
+  errorMessage?: string;
 }
 
-export const GenerationStatus: React.FC<GenerationStatusProps> = ({
-  currentStep,
-  characters,
-  elapsedTime,
-}) => {
-  const estimatedTotalTime = 8000  // 8 seconds typical
-  const progressPercent = Math.min((elapsedTime / estimatedTotalTime) * 100, 90)
-  
+export const GenerationStatus: React.FC<GenerationStatusProps> = ({ currentStep, characters, elapsedTime }) => {
+  const estimatedTotalTime = 8000; // 8 seconds typical
+  const progressPercent = Math.min((elapsedTime / estimatedTotalTime) * 100, 90);
+
   return (
     <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
       <h3 className="font-semibold text-blue-900">🤖 AI Generation in Progress</h3>
-      
+
       <div className="mt-3 space-y-2">
         <div className="text-sm">
-          <span className={currentStep === 1 ? 'font-bold' : ''}>
-            Step 1: Analyzing Characters...
-          </span>
+          <span className={currentStep === 1 ? 'font-bold' : ''}>Step 1: Analyzing Characters...</span>
           {currentStep >= 1 && <span className="text-green-600"> ✓</span>}
         </div>
-        
+
         {characters.length > 0 && (
           <ul className="ml-4 text-sm text-slate-700">
-            {characters.map(char => (
+            {characters.map((char) => (
               <li key={char._id}>- {char.name}</li>
             ))}
           </ul>
         )}
-        
+
         <div className="text-sm mt-2">
-          <span className={currentStep === 2 ? 'font-bold' : ''}>
-            Step 2: Writing Prose...
-          </span>
+          <span className={currentStep === 2 ? 'font-bold' : ''}>Step 2: Writing Prose...</span>
           {currentStep >= 2 && <span className="text-green-600"> ✓</span>}
         </div>
       </div>
-      
+
       <div className="mt-4">
         <div className="w-full bg-gray-200 rounded-full h-2">
-          <div 
-            className="bg-blue-600 h-2 rounded-full transition-all"
-            style={{width: `${progressPercent}%`}}
-          />
+          <div className="bg-blue-600 h-2 rounded-full transition-all" style={{ width: `${progressPercent}%` }} />
         </div>
         <p className="text-xs text-blue-700 mt-1">~{Math.max(0, Math.round((estimatedTotalTime - elapsedTime) / 1000))}s remaining</p>
       </div>
-      
-      <p className="text-xs text-blue-700 mt-3">
-        💡 This typically takes 5-10 seconds
-      </p>
+
+      <p className="text-xs text-blue-700 mt-3">💡 This typically takes 5-10 seconds</p>
     </div>
-  )
-}
+  );
+};
 ```
 
 **Acceptance Criteria**:
+
 - ✅ Shows current step (Character Agent or Scene Writer)
 - ✅ Lists characters being analyzed
 - ✅ Progress bar with time estimate
@@ -373,6 +386,7 @@ export const GenerationStatus: React.FC<GenerationStatusProps> = ({
 **Purpose**: Make the app look professional and polished
 
 **Current Issues**:
+
 - ❌ Test components have rough styling
 - ❌ Inconsistent spacing and colors
 - ❌ No visual hierarchy
@@ -381,6 +395,7 @@ export const GenerationStatus: React.FC<GenerationStatusProps> = ({
 **Design Improvements**:
 
 **1. Color Palette (Tailwind)**:
+
 ```
 Primary: slate-900 (dark, professional)
 Accent: purple-600 (generation/AI)
@@ -392,6 +407,7 @@ Borders: slate-200 / slate-700 (dark mode)
 ```
 
 **2. Typography**:
+
 ```
 Heading 1: text-3xl font-bold
 Heading 2: text-2xl font-semibold
@@ -405,6 +421,7 @@ Dark mode: white text on dark backgrounds
 ```
 
 **3. Spacing**:
+
 ```
 Container padding: px-6 py-6
 Section gaps: space-y-4
@@ -414,6 +431,7 @@ Card padding: p-6
 ```
 
 **4. Component Styling**:
+
 - Buttons: Consistent sizing, hover states, focus states
 - Cards: Subtle shadows, proper borders, spacing
 - Inputs: Focus indicators, clear labels
@@ -421,12 +439,14 @@ Card padding: p-6
 - Icons: Emoji or SVG icons, 16-24px sizes
 
 **5. Dark Mode**:
+
 - Full dark mode support
 - Toggle in header (☀️ / 🌙)
 - Proper contrast ratios
 - Persists to localStorage
 
 **6. Responsive Refinement**:
+
 - Proper padding on mobile (px-4 instead of px-6)
 - Larger touch targets (min 44px)
 - Proper text scaling
@@ -435,6 +455,7 @@ Card padding: p-6
 **Example Before/After**:
 
 **Before (Test Component)**:
+
 ```tsx
 <div className="border rounded-lg p-6 bg-slate-50 space-y-4">
   <h3 className="text-xl font-semibold mb-4">Scene Management Test</h3>
@@ -444,17 +465,14 @@ Card padding: p-6
 ```
 
 **After (Polished)**:
+
 ```tsx
 <div className="rounded-lg border border-slate-200 bg-white dark:bg-slate-900 dark:border-slate-700 shadow-sm p-6 space-y-4">
-  <h3 className="text-xl font-semibold text-slate-900 dark:text-white">
-    Scene Management
-  </h3>
+  <h3 className="text-xl font-semibold text-slate-900 dark:text-white">Scene Management</h3>
   <div className="space-y-2">
-    <label className="text-sm font-medium text-slate-700 dark:text-slate-300">
-      Scene Outline
-    </label>
-    <textarea 
-      placeholder="Enter your scene outline..." 
+    <label className="text-sm font-medium text-slate-700 dark:text-slate-300">Scene Outline</label>
+    <textarea
+      placeholder="Enter your scene outline..."
       className="w-full rounded border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-800 p-3 focus:ring-2 focus:ring-purple-500"
     />
   </div>
@@ -465,6 +483,7 @@ Card padding: p-6
 ```
 
 **Acceptance Criteria**:
+
 - ✅ Consistent color palette throughout
 - ✅ Professional typography
 - ✅ Proper spacing and layout
@@ -479,30 +498,35 @@ Card padding: p-6
 ## Implementation Timeline
 
 ### Story 5.1: Split-Screen Layout
+
 - **Estimate**: 2-3 hours
 - **Complexity**: Medium
 - **Risk**: Low (CSS/layout only)
 - **Priority**: Critical (foundation for others)
 
 ### Story 5.2: Keyboard Shortcuts
+
 - **Estimate**: 1-2 hours
 - **Complexity**: Low
 - **Risk**: Low
 - **Priority**: High (improves UX significantly)
 
 ### Story 5.3: Visual Badges in StoryTree
+
 - **Estimate**: 1-2 hours
 - **Complexity**: Low
 - **Risk**: Low
 - **Priority**: High (status visibility important)
 
 ### Story 5.4: GenerationStatus Component
+
 - **Estimate**: 2-3 hours
 - **Complexity**: Medium
 - **Risk**: Medium (timing/progress calculation)
 - **Priority**: Medium (nice-to-have, improves feedback)
 
 ### Story 5.5: Polish Visual Design
+
 - **Estimate**: 3-4 hours
 - **Complexity**: Low-Medium
 - **Risk**: Low
@@ -515,6 +539,7 @@ Card padding: p-6
 ## Mary's Strategic Recommendations
 
 ### What to Prioritize
+
 1. **Start with 5.1** - Split-screen foundation
 2. **Then 5.5** - Polish design (improves perception)
 3. **Then 5.2** - Keyboard shortcuts
@@ -524,6 +549,7 @@ Card padding: p-6
 **Rationale**: Prioritizes visual polish and essential features before optional enhancements.
 
 ### Alternative Approach
+
 1. **5.1** - Layout foundation
 2. **5.3** - Status badges (quick win, big impact)
 3. **5.2** - Keyboard shortcuts (improves workflow)
@@ -533,6 +559,7 @@ Card padding: p-6
 **Rationale**: Delivers features in order of user impact, Polish can be iterative.
 
 ### Risk Mitigation
+
 - ✅ Implement Story 5.1 first (foundation)
 - ✅ Test responsiveness on real devices
 - ✅ Use Tailwind's built-in responsive utilities
@@ -571,6 +598,7 @@ After completing Story 5.1-5.5:
 ## Appendix: Component Layout Reference
 
 ### Split-Screen Structure
+
 ```
 ┌─────────────────────────────────────────────┐
 │ Header (Navigation, Theme Toggle)           │
@@ -593,6 +621,7 @@ After completing Story 5.1-5.5:
 ```
 
 ### Mobile Responsive
+
 ```
 ┌─────────────────────────┐
 │ Header                  │

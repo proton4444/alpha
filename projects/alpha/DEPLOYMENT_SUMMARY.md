@@ -14,15 +14,18 @@ This document summarizes the deployment setup for the Narrative Canvas Platform.
 ## Files Created for Deployment
 
 ### 1. `vercel.json` (Primary deployment config)
+
 - Vercel deployment configuration
 - Configures build settings, environment variables, and routing
 - Includes security headers
 
 ### 2. `netlify.toml` (Alternative deployment config)
+
 - Netlify deployment configuration (if you prefer Netlify over Vercel)
 - Similar settings to vercel.json
 
 ### 3. `DEPLOYMENT.md` (Comprehensive guide)
+
 - Complete step-by-step deployment instructions
 - Prerequisites and account setup
 - Convex backend deployment
@@ -32,6 +35,7 @@ This document summarizes the deployment setup for the Narrative Canvas Platform.
 - Alternative deployment platforms
 
 ### 4. `DEPLOYMENT_CHECKLIST.md` (Pre-deployment checklist)
+
 - Pre-deployment verification steps
 - Convex deployment checklist
 - Frontend deployment checklist
@@ -39,6 +43,7 @@ This document summarizes the deployment setup for the Narrative Canvas Platform.
 - Feature testing checklist
 
 ### 5. `.env.production.example` (Production environment template)
+
 - Template for production environment variables
 - Documents required variables with examples
 
@@ -77,15 +82,16 @@ This document summarizes the deployment setup for the Narrative Canvas Platform.
 
 ## Environment Variables Required
 
-| Variable | Where to Set | How to Get | Required |
-|----------|--------------|------------|----------|
-| `VITE_CONVEX_URL` | Vercel Dashboard | Run `npx convex deploy --prod` | Yes |
+| Variable          | Where to Set     | How to Get                     | Required |
+| ----------------- | ---------------- | ------------------------------ | -------- |
+| `VITE_CONVEX_URL` | Vercel Dashboard | Run `npx convex deploy --prod` | Yes      |
 
 ---
 
 ## Deployment Steps (Quick Reference)
 
 ### Step 1: Deploy Convex Backend
+
 ```bash
 cd /home/user/alpha/projects/alpha
 npx convex deploy --prod
@@ -96,12 +102,14 @@ npx convex deploy --prod
 ### Step 2: Deploy Frontend to Vercel
 
 **Option A: Via Dashboard**
+
 1. Go to https://vercel.com/dashboard
 2. Import GitHub repository
 3. Add environment variable: `VITE_CONVEX_URL`
 4. Deploy
 
 **Option B: Via CLI**
+
 ```bash
 vercel login
 vercel --prod
@@ -109,6 +117,7 @@ vercel env add VITE_CONVEX_URL
 ```
 
 ### Step 3: Verify Deployment
+
 1. Visit deployment URL
 2. Check browser console for errors
 3. Test all features
@@ -119,6 +128,7 @@ vercel env add VITE_CONVEX_URL
 ## Cost Estimate (Free Tier)
 
 ### Vercel Free Tier
+
 - **Projects**: Unlimited personal projects
 - **Bandwidth**: 100 GB/month
 - **Build Time**: 100 hours/month
@@ -127,6 +137,7 @@ vercel env add VITE_CONVEX_URL
 - **Cost**: $0/month
 
 ### Convex Free Tier
+
 - **Database Storage**: 1 GB
 - **File Storage**: 1 GB
 - **Function Calls**: 1,000,000/month
@@ -139,15 +150,15 @@ vercel env add VITE_CONVEX_URL
 
 ## Platform Comparison
 
-| Feature | Vercel | Netlify | Cloudflare Pages |
-|---------|--------|---------|------------------|
-| Build Time | Fast | Fast | Very Fast |
-| Edge Network | Excellent | Excellent | Excellent |
-| Convex Integration | Excellent | Good | Good |
-| Vite Support | Native | Native | Native |
-| Free Tier | Generous | Generous | Generous |
-| Ease of Setup | Very Easy | Easy | Easy |
-| **Recommended** | ✅ **Yes** | Alternative | Alternative |
+| Feature            | Vercel     | Netlify     | Cloudflare Pages |
+| ------------------ | ---------- | ----------- | ---------------- |
+| Build Time         | Fast       | Fast        | Very Fast        |
+| Edge Network       | Excellent  | Excellent   | Excellent        |
+| Convex Integration | Excellent  | Good        | Good             |
+| Vite Support       | Native     | Native      | Native           |
+| Free Tier          | Generous   | Generous    | Generous         |
+| Ease of Setup      | Very Easy  | Easy        | Easy             |
+| **Recommended**    | ✅ **Yes** | Alternative | Alternative      |
 
 ---
 
@@ -226,11 +237,11 @@ vercel env add VITE_CONVEX_URL
 
 ## Deployment URLs (Fill after deployment)
 
-**Frontend (Vercel)**: _________________________________
+**Frontend (Vercel)**: **\*\***\*\*\*\***\*\***\_**\*\***\*\*\*\***\*\***
 
-**Backend (Convex)**: _________________________________
+**Backend (Convex)**: **\*\***\*\*\*\***\*\***\_**\*\***\*\*\*\***\*\***
 
-**Custom Domain** (optional): _________________________________
+**Custom Domain** (optional): **\*\***\*\*\*\***\*\***\_**\*\***\*\*\*\***\*\***
 
 ---
 

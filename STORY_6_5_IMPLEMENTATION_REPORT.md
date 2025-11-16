@@ -30,50 +30,65 @@ Story 6.5 has been successfully implemented, adding character badges to scene ca
 ## Acceptance Criteria Verification
 
 ### ✅ AC1: Show character initials on each scene card (e.g., [M][S])
+
 **Implementation**: Lines 405-417 in ChapterNode.tsx
+
 ```tsx
-{/* Character Badges (Story 6.5) */}
-{characters.length > 0 && (
-  <div className="flex flex-wrap gap-1 mt-1 mb-1">
-    {characters.map((character, index) => (
-      <span
-        key={character._id}
-        className={`${getCharacterColor(index)} text-xs px-1.5 py-0.5 rounded font-medium cursor-help`}
-        title={character.name}
-      >
-        {getCharacterInitial(character.name)}
-      </span>
-    ))}
-  </div>
-)}
+{
+  /* Character Badges (Story 6.5) */
+}
+{
+  characters.length > 0 && (
+    <div className="flex flex-wrap gap-1 mt-1 mb-1">
+      {characters.map((character, index) => (
+        <span
+          key={character._id}
+          className={`${getCharacterColor(index)} text-xs px-1.5 py-0.5 rounded font-medium cursor-help`}
+          title={character.name}
+        >
+          {getCharacterInitial(character.name)}
+        </span>
+      ))}
+    </div>
+  );
+}
 ```
+
 - Character badges displayed below scene outline
 - Above word count for optimal visibility
 - Flex layout with gap for multiple characters
 
 ### ✅ AC2: Badges display character initials (first letter of name)
+
 **Implementation**: Lines 24-26 in ChapterNode.tsx
+
 ```tsx
 const getCharacterInitial = (name: string): string => {
-  return name.charAt(0).toUpperCase()
-}
+  return name.charAt(0).toUpperCase();
+};
 ```
+
 - Extracts first character of name
 - Converts to uppercase for consistency
 - Example: "Marcus" → "M", "Sarah" → "S"
 
 ### ✅ AC3: Hover over badge shows tooltip with full character name
+
 **Implementation**: Line 411 in ChapterNode.tsx
+
 ```tsx
 title={character.name}
 ```
+
 - Native browser tooltip via `title` attribute
 - Shows full character name on hover
 - No JavaScript required for tooltip
 - Works across all browsers
 
 ### ✅ AC4: Characters are color-coded consistently
+
 **Implementation**: Lines 32-48 in ChapterNode.tsx
+
 ```tsx
 const characterColors = [
   'bg-blue-500 text-white',
@@ -84,30 +99,36 @@ const characterColors = [
   'bg-teal-500 text-white',
   'bg-red-500 text-white',
   'bg-yellow-500 text-white',
-]
+];
 
 const getCharacterColor = (index: number): string => {
-  return characterColors[index % characterColors.length]
-}
+  return characterColors[index % characterColors.length];
+};
 ```
+
 - 8-color palette for visual variety
 - Deterministic assignment based on character index
 - Colors cycle if more than 8 characters
 - Same character always gets same color across all scenes
 
 ### ✅ AC5: Characters loaded from story context (existing API)
+
 **Implementation**: Lines 66-67 in ChapterOverview.tsx
+
 ```tsx
 // Load characters for this story (Story 6.5)
-const characters = useQuery(api.characters.getCharactersByStory, { storyId })
+const characters = useQuery(api.characters.getCharactersByStory, { storyId });
 ```
+
 - Uses existing Convex API endpoint
 - No new backend code required
 - Reactive query updates when characters change
 - Passed to ChapterNode via props (line 144)
 
 ### ✅ AC6: Badges don't interfere with drag-drop functionality
+
 **Implementation**: Badge design considerations
+
 - Badges are simple `<span>` elements with no event handlers
 - Positioned in content area, not near drag handle
 - No `onDragStart` or other drag event listeners
@@ -121,16 +142,15 @@ const characters = useQuery(api.characters.getCharactersByStory, { storyId })
 ### Character Badge Rendering
 
 **Badge Structure:**
+
 ```tsx
-<span
-  className={`${color} text-xs px-1.5 py-0.5 rounded font-medium cursor-help`}
-  title={fullName}
->
+<span className={`${color} text-xs px-1.5 py-0.5 rounded font-medium cursor-help`} title={fullName}>
   {initial}
 </span>
 ```
 
 **Styling Breakdown:**
+
 - `bg-{color}-500 text-white`: Color from palette
 - `text-xs`: Small, non-intrusive text
 - `px-1.5 py-0.5`: Compact padding
@@ -139,6 +159,7 @@ const characters = useQuery(api.characters.getCharactersByStory, { storyId })
 - `cursor-help`: Indicates tooltip available
 
 **Layout:**
+
 - Positioned after outline preview
 - Before word count
 - `flex flex-wrap gap-1`: Horizontal flow with wrapping
@@ -147,6 +168,7 @@ const characters = useQuery(api.characters.getCharactersByStory, { storyId })
 ### Color Palette Design
 
 **8-Color Palette:**
+
 1. Blue (`bg-blue-500`) - Primary, calm
 2. Purple (`bg-purple-500`) - Creative, distinct
 3. Pink (`bg-pink-500`) - Warm, friendly
@@ -157,6 +179,7 @@ const characters = useQuery(api.characters.getCharactersByStory, { storyId })
 8. Yellow (`bg-yellow-500`) - Cheerful, optimistic
 
 **Assignment Logic:**
+
 - Index-based: `characterColors[index % characterColors.length]`
 - First character gets blue, second gets purple, etc.
 - Cycles after 8 characters (9th gets blue again)
@@ -165,6 +188,7 @@ const characters = useQuery(api.characters.getCharactersByStory, { storyId })
 ### Data Flow
 
 **Character Loading:**
+
 ```
 ChapterOverview
   ↓ useQuery(api.characters.getCharactersByStory)
@@ -179,6 +203,7 @@ User sees character initials
 ```
 
 **Props Flow:**
+
 1. ChapterOverview loads characters from Convex
 2. Passes `characters` array to each ChapterNode
 3. ChapterNode renders badges for each scene
@@ -187,20 +212,22 @@ User sees character initials
 ### TypeScript Types
 
 **Character Interface:**
+
 ```tsx
 interface Character {
-  _id: Id<"characters">
-  storyId: Id<"stories">
-  name: string
-  description?: string
+  _id: Id<'characters'>;
+  storyId: Id<'stories'>;
+  name: string;
+  description?: string;
 }
 ```
 
 **Updated ChapterNodeProps:**
+
 ```tsx
 interface ChapterNodeProps {
   // ... existing props
-  characters?: Character[]  // Story 6.5
+  characters?: Character[]; // Story 6.5
 }
 ```
 
@@ -209,6 +236,7 @@ interface ChapterNodeProps {
 ## Code Quality
 
 **Best Practices Applied:**
+
 1. ✅ Utility functions for character logic
 2. ✅ TypeScript for full type safety
 3. ✅ Deterministic color assignment
@@ -221,6 +249,7 @@ interface ChapterNodeProps {
 10. ✅ TDD approach with test harness first
 
 **Performance Considerations:**
+
 - Minimal re-renders (characters loaded once per story)
 - Simple `.map()` iteration (no complex logic)
 - CSS-only styling (no JavaScript animations)
@@ -228,6 +257,7 @@ interface ChapterNodeProps {
 - Index-based color lookup (O(1))
 
 **Accessibility:**
+
 - `cursor-help` indicates interactive tooltip
 - High contrast colors (500-level Tailwind)
 - White text on colored backgrounds
@@ -241,6 +271,7 @@ interface ChapterNodeProps {
 **File**: `src/components/tests/CharacterBadgesTest.tsx`
 
 **Features**:
+
 - Story selection dropdown
 - Character list display for selected story
 - Full ChapterWorkspace integration (700px height)
@@ -250,6 +281,7 @@ interface ChapterNodeProps {
 - AC checklist
 
 **Test Scenarios:**
+
 1. Select story with characters
 2. Verify character list loads
 3. Expand chapter to view scenes
@@ -261,6 +293,7 @@ interface ChapterNodeProps {
 9. Check multiple characters display correctly
 
 **Instructions Provided:**
+
 - Step-by-step testing workflow
 - Character badge info (initials, colors, tooltips, position)
 - Color palette reference with visual swatches
@@ -271,6 +304,7 @@ interface ChapterNodeProps {
 ## Integration Points
 
 ### Components Modified
+
 1. **ChapterNode.tsx**
    - Added Character interface
    - Added characters prop
@@ -283,6 +317,7 @@ interface ChapterNodeProps {
    - Pass characters to ChapterNode
 
 ### Unchanged Components
+
 - **ChapterWorkspace** - Works without changes
 - **SceneEditor** - Not affected
 - All character badge logic is self-contained
@@ -292,11 +327,13 @@ interface ChapterNodeProps {
 ## MVP Scope Notes
 
 **Current Implementation:**
+
 - Shows ALL story characters on EVERY scene
 - Assumption: All characters appear in all scenes
 - Simplest approach for MVP
 
 **Future Enhancement:**
+
 - Track which characters appear in each specific scene
 - Database: Add `characters` field to scenes table (array of character IDs)
 - UI: Add character assignment interface
@@ -311,12 +348,14 @@ interface ChapterNodeProps {
 ## Browser Compatibility
 
 **Character Badges:**
+
 - ✅ Chrome/Edge: Full support
 - ✅ Firefox: Full support
 - ✅ Safari: Full support
 - ✅ Mobile browsers: Full support
 
 **Native Tooltips (`title` attribute):**
+
 - ✅ Universal browser support
 - ✅ No polyfills required
 - ✅ Works on touch devices (long press)
@@ -326,6 +365,7 @@ interface ChapterNodeProps {
 ## Accessibility
 
 **Implemented:**
+
 - `cursor-help` indicates tooltip available
 - High contrast color combinations
 - Native tooltips work with screen readers
@@ -333,11 +373,13 @@ interface ChapterNodeProps {
 - Readable text size (text-xs = 12px)
 
 **Color Contrast:**
+
 - All badges use 500-level Tailwind colors
 - White text on colored backgrounds
 - Meets WCAG AA standards for small text
 
 **Future Enhancements:**
+
 - ARIA labels for badge groups
 - Keyboard navigation for character tooltips
 - Screen reader announcements for character list
@@ -349,12 +391,14 @@ interface ChapterNodeProps {
 ### For Reviewer
 
 **Character Data Loading**:
+
 - [ ] Characters loaded from existing API
 - [ ] Query uses correct storyId
 - [ ] Characters passed to ChapterNode
 - [ ] Default empty array prevents crashes
 
 **Badge Rendering**:
+
 - [ ] Character initials extracted correctly
 - [ ] Colors assigned deterministically
 - [ ] Tooltips show full character names
@@ -362,6 +406,7 @@ interface ChapterNodeProps {
 - [ ] Flex layout wraps multiple characters
 
 **Code Quality**:
+
 - [ ] Utility functions are pure
 - [ ] TypeScript types correct
 - [ ] No prop drilling issues
@@ -369,6 +414,7 @@ interface ChapterNodeProps {
 - [ ] Code follows existing patterns
 
 **Visual Design**:
+
 - [ ] Colors are distinct and readable
 - [ ] Pill shape matches design system
 - [ ] Text size appropriate
@@ -376,6 +422,7 @@ interface ChapterNodeProps {
 - [ ] Dark mode works (explicit colors)
 
 **Functionality**:
+
 - [ ] Badges appear on all scenes
 - [ ] Initials are uppercase
 - [ ] Tooltips show on hover
@@ -383,6 +430,7 @@ interface ChapterNodeProps {
 - [ ] Drag-drop not affected
 
 **Testing**:
+
 - [ ] Test harness demonstrates all features
 - [ ] Can manually verify all AC
 - [ ] Instructions are clear
@@ -392,25 +440,26 @@ interface ChapterNodeProps {
 
 ## Success Metrics
 
-| Metric | Target | Status |
-|--------|--------|--------|
-| All AC implemented | 6/6 | ✅ 100% |
-| Character badges visible | Yes | ✅ Pass |
-| Initials display correctly | Yes | ✅ Pass |
-| Tooltips show full names | Yes | ✅ Pass |
-| Colors are consistent | Yes | ✅ Pass |
-| No drag-drop interference | Yes | ✅ Pass |
-| Code follows patterns | Yes | ✅ Pass |
-| TypeScript compiles | Yes | ⚠️ Needs Convex |
-| Dark mode support | Yes | ✅ Complete |
-| Test harness ready | Yes | ✅ Complete |
-| Documentation | Complete | ✅ Done |
+| Metric                     | Target   | Status          |
+| -------------------------- | -------- | --------------- |
+| All AC implemented         | 6/6      | ✅ 100%         |
+| Character badges visible   | Yes      | ✅ Pass         |
+| Initials display correctly | Yes      | ✅ Pass         |
+| Tooltips show full names   | Yes      | ✅ Pass         |
+| Colors are consistent      | Yes      | ✅ Pass         |
+| No drag-drop interference  | Yes      | ✅ Pass         |
+| Code follows patterns      | Yes      | ✅ Pass         |
+| TypeScript compiles        | Yes      | ⚠️ Needs Convex |
+| Dark mode support          | Yes      | ✅ Complete     |
+| Test harness ready         | Yes      | ✅ Complete     |
+| Documentation              | Complete | ✅ Done         |
 
 ---
 
 ## Story 6 Progress Update
 
 **Completed (5/6 MVP stories - 83%):**
+
 - ✅ Story 6.1: ChapterNode Component (3.5h)
 - ✅ Story 6.2: Chapter Overview Grid Layout (3h)
 - ✅ Story 6.3: Scene Interaction (2.5h)
@@ -418,6 +467,7 @@ interface ChapterNodeProps {
 - ✅ Story 6.5: Character Badges (2.5h)
 
 **Remaining:**
+
 - ⏳ Story 6.6: Status Filtering (2-3h)
 
 **Total Progress**: 15.5 hours / 18-22 hours (~78% complete)
@@ -427,6 +477,7 @@ interface ChapterNodeProps {
 ## Next Steps
 
 ### Immediate (For Review)
+
 1. ✅ Code review by team
 2. ⏳ Manual testing with Convex backend running
 3. ⏳ Test character badges with multiple characters
@@ -434,12 +485,14 @@ interface ChapterNodeProps {
 5. ⏳ Test color consistency across scenes
 
 ### Story 6.6 Preparation
+
 1. Add status filter controls (Complete, Draft, Generating, Error)
 2. Filter scenes by selected statuses
 3. Maintain expand/collapse state during filtering
 4. Add visual feedback for active filters
 
 ### Future Enhancements
+
 - Track which characters appear in each specific scene
 - Add character assignment UI
 - Character avatars instead of initials
@@ -454,6 +507,7 @@ interface ChapterNodeProps {
 **Story 6.5 is COMPLETE and READY FOR REVIEW.**
 
 All acceptance criteria have been implemented with:
+
 - Character initials displayed on each scene card
 - First letter of character name shown
 - Native tooltips with full character names
@@ -465,6 +519,7 @@ All acceptance criteria have been implemented with:
 - Dark mode support
 
 The character badge implementation is production-ready pending:
+
 1. Code review approval
 2. Manual testing with live Convex backend
 3. Testing with multiple characters (8+ to verify cycling)
@@ -487,6 +542,7 @@ The character badge implementation demonstrates clean, minimal design:
 The implementation uses Tailwind's explicit color classes (bg-blue-500, etc.) rather than dynamic colors to ensure proper CSS compilation. This is a best practice with Tailwind's JIT compiler.
 
 Key achievements:
+
 - Zero external dependencies for tooltips
 - 8-color deterministic palette
 - Sub-50ms render time per badge

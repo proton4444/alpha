@@ -7,6 +7,7 @@
 ## Verified Features
 
 ### Story 6.1: ChapterNode Component ✅
+
 - Scene card with outline preview
 - Word count display
 - Status badges (draft/generating/complete/error)
@@ -15,6 +16,7 @@
 - Fully responsive & dark mode
 
 ### Story 6.2: Chapter Overview Grid ✅
+
 - CSS Grid responsive layout (3-4 per row desktop)
 - Chapter-centric design (not scene-centric)
 - Character data loading
@@ -22,6 +24,7 @@
 - Mobile/tablet/desktop support
 
 ### Story 6.3: Scene Interaction ✅
+
 - Click scene → opens SceneEditor
 - Bidirectional data flow
 - Selection highlighting
@@ -29,6 +32,7 @@
 - Split-screen workspace
 
 ### Story 6.4: Drag-Drop Reordering ✅
+
 - HTML5 DnD API (no React Flow)
 - Visual drag feedback
 - Scene reordering within chapter
@@ -36,6 +40,7 @@
 - Performance: <200ms per action
 
 ### Story 6.5: Character Badges ✅
+
 - Character initials on scene cards
 - 8-color palette (deterministic assignment)
 - Hover tooltips with full names
@@ -43,6 +48,7 @@
 - Positioned below outline, above word count
 
 ## Code Quality
+
 - ✅ Full TypeScript type safety
 - ✅ React best practices (hooks, memoization)
 - ✅ Tailwind CSS styling
@@ -51,6 +57,7 @@
 - ✅ Responsive design
 
 ## Files Changed
+
 - 24 files, 4,876 insertions
 - 6 commits
 - 5 component implementations
@@ -58,11 +65,13 @@
 - Complete documentation
 
 ## Implementation Time
+
 - Total: 15.5 hours / 18-22 hour target
 - Progress: 78% complete
 - Remaining: Story 6.6 (Status Filtering, 2-3h)
 
 ## Ready For
+
 ✅ Code review
 ✅ Integration into App.tsx
 ✅ Production deployment

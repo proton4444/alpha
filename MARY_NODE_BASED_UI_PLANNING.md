@@ -1,4 +1,5 @@
 # Node-Based UI/UX Planning Document
+
 ## For Mary Agent Review - Narrative Canvas Platform
 
 **Status**: PLANNING  
@@ -15,7 +16,7 @@ We need to design a **node-based visual editor** for the Narrative Canvas Platfo
 ✅ Story/Chapter/Scene CRUD operations (Stories 2.1-2.3)  
 ✅ Character management system (Stories 3.1-3.3)  
 ✅ AI prose generation pipeline (Stories 4.1-4.3)  
-✅ Scene editor with accept/regenerate/edit (Story 4.6)  
+✅ Scene editor with accept/regenerate/edit (Story 4.6)
 
 ❌ **MISSING**: Visual node-based interface for story structure
 
@@ -24,6 +25,7 @@ We need to design a **node-based visual editor** for the Narrative Canvas Platfo
 ## Current State (Stories 1-4.6)
 
 ### Architecture Overview
+
 ```
 Frontend (React + Tailwind)
   ├── Story CRUD Test
@@ -51,6 +53,7 @@ Data Model
 ```
 
 ### Current UI Components
+
 - StoryCRUDTest: Create stories, list stories
 - ChapterManagementTest: View chapters (24 per story)
 - SceneManagementTest: CRUD scenes, generate prose
@@ -58,6 +61,7 @@ Data Model
 - SceneEditor (4.6): Accept/regenerate/edit prose
 
 ### Data Available
+
 - Full story hierarchy: stories → chapters → scenes
 - Character data with relationships to story
 - Scene metadata: status, outline, prose, generation count
@@ -72,6 +76,7 @@ As Product Manager/UX Designer, Mary needs to answer:
 ### 1. **What is a "Node" in Our Context?**
 
 **Option A**: Scene-centric nodes
+
 - Each node = one scene
 - Shows scene title/outline
 - Shows generation status
@@ -79,18 +84,21 @@ As Product Manager/UX Designer, Mary needs to answer:
 - Connected to chapter parent
 
 **Option B**: Chapter-centric nodes with nested scenes
+
 - Each node = one chapter
 - Expandable to show scenes inside
 - Better for large stories (24+ chapters)
 - Cleaner visual hierarchy
 
 **Option C**: Hybrid flow diagram
+
 - Nodes represent both chapters AND scenes
 - Edges show character relationships
 - Shows narrative flow across chapters
 - More complex but powerful
 
 **Option D**: Character-centric relationship graph
+
 - Nodes = characters
 - Edges = interactions (scenes where they appear together)
 - Shows which characters are in which scenes
@@ -99,12 +107,14 @@ As Product Manager/UX Designer, Mary needs to answer:
 ### 2. **What Actions Should Users Perform on Nodes?**
 
 **Minimum (MVP)**:
+
 - Click node → open scene editor (Story 4.6)
 - Drag to reorder (reorder scenes within chapter)
 - Double-click to rename scene/outline
 - Right-click context menu (delete, duplicate)
 
 **Enhanced**:
+
 - Drag scene from one chapter to another
 - Drag character node onto scene node (assign character)
 - Preview prose on hover
@@ -112,6 +122,7 @@ As Product Manager/UX Designer, Mary needs to answer:
 - Filter scenes by character or status
 
 **Advanced**:
+
 - Create connections between scenes (narrative flow)
 - Show word count / reading time per scene
 - Batch operations (regenerate all draft scenes)
@@ -120,6 +131,7 @@ As Product Manager/UX Designer, Mary needs to answer:
 ### 3. **Visual Style**
 
 **What should the node display?**
+
 ```
 ┌─────────────────────────┐
 │ Scene 3: The Discovery  │  ← scene title/number
@@ -134,12 +146,14 @@ As Product Manager/UX Designer, Mary needs to answer:
 ```
 
 **Color scheme**:
+
 - Background: Light (draft), Blue (generating), Green (complete), Red (error)
 - Text: Dark on light, white on dark
 - Borders: Subtle, rounded corners
 - Hover effect: Scale up, shadow, highlight
 
 **Size**:
+
 - Small: 200px × 150px (fits many scenes on screen)
 - Medium: 280px × 200px (better readability)
 - Large: 400px × 300px (detailed preview)
@@ -147,24 +161,28 @@ As Product Manager/UX Designer, Mary needs to answer:
 ### 4. **Layout Strategy**
 
 **Option A**: Grid Layout
+
 - Chapters in rows
 - Scenes in columns within chapter row
 - Responsive (adapt to screen size)
 - Good for linear stories
 
 **Option B**: Vertical Flow (Kanban-style)
+
 - Columns per chapter
 - Scenes as cards in columns
 - Drag-drop reordering
 - Great for chapter-focused workflows
 
 **Option C**: Free Canvas (React Flow)
+
 - Nodes can be placed anywhere
 - User organizes layout
 - Save layout for each story
 - Most flexible, but overwhelming
 
 **Option D**: Tree Hierarchy
+
 - Story at root
 - Chapters as branches
 - Scenes as leaves
@@ -185,8 +203,9 @@ As Product Manager/UX Designer, Mary needs to answer:
 ## Story 5: Node-Based Visual Editor - Proposed Structure
 
 ### Story 5.1: Core Node Component
+
 - **Scope**: Build reusable NodeComponent
-- **Deliverables**: 
+- **Deliverables**:
   - SceneNode: displays scene info, status badge, prose preview
   - Hover effects, click handlers
   - Responsive sizing
@@ -197,6 +216,7 @@ As Product Manager/UX Designer, Mary needs to answer:
   - ✅ Color-coded by status
 
 ### Story 5.2: Node Graph Layout
+
 - **Scope**: Choose and implement layout strategy
 - **Deliverables**:
   - Layout component (Grid/Kanban/Canvas)
@@ -208,6 +228,7 @@ As Product Manager/UX Designer, Mary needs to answer:
   - ✅ Adapts to screen size
 
 ### Story 5.3: Node Interactions
+
 - **Scope**: Click, hover, context menu actions
 - **Deliverables**:
   - Click node → open scene editor
@@ -219,6 +240,7 @@ As Product Manager/UX Designer, Mary needs to answer:
   - ✅ Hover preview displays full prose
 
 ### Story 5.4: Drag & Drop Reordering
+
 - **Scope**: Reorder scenes within/across chapters
 - **Deliverables**:
   - Drag scene node to new position
@@ -231,6 +253,7 @@ As Product Manager/UX Designer, Mary needs to answer:
   - ✅ Visual feedback during drag
 
 ### Story 5.5: Character Visualization
+
 - **Scope**: Show which characters are involved in scenes
 - **Deliverables**:
   - Character avatars/tags on scene nodes
@@ -242,6 +265,7 @@ As Product Manager/UX Designer, Mary needs to answer:
   - ✅ Filtered scenes highlighted visually
 
 ### Story 5.6: Status Visualization & Filtering
+
 - **Scope**: Color-code scenes by status, provide filters
 - **Deliverables**:
   - Color scheme: draft/generating/complete/error
@@ -253,6 +277,7 @@ As Product Manager/UX Designer, Mary needs to answer:
   - ✅ Filtered view updates in real-time
 
 ### Story 5.7: Zoom & Pan Controls
+
 - **Scope**: Allow users to zoom/pan large story graphs
 - **Deliverables**:
   - Zoom in/out buttons or wheel
@@ -265,6 +290,7 @@ As Product Manager/UX Designer, Mary needs to answer:
   - ✅ Minimap shows overview
 
 ### Story 5.8: Navigation & Chapter Tabs
+
 - **Scope**: Make large stories manageable
 - **Deliverables**:
   - Chapter tabs at top (or sidebar)
@@ -282,6 +308,7 @@ As Product Manager/UX Designer, Mary needs to answer:
 ### For Node-Based UI:
 
 **Primary Choice: React Flow**
+
 - Purpose: Node-based visual editor
 - Pros: Purpose-built for nodes/edges, battle-tested, great UX
 - Cons: Additional library (~30KB gzip)
@@ -289,16 +316,19 @@ As Product Manager/UX Designer, Mary needs to answer:
 - Use case: Perfect for our scene node editor
 
 **Alternative: D3.js**
+
 - More flexible, steeper learning curve
 - Better for complex graph visualizations
 - Overkill for our use case unless we need character relationship graphs
 
 **Alternative: Konva.js**
+
 - Good for interactive graphics
 - Better performance for large node counts
 - More manual work required
 
 **Recommendation**: Start with **React Flow**
+
 - Simpler to implement
 - Built-in features (drag, zoom, pan, minimap)
 - Active community, good docs
@@ -309,6 +339,7 @@ As Product Manager/UX Designer, Mary needs to answer:
 ## Implementation Phases
 
 ### Phase 1: MVP (Stories 5.1-5.3)
+
 - Core node component
 - Basic layout (grid by chapter)
 - Click to open scene editor
@@ -316,6 +347,7 @@ As Product Manager/UX Designer, Mary needs to answer:
 - **Deliverable**: Users can visualize story structure
 
 ### Phase 2: UX Polish (Stories 5.4-5.6)
+
 - Drag & drop reordering
 - Character visualization
 - Status filtering
@@ -323,6 +355,7 @@ As Product Manager/UX Designer, Mary needs to answer:
 - **Deliverable**: Interactive visual editor with filtering
 
 ### Phase 3: Advanced (Stories 5.7-5.8)
+
 - Zoom & pan controls
 - Minimap
 - Chapter navigation
@@ -351,19 +384,19 @@ As Product Manager/UX Designer, Mary needs to answer:
 ✅ Users can reorder scenes visually  
 ✅ System remains performant with 100+ scenes  
 ✅ Clear status/character information on nodes  
-✅ Intuitive interactions (drag, click, hover)  
+✅ Intuitive interactions (drag, click, hover)
 
 ---
 
 ## Risks & Mitigations
 
-| Risk | Impact | Mitigation |
-|------|--------|-----------|
-| Performance with many nodes | HIGH | Use React Flow's optimization, virtualization |
-| Complex interactions confusing users | MEDIUM | Start with MVP, gather feedback |
-| Library limitations (React Flow) | MEDIUM | Evaluate alternatives early |
-| Mobile responsiveness | MEDIUM | Design for touch early, test on devices |
-| Scope creep | HIGH | Define MVP clearly, prioritize stories 5.1-5.3 |
+| Risk                                 | Impact | Mitigation                                     |
+| ------------------------------------ | ------ | ---------------------------------------------- |
+| Performance with many nodes          | HIGH   | Use React Flow's optimization, virtualization  |
+| Complex interactions confusing users | MEDIUM | Start with MVP, gather feedback                |
+| Library limitations (React Flow)     | MEDIUM | Evaluate alternatives early                    |
+| Mobile responsiveness                | MEDIUM | Design for touch early, test on devices        |
+| Scope creep                          | HIGH   | Define MVP clearly, prioritize stories 5.1-5.3 |
 
 ---
 
@@ -381,15 +414,15 @@ As Product Manager/UX Designer, Mary needs to answer:
 
 ### React Flow vs. Alternatives
 
-| Criteria | React Flow | D3.js | Konva.js | Custom |
-|----------|-----------|-------|----------|--------|
-| Learning curve | Easy | Steep | Medium | Hard |
-| Time to implement | Fast (6-8h) | Slow (12-16h) | Medium (8-10h) | Very slow |
-| Features built-in | Many | Few | Some | None |
-| Performance | Good | Excellent | Excellent | Variable |
-| Community | Active | Massive | Good | None |
-| Maintenance | Maintained | Maintained | Maintained | You |
-| **Recommendation** | ⭐ Start here | Alternative | Alternative | Last resort |
+| Criteria           | React Flow    | D3.js         | Konva.js       | Custom      |
+| ------------------ | ------------- | ------------- | -------------- | ----------- |
+| Learning curve     | Easy          | Steep         | Medium         | Hard        |
+| Time to implement  | Fast (6-8h)   | Slow (12-16h) | Medium (8-10h) | Very slow   |
+| Features built-in  | Many          | Few           | Some           | None        |
+| Performance        | Good          | Excellent     | Excellent      | Variable    |
+| Community          | Active        | Massive       | Good           | None        |
+| Maintenance        | Maintained    | Maintained    | Maintained     | You         |
+| **Recommendation** | ⭐ Start here | Alternative   | Alternative    | Last resort |
 
 ---
 

@@ -15,6 +15,7 @@ npm run convex:dev
 ```
 
 **Expected output:**
+
 ```
 ✔ Convex functions ready!
   http://localhost:3000
@@ -34,6 +35,7 @@ npm run dev
 ```
 
 **Expected output:**
+
 ```
   VITE v5.x.x  ready in xxx ms
 
@@ -60,6 +62,7 @@ npm run dev
 Once the page loads, verify these visual elements are styled:
 
 #### ✅ Filter Buttons (Top of Chapter Overview)
+
 - [ ] "All" button - Dark slate background when active
 - [ ] "Complete" button - **GREEN** background when active
 - [ ] "Draft" button - Gray background when active
@@ -68,6 +71,7 @@ Once the page loads, verify these visual elements are styled:
 - [ ] Count badges visible on each button
 
 #### ✅ Chapter Cards
+
 - [ ] Visible **borders** around cards (light gray)
 - [ ] **Shadows** on cards (subtle drop shadow)
 - [ ] **Grid spacing** - 1rem gaps between cards
@@ -77,17 +81,20 @@ Once the page loads, verify these visual elements are styled:
   - Desktop: 3-4 columns
 
 #### ✅ Scene Cards (Expand a chapter first)
+
 - [ ] **Complete scenes** - Green background
 - [ ] **Draft scenes** - Gray background
 - [ ] **Generating scenes** - Blue background with pulse animation
 - [ ] **Error scenes** - Red background
 
 #### ✅ Character Badges
+
 - [ ] Colored circles with initials
 - [ ] Multiple colors (blue, purple, pink, orange, green, etc.)
 - [ ] Hover shows full character name in tooltip
 
 #### ✅ Progress Bars
+
 - [ ] Green fill showing completion percentage
 - [ ] Smooth transitions when filtering
 
@@ -96,12 +103,14 @@ Once the page loads, verify these visual elements are styled:
 ### If Styles Don't Appear
 
 **Quick fix:**
+
 1. Stop both servers (Ctrl+C in both terminals)
 2. Clear cache: `rm -rf .vite node_modules/.vite`
 3. Restart both servers
 4. Hard refresh browser (Ctrl+Shift+R)
 
 **Still not working?**
+
 - See `TAILWIND_FIX_GUIDE.txt` for detailed troubleshooting
 
 ---
@@ -116,6 +125,7 @@ Once the page loads, verify these visual elements are styled:
    - GitHub account: https://github.com (optional but recommended)
 
 2. **Install Convex CLI** (if not installed):
+
    ```bash
    npm install -g convex
    ```
@@ -137,11 +147,13 @@ npx convex deploy --prod
 ```
 
 **Follow prompts:**
+
 - Login to Convex (browser will open)
 - Select "Create new project" or choose existing
 - Wait for deployment to complete
 
 **IMPORTANT:** Copy the deployment URL that's shown:
+
 ```
 ✔ Deployment complete!
   https://your-unique-name.convex.cloud
@@ -154,6 +166,7 @@ npx convex deploy --prod
 #### Step 2A: Deploy Frontend to Vercel (Dashboard Method - Recommended)
 
 1. **Push code to GitHub** (if not already done):
+
    ```bash
    git push origin main
    ```
@@ -240,12 +253,15 @@ vercel --prod
 ### Local Development Issues
 
 **Problem**: Styles not showing
+
 - **Solution**: See `TAILWIND_FIX_GUIDE.txt`
 
 **Problem**: Convex connection failed
+
 - **Solution**: Ensure `npm run convex:dev` is running in separate terminal
 
 **Problem**: Port 5173 already in use
+
 - **Solution**: `pkill -f vite` then restart
 
 ---
@@ -253,14 +269,17 @@ vercel --prod
 ### Deployment Issues
 
 **Problem**: Vercel build fails
+
 - **Solution**: Check environment variable is set correctly
 - **Solution**: Ensure Convex backend deployed first
 
 **Problem**: Site loads but no data
+
 - **Solution**: Check `VITE_CONVEX_URL` environment variable matches Convex deployment URL
 - **Solution**: Check Convex dashboard for errors
 
 **Problem**: 404 on routes
+
 - **Solution**: Already configured in `vercel.json` - should auto-work
 
 ---
@@ -268,6 +287,7 @@ vercel --prod
 ## Quick Reference
 
 ### Local Development Commands
+
 ```bash
 # Terminal 1: Convex
 npm run convex:dev
@@ -277,6 +297,7 @@ npm run dev
 ```
 
 ### Deployment Commands
+
 ```bash
 # Deploy backend
 npx convex deploy --prod
@@ -286,6 +307,7 @@ vercel --prod
 ```
 
 ### Important URLs
+
 - **Local Dev**: http://localhost:5173
 - **Convex Dashboard**: https://dashboard.convex.dev
 - **Vercel Dashboard**: https://vercel.com/dashboard
@@ -314,6 +336,7 @@ vercel --prod
 **Status**: Ready to test and deploy! 🚀
 
 **Estimated time**:
+
 - Local testing: 5 minutes
 - Deployment: 15-30 minutes
 - **Total**: 20-35 minutes

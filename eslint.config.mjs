@@ -17,6 +17,7 @@ export default [
       'test/fixtures/**',
       'test/fixtures/**/*.yaml',
       'projects/**/postcss.config.js',
+      'projects/alpha/**', // Sub-project with its own ESLint config
     ],
   },
 

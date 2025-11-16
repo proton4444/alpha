@@ -12,6 +12,7 @@ npx convex dev
 ```
 
 This will:
+
 1. Prompt you to login to Convex (opens browser)
 2. Create a new project or select existing one
 3. Generate `convex.json` with your project URL
@@ -84,6 +85,7 @@ Once Convex is connected, you can add test data through the dashboard or via mut
 4. Click "+ Add Document" for each table:
 
 **stories table:**
+
 ```json
 {
   "title": "The Chronicles of Aethoria",
@@ -93,6 +95,7 @@ Once Convex is connected, you can add test data through the dashboard or via mut
 ```
 
 **chapters table:**
+
 ```json
 {
   "storyId": "<story-id-from-above>",
@@ -102,6 +105,7 @@ Once Convex is connected, you can add test data through the dashboard or via mut
 ```
 
 **scenes table:**
+
 ```json
 {
   "chapterId": "<chapter-id-from-above>",
@@ -125,10 +129,14 @@ In `App.tsx`, you can toggle between:
 
 ```tsx
 // Demo mode (mock data)
-{useGraphicalCanvas ? <GraphicalCanvasDemo /> : <Workspace />}
+{
+  useGraphicalCanvas ? <GraphicalCanvasDemo /> : <Workspace />;
+}
 
 // Real Convex data
-{useGraphicalCanvas ? <GraphicalCanvas /> : <Workspace />}
+{
+  useGraphicalCanvas ? <GraphicalCanvas /> : <Workspace />;
+}
 ```
 
 ---
@@ -144,6 +152,7 @@ npm install convex@latest
 ### Error: "VITE_CONVEX_URL not set"
 
 Create `.env.local` with your Convex URL:
+
 ```bash
 echo "VITE_CONVEX_URL=https://your-deployment.convex.cloud" > .env.local
 ```
@@ -159,12 +168,14 @@ echo "VITE_CONVEX_URL=https://your-deployment.convex.cloud" > .env.local
 ## What's Already Set Up
 
 ✅ **Convex schema** (`convex/schema.ts`):
+
 - stories table
 - chapters table
 - scenes table
 - characters table
 
 ✅ **Convex functions** (in `convex/`):
+
 - `stories.ts` - list, create, get stories
 - `chapters.ts` - manage chapters
 - `scenes.ts` - manage scenes with generation
@@ -172,6 +183,7 @@ echo "VITE_CONVEX_URL=https://your-deployment.convex.cloud" > .env.local
 - `storyTree.ts` - fetch complete story hierarchy
 
 ✅ **Frontend integration**:
+
 - GraphicalCanvas uses `useQuery` hooks
 - Real-time updates via Convex subscriptions
 - Automatic re-rendering on data changes
