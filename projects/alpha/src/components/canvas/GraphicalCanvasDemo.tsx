@@ -162,7 +162,6 @@ export function GraphicalCanvasDemo() {
     const newNodes: Node[] = []
     const newEdges: Edge[] = []
 
-    const CHAPTER_WIDTH = 200
     const CHAPTER_SPACING_X = 260
     const CHAPTER_SPACING_Y = 400
     const SCENE_WIDTH = 160

@@ -42,13 +42,14 @@ export const SceneEditor: React.FC<SceneEditorProps> = ({ sceneId }) => {
   // not cascading renders - only triggers when scene ID changes
   useEffect(() => {
     if (scene) {
-      // eslint-disable-next-line react-hooks/set-state-in-effect
       setOutlineValue(scene.outline || '')
       setProseValue(scene.prose || '')
       // Reset edit mode and accepted state when scene changes
       setIsEditingProse(false)
       setIsAccepted(false)
     }
+    // Only re-run when scene._id changes (switching scenes), not when scene data updates
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [scene?._id])
 
   // Auto-save outline after 1 second of inactivity
@@ -59,7 +60,6 @@ export const SceneEditor: React.FC<SceneEditorProps> = ({ sceneId }) => {
 
     // Set status immediately for UX feedback, then debounce the actual save
     // This is intentional async workflow management, not cascading renders
-    // eslint-disable-next-line react-hooks/set-state-in-effect
     setSaveStatus('saving')
     const timer = setTimeout(async () => {
       try {

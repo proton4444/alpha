@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from 'react'
+import { useState, useEffect, useCallback, useMemo } from 'react'
 import { useQuery } from 'convex/react'
 import { api } from '../../convex/_generated/api'
 import { ChapterOverview } from './ChapterOverview'
@@ -63,7 +63,11 @@ export function ChapterWorkspace({ storyId }: ChapterWorkspaceProps) {
   )
 
   // Build list of scenes in the expanded chapter for navigation
-  const scenesInExpandedChapter = expandedChapter?.scenes || []
+  // Memoized to prevent useCallback dependencies from changing on every render
+  const scenesInExpandedChapter = useMemo(
+    () => expandedChapter?.scenes || [],
+    [expandedChapter?.scenes]
+  )
 
   // Keyboard navigation: Navigate within expanded chapter only
   const navigateToPreviousScene = useCallback(() => {

@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from 'react'
+import { useState, useEffect, useCallback, useMemo } from 'react'
 import { useQuery } from 'convex/react'
 import { api } from '../../convex/_generated/api'
 import { StoryNavigationPanel } from './StoryNavigationPanel'
@@ -28,9 +28,13 @@ export function Workspace() {
   )
 
   // Build flat list of all scenes for navigation
-  const allScenes = storyTree?.chapters.flatMap(ch =>
-    ch.scenes.map(scene => ({ ...scene, chapterId: ch._id }))
-  ) || []
+  // Memoized to prevent useCallback dependencies from changing on every render
+  const allScenes = useMemo(
+    () => storyTree?.chapters.flatMap(ch =>
+      ch.scenes.map(scene => ({ ...scene, chapterId: ch._id }))
+    ) || [],
+    [storyTree?.chapters]
+  )
 
   // Find current chapter for left/right arrow navigation
   const currentScene = allScenes.find(s => s._id === selectedSceneId)
