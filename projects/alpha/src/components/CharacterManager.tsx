@@ -4,6 +4,7 @@ import { api } from '../../convex/_generated/api'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Textarea } from '@/components/ui/textarea'
+import { logger } from '@/lib/logger'
 import {
   Dialog,
   DialogContent,
@@ -94,7 +95,7 @@ export function CharacterManager({ storyId }: CharacterManagerProps) {
       }
       handleCloseDialog()
     } catch (error) {
-      console.error('Failed to save character:', error)
+      logger.asyncError('save character', error)
       alert(String(error))
     }
   }
@@ -110,7 +111,7 @@ export function CharacterManager({ storyId }: CharacterManagerProps) {
     try {
       await deleteCharacter({ characterId })
     } catch (error) {
-      console.error('Failed to delete character:', error)
+      logger.asyncError('delete character', error)
       alert(String(error))
     }
   }

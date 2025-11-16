@@ -6,6 +6,7 @@ import { Textarea } from '@/components/ui/textarea'
 import { GenerationStatus, GenerationError } from '@/components/GenerationStatus'
 import { useScene } from '@/hooks/useConvexQueries'
 import type { Id } from '../../convex/_generated/dataModel'
+import { logger } from '@/lib/logger'
 
 interface SceneEditorProps {
   sceneId: Id<"scenes"> | string | null
@@ -63,7 +64,7 @@ export const SceneEditor: React.FC<SceneEditorProps> = ({ sceneId }) => {
         setSaveStatus('saved')
         setTimeout(() => setSaveStatus('idle'), 2000)
       } catch (error) {
-        console.error('Failed to auto-save outline:', error)
+        logger.asyncError('auto-save outline', error)
         setSaveStatus('idle')
       }
     }, 1000)
@@ -84,7 +85,7 @@ export const SceneEditor: React.FC<SceneEditorProps> = ({ sceneId }) => {
         outline: outlineValue,
       })
     } catch (error) {
-      console.error('Failed to request scene generation:', error)
+      logger.asyncError('request scene generation', error)
       alert('Failed to start generation: ' + String(error))
     }
   }
@@ -120,7 +121,7 @@ export const SceneEditor: React.FC<SceneEditorProps> = ({ sceneId }) => {
         outline: outlineValue,
       })
     } catch (error) {
-      console.error('Failed to regenerate scene:', error)
+      logger.asyncError('regenerate scene', error)
       alert('Failed to regenerate: ' + String(error))
     }
   }
@@ -143,7 +144,7 @@ export const SceneEditor: React.FC<SceneEditorProps> = ({ sceneId }) => {
       setIsEditingProse(false)
       alert('Prose saved successfully!')
     } catch (error) {
-      console.error('Failed to save edited prose:', error)
+      logger.asyncError('save edited prose', error)
       alert('Failed to save prose: ' + String(error))
     }
   }

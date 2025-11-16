@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { useMutation } from 'convex/react'
 import { api } from '../../convex/_generated/api'
 import type { Id } from '../../convex/_generated/dataModel'
+import { logger } from '@/lib/logger'
 
 /**
  * Utility function to count words in prose
@@ -250,7 +251,7 @@ export function ChapterNode({
         newPosition: targetIndex + 1, // Convert to 1-indexed
       })
     } catch (error) {
-      console.error('Failed to reorder scenes:', error)
+      logger.asyncError('reorder scenes', error)
     }
 
     setDraggedSceneId(null)
