@@ -19,7 +19,7 @@ import { api } from '../../../convex/_generated/api'
 import { Id } from '../../../convex/_generated/dataModel'
 
 import { SceneNode } from './SceneNode'
-import { ChapterNode } from './ChapterNode'
+import { ChapterNode } from './ChapterFlowNode'
 import { SceneEditor } from '../SceneEditor'
 
 // Register custom node types

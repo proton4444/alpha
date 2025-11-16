@@ -15,7 +15,7 @@ import 'reactflow/dist/style.css'
 import './canvas.css'
 
 import { SceneNode } from './SceneNode'
-import { ChapterNode } from './ChapterNode'
+import { ChapterNode } from './ChapterFlowNode'
 
 // Register custom node types
 const nodeTypes = {
