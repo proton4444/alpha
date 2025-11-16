@@ -22,6 +22,48 @@ import { SceneNode } from './SceneNode'
 import { ChapterNode } from './ChapterFlowNode'
 import { SceneEditor } from '../SceneEditor'
 
+// Type definitions for Convex data
+type Story = {
+  _id: Id<'stories'>
+  _creationTime: number
+  title: string
+  createdAt: number
+}
+
+type Chapter = {
+  _id: Id<'chapters'>
+  _creationTime: number
+  storyId: Id<'stories'>
+  chapterNumber: number
+  title: string
+}
+
+type Scene = {
+  _id: Id<'scenes'>
+  _creationTime: number
+  storyId: Id<'stories'>
+  chapterId: Id<'chapters'>
+  sceneNumber: number
+  outline: string
+  prose?: string
+  status: 'draft' | 'generating' | 'complete' | 'error'
+  errorMessage?: string
+  regenerationCount: number
+}
+
+type Character = {
+  _id: Id<'characters'>
+  _creationTime: number
+  storyId: Id<'stories'>
+  name: string
+  traits: string
+  backstory?: string
+}
+
+type ChapterWithScenes = Chapter & {
+  scenes: Scene[]
+}
+
 // Register custom node types
 const nodeTypes = {
   scene: SceneNode,
@@ -67,13 +109,13 @@ export function GraphicalCanvas() {
     const SCENE_SPACING = 20
 
     // Create chapter nodes
-    storyTree.chapters.forEach((chapter: any, chapterIndex: number) => {
+    storyTree.chapters.forEach((chapter: ChapterWithScenes, chapterIndex: number) => {
       const chapterX = (chapterIndex % 4) * CHAPTER_SPACING_X
       const chapterY = Math.floor(chapterIndex / 4) * CHAPTER_SPACING_Y
 
       // Chapter node
-      const completedScenes = chapter.scenes.filter((s: any) => s.status === 'complete').length
-      const totalWords = chapter.scenes.reduce((sum: number, s: any) => {
+      const completedScenes = chapter.scenes.filter((s: Scene) => s.status === 'complete').length
+      const totalWords = chapter.scenes.reduce((sum: number, s: Scene) => {
         return sum + (s.prose ? s.prose.split(/\s+/).length : 0)
       }, 0)
 
@@ -91,11 +133,11 @@ export function GraphicalCanvas() {
       })
 
       // Scene nodes (below chapter)
-      chapter.scenes.forEach((scene: any, sceneIndex: number) => {
+      chapter.scenes.forEach((scene: Scene, sceneIndex: number) => {
         const sceneX = chapterX + (sceneIndex * (SCENE_WIDTH + SCENE_SPACING))
         const sceneY = chapterY + 150
 
-        const sceneCharacters = characters.filter((char: any) =>
+        const sceneCharacters = characters.filter((char: Character) =>
           scene.prose?.includes(char.name) || scene.outline.includes(char.name)
         )
 
@@ -153,7 +195,7 @@ export function GraphicalCanvas() {
           onChange={(e) => setSelectedStoryId(e.target.value as Id<'stories'>)}
           className="px-3 py-2 border rounded-lg dark:bg-slate-700 dark:text-slate-200 dark:border-slate-600"
         >
-          {stories?.map((story: any) => (
+          {stories?.map((story: Story) => (
             <option key={story._id} value={story._id}>
               {story.title}
             </option>

@@ -1,7 +1,6 @@
 import { useState, useEffect, useMemo, useCallback, lazy, Suspense } from 'react'
 import { ConvexProvider, ConvexReactClient } from 'convex/react'
 import { Workspace } from '@/components/Workspace'
-import { GraphicalCanvas } from '@/components/canvas/GraphicalCanvas'
 import { GraphicalCanvasDemo } from '@/components/canvas/GraphicalCanvasDemo'
 import { useAllStories } from '@/hooks/useConvexQueries'
 

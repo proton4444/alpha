@@ -11,6 +11,15 @@ import {
 } from '@/components/ui/dialog'
 import { CharacterManager } from '@/components/CharacterManager'
 import { SceneEditor } from '@/components/SceneEditor'
+import { Id } from '../../convex/_generated/dataModel'
+
+// Type definition for Story (from Convex schema)
+type Story = {
+  _id: Id<'stories'>
+  _creationTime: number
+  title: string
+  createdAt: number
+}
 
 interface TestComponentsProps {
   isDark: boolean
@@ -20,7 +29,7 @@ interface TestComponentsProps {
   setSelectedStoryId: (id: string | null) => void
   selectedSceneId: string | null
   setSelectedSceneId: (id: string | null) => void
-  stories: any[]
+  stories: Story[]
 }
 
 export function TestComponents({
@@ -111,7 +120,7 @@ export function TestComponents({
             </div>
             {selectedStoryId && (
               <div className="mt-4 border-t pt-4">
-                <CharacterManager storyId={selectedStoryId as any} />
+                <CharacterManager storyId={selectedStoryId as Id<'stories'>} />
               </div>
             )}
           </div>
@@ -133,7 +142,7 @@ export function TestComponents({
             </div>
             {selectedSceneId && (
               <div className="mt-4 border-t pt-4 bg-white dark:bg-slate-900 rounded-lg min-h-[600px]">
-                <SceneEditor sceneId={selectedSceneId as any} />
+                <SceneEditor sceneId={selectedSceneId as Id<'scenes'>} />
               </div>
             )}
             <div className="text-xs space-y-1 pt-2 border-t dark:text-slate-300">
