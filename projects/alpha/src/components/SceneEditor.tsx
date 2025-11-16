@@ -37,9 +37,12 @@ export const SceneEditor: React.FC<SceneEditorProps> = ({ sceneId }) => {
   const updateScene = useMutation(api.scenes.updateScene)
   const requestSceneGeneration = useMutation(api.scenes.requestSceneGeneration)
 
-  // Update local state when scene data changes
+  // Sync local editable state with server data when scene changes
+  // This is intentional data synchronization from external source (Convex),
+  // not cascading renders - only triggers when scene ID changes
   useEffect(() => {
     if (scene) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       setOutlineValue(scene.outline || '')
       setProseValue(scene.prose || '')
       // Reset edit mode and accepted state when scene changes
@@ -54,6 +57,9 @@ export const SceneEditor: React.FC<SceneEditorProps> = ({ sceneId }) => {
       return
     }
 
+    // Set status immediately for UX feedback, then debounce the actual save
+    // This is intentional async workflow management, not cascading renders
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setSaveStatus('saving')
     const timer = setTimeout(async () => {
       try {

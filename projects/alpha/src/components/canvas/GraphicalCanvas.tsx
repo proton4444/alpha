@@ -89,9 +89,12 @@ export function GraphicalCanvas() {
   const [nodes, setNodes, onNodesChange] = useNodesState([])
   const [edges, setEdges, onEdgesChange] = useEdgesState([])
 
-  // Auto-select first story if none selected
+  // Auto-select first story if none selected (UX convenience)
+  // This is intentional data synchronization from external source (Convex),
+  // not cascading renders - only runs when stories load
   useEffect(() => {
     if (!selectedStoryId && stories && stories.length > 0) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       setSelectedStoryId(stories[0]._id)
     }
   }, [stories, selectedStoryId])

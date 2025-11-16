@@ -20,7 +20,12 @@ function getConvexClient(): ConvexReactClient {
 }
 
 function AppContent() {
-  const [isDark, setIsDark] = useState(true)
+  // Initialize theme from localStorage or system preference (lazy initializer - runs once)
+  const [isDark, setIsDark] = useState(() => {
+    const savedTheme = localStorage.getItem('theme')
+    const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches
+    return savedTheme ? savedTheme === 'dark' : prefersDark
+  })
   const [showTestComponents, setShowTestComponents] = useState(false)
   const [useGraphicalCanvas, setUseGraphicalCanvas] = useState(true)
   const [selectedStoryId, setSelectedStoryId] = useState<string | null>(null)
@@ -36,14 +41,10 @@ function AppContent() {
     localStorage.setItem('theme', dark ? 'dark' : 'light')
   }, [])
 
+  // Apply theme to DOM when isDark changes
   useEffect(() => {
-    // Load theme preference from localStorage
-    const savedTheme = localStorage.getItem('theme')
-    const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches
-    const isDarkMode = savedTheme ? savedTheme === 'dark' : prefersDark
-    setIsDark(isDarkMode)
-    updateTheme(isDarkMode)
-  }, [updateTheme])
+    updateTheme(isDark)
+  }, [isDark, updateTheme])
 
   const toggleTheme = () => {
     const newIsDark = !isDark
