@@ -98,8 +98,14 @@ export function StoryNavigationPanel({
             onToggleChapter={onToggleChapter}
           />
         ) : (
-          <div className="p-4 text-center text-sm text-slate-500 dark:text-slate-400">
-            Select a story to view its structure
+          <div className="p-8 text-center">
+            <div className="text-6xl mb-3">📖</div>
+            <p className="text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">
+              No Story Selected
+            </p>
+            <p className="text-xs text-slate-500 dark:text-slate-400">
+              Choose a story from the dropdown above to explore chapters and scenes
+            </p>
           </div>
         )}
       </div>

@@ -377,7 +377,7 @@ export function ChapterNode({
                     onDrop={(e) => handleDrop(e, index)}
                     onDragEnd={handleDragEnd}
                     onClick={() => handleSceneClick(scene._id)}
-                    className={`group p-3 rounded border cursor-pointer transition-all duration-150 ${
+                    className={`group p-4 rounded border cursor-pointer transition-all duration-150 ${
                       statusStyles[scene.status]
                     } ${
                       isSelected

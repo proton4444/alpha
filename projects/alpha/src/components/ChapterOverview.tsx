@@ -172,8 +172,8 @@ export function ChapterOverview({
       </div>
 
       {/* Status Filter Bar (Story 6.6) */}
-      <div className="mb-6">
-        <div className="flex flex-wrap gap-2">
+      <div className="mb-6 overflow-x-auto pb-2">
+        <div className="flex gap-2 min-w-max md:min-w-0 md:flex-wrap">
           {/* All Filter */}
           <button
             onClick={() => handleFilterChange("all")}

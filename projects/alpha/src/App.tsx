@@ -155,157 +155,194 @@ function AppContent() {
               </p>
             </div>
 
-            {/* Data Cleanup Utility - Clear test data */}
-            <DataCleanupTest />
+            {/* Utilities */}
+            <details className="border-2 border-red-500 dark:border-red-700 rounded-lg overflow-hidden mb-6">
+              <summary className="cursor-pointer px-6 py-4 bg-red-50 dark:bg-red-900/20 hover:bg-red-100 dark:hover:bg-red-900/30 transition-colors font-semibold text-lg text-red-900 dark:text-red-100">
+                🧹 Utilities & Data Management
+              </summary>
+              <div className="p-6 space-y-6 bg-white dark:bg-slate-900">
+                {/* Data Cleanup Utility - Clear test data */}
+                <DataCleanupTest />
+              </div>
+            </details>
 
-            {/* Story CRUD Test - Story 2.1 */}
-            <StoryCRUDTest />
+            {/* Story & Content Management (Stories 2-3) */}
+            <details className="border border-slate-300 dark:border-slate-700 rounded-lg overflow-hidden mb-6">
+              <summary className="cursor-pointer px-6 py-4 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-750 transition-colors font-semibold text-lg text-slate-900 dark:text-white">
+                📚 Story & Content Management (Stories 2.1 - 3.1)
+              </summary>
+              <div className="p-6 space-y-6 bg-white dark:bg-slate-900">
+                {/* Story CRUD Test - Story 2.1 */}
+                <StoryCRUDTest />
 
-            {/* Chapter Management Test - Story 2.2 */}
-            <ChapterManagementTest />
+                {/* Chapter Management Test - Story 2.2 */}
+                <ChapterManagementTest />
 
-            {/* Scene Management Test - Story 2.3 */}
-            <SceneManagementTest />
+                {/* Scene Management Test - Story 2.3 */}
+                <SceneManagementTest />
 
-            {/* Story Tree Test - Story 2.4 */}
-            <StoryTreeTest />
+                {/* Story Tree Test - Story 2.4 */}
+                <StoryTreeTest />
 
-            {/* Character CRUD Test - Story 3.1 */}
-            <CharacterCRUDTest />
+                {/* Character CRUD Test - Story 3.1 */}
+                <CharacterCRUDTest />
+              </div>
+            </details>
 
-            {/* CharacterManager Production UI - Story 3.2 */}
-            <div className="border rounded-lg p-6 bg-slate-50 space-y-4">
-              <h3 className="text-xl font-semibold mb-4">📋 Character Manager UI (Story 3.2)</h3>
-              <div>
-                <label className="text-sm font-medium mb-2 block">Select a Story to Manage Characters:</label>
-                {stories.length === 0 ? (
-                  <p className="text-sm text-slate-600">Create a story first using the test above</p>
-                ) : (
-                  <div className="space-y-2">
-                    {stories.map((story) => (
-                      <button
-                        key={story._id}
-                        onClick={() => setSelectedStoryId(story._id)}
-                        className={`block w-full text-left px-4 py-2 rounded border transition-colors ${
-                          selectedStoryId === story._id
-                            ? 'bg-blue-500 text-white border-blue-600'
-                            : 'bg-white border-slate-300 hover:bg-slate-100'
-                        }`}
-                      >
-                        {story.title}
-                      </button>
-                    ))}
+            {/* Production UI Components (Stories 3-4) */}
+            <details className="border border-purple-300 dark:border-purple-700 rounded-lg overflow-hidden mb-6">
+              <summary className="cursor-pointer px-6 py-4 bg-purple-50 dark:bg-purple-900/20 hover:bg-purple-100 dark:hover:bg-purple-900/30 transition-colors font-semibold text-lg text-purple-900 dark:text-purple-100">
+                ✏️ Production Editors (Stories 3.2 - 4.6)
+              </summary>
+              <div className="p-6 space-y-6 bg-white dark:bg-slate-900">
+                {/* CharacterManager Production UI - Story 3.2 */}
+                <div className="border rounded-lg p-6 bg-slate-50 dark:bg-slate-800 space-y-4">
+                  <h3 className="text-xl font-semibold mb-4 text-slate-900 dark:text-white">📋 Character Manager UI (Story 3.2)</h3>
+                  <div>
+                    <label className="text-sm font-medium mb-2 block text-slate-700 dark:text-slate-300">Select a Story to Manage Characters:</label>
+                    {stories.length === 0 ? (
+                      <p className="text-sm text-slate-600 dark:text-slate-400">Create a story first using the test above</p>
+                    ) : (
+                      <div className="space-y-2">
+                        {stories.map((story) => (
+                          <button
+                            key={story._id}
+                            onClick={() => setSelectedStoryId(story._id)}
+                            className={`block w-full text-left px-4 py-2 rounded border transition-colors ${
+                              selectedStoryId === story._id
+                                ? 'bg-blue-500 text-white border-blue-600'
+                                : 'bg-white dark:bg-slate-700 border-slate-300 dark:border-slate-600 hover:bg-slate-100 dark:hover:bg-slate-600 text-slate-900 dark:text-white'
+                            }`}
+                          >
+                            {story.title}
+                          </button>
+                        ))}
+                      </div>
+                    )}
                   </div>
-                )}
-              </div>
-              {selectedStoryId && (
-                <div className="mt-4 border-t pt-4">
-                  <CharacterManager storyId={selectedStoryId as any} />
+                  {selectedStoryId && (
+                    <div className="mt-4 border-t pt-4">
+                      <CharacterManager storyId={selectedStoryId as any} />
+                    </div>
+                  )}
                 </div>
-              )}
-            </div>
 
-            {/* SceneEditor Production UI - Stories 4.5 & 4.6 */}
-            <div className="border rounded-lg p-6 bg-slate-50 space-y-4">
-              <h3 className="text-xl font-semibold mb-4">✏️ Scene Editor (Stories 4.5 & 4.6)</h3>
-              <div>
-                <label className="text-sm font-medium mb-2 block">
-                  Select a Scene to Edit (use Scene Management Test above to create scenes):
-                </label>
-                <Input
-                  type="text"
-                  placeholder="Paste scene ID here..."
-                  value={selectedSceneId || ''}
-                  onChange={(e) => setSelectedSceneId(e.target.value || null)}
-                  className="mb-4"
-                />
-              </div>
-              {selectedSceneId && (
-                <div className="mt-4 border-t pt-4 bg-white rounded-lg min-h-[600px]">
-                  <SceneEditor sceneId={selectedSceneId as any} />
+                {/* SceneEditor Production UI - Stories 4.5 & 4.6 */}
+                <div className="border rounded-lg p-6 bg-slate-50 dark:bg-slate-800 space-y-4">
+                  <h3 className="text-xl font-semibold mb-4 text-slate-900 dark:text-white">✏️ Scene Editor (Stories 4.5 & 4.6)</h3>
+                  <div>
+                    <label className="text-sm font-medium mb-2 block text-slate-700 dark:text-slate-300">
+                      Select a Scene to Edit (use Scene Management Test above to create scenes):
+                    </label>
+                    <Input
+                      type="text"
+                      placeholder="Paste scene ID here..."
+                      value={selectedSceneId || ''}
+                      onChange={(e) => setSelectedSceneId(e.target.value || null)}
+                      className="mb-4"
+                    />
+                  </div>
+                  {selectedSceneId && (
+                    <div className="mt-4 border-t pt-4 bg-white dark:bg-slate-800 rounded-lg min-h-[600px]">
+                      <SceneEditor sceneId={selectedSceneId as any} />
+                    </div>
+                  )}
+                  <div className="text-xs space-y-1 pt-2 border-t text-slate-700 dark:text-slate-300">
+                    <p className="font-semibold">Story 4.5 Features:</p>
+                    <p>✅ Scene outline input with auto-save (1 second debounce)</p>
+                    <p>✅ "Generate Prose" button</p>
+                    <p>✅ Generation status display (Draft / Generating / Complete / Error)</p>
+                    <p>✅ Generated prose display area</p>
+                    <p className="font-semibold mt-2">Story 4.6 Features:</p>
+                    <p>✅ Accept button (green) - marks scene as final</p>
+                    <p>✅ Regenerate button (yellow) - triggers regeneration with count increment</p>
+                    <p>✅ Edit button (blue) - enables manual editing with Save button</p>
+                  </div>
                 </div>
-              )}
-              <div className="text-xs space-y-1 pt-2 border-t">
-                <p className="font-semibold">Story 4.5 Features:</p>
-                <p>✅ Scene outline input with auto-save (1 second debounce)</p>
-                <p>✅ "Generate Prose" button</p>
-                <p>✅ Generation status display (Draft / Generating / Complete / Error)</p>
-                <p>✅ Generated prose display area</p>
-                <p className="font-semibold mt-2">Story 4.6 Features:</p>
-                <p>✅ Accept button (green) - marks scene as final</p>
-                <p>✅ Regenerate button (yellow) - triggers regeneration with count increment</p>
-                <p>✅ Edit button (blue) - enables manual editing with Save button</p>
               </div>
-            </div>
+            </details>
 
             {/* Story 6: Chapter Node-Based UI Tests */}
-            
-            {/* Chapter Node Test - Story 6.1 */}
-            <ChapterNodeTest />
-            
-            {/* Character Badges Test - Story 6.5 */}
-            <CharacterBadgesTest />
-            
-            {/* Drag Drop Test - Story 6.4 */}
-            <DragDropTest />
-            
-            {/* Status Filter Test - Story 6.6 */}
-            <StatusFilterTest />
-            
-            {/* Chapter Overview Test - Story 6.2 */}
-            <ChapterOverviewTest />
-            
-            {/* Chapter Workspace Test - Story 6 Integration */}
-            <ChapterWorkspaceTest />
-            {/* shadcn/ui Components Demo - Story 1.5 */}
-            <div className="border rounded-lg p-6 bg-slate-50 space-y-4">
-              <h3 className="text-xl font-semibold mb-4">shadcn/ui Components Demo</h3>
+            <details open className="border border-blue-300 dark:border-blue-700 rounded-lg overflow-hidden mb-6">
+              <summary className="cursor-pointer px-6 py-4 bg-blue-50 dark:bg-blue-900/20 hover:bg-blue-100 dark:hover:bg-blue-900/30 transition-colors font-semibold text-lg text-blue-900 dark:text-blue-100">
+                🎯 Story 6: Chapter Node UI (Grid View)
+              </summary>
+              <div className="p-6 space-y-6 bg-white dark:bg-slate-900">
+                {/* Chapter Node Test - Story 6.1 */}
+                <ChapterNodeTest />
 
-              <div className="space-y-3">
-                <div>
-                  <label className="text-sm font-medium mb-2 block">Button Variants:</label>
-                  <div className="flex gap-2 flex-wrap">
-                    <Button>Default</Button>
-                    <Button variant="secondary">Secondary</Button>
-                    <Button variant="outline">Outline</Button>
-                    <Button variant="ghost">Ghost</Button>
-                    <Button variant="destructive">Destructive</Button>
+                {/* Chapter Overview Test - Story 6.2 */}
+                <ChapterOverviewTest />
+
+                {/* Chapter Workspace Test - Story 6 Integration */}
+                <ChapterWorkspaceTest />
+
+                {/* Drag Drop Test - Story 6.4 */}
+                <DragDropTest />
+
+                {/* Character Badges Test - Story 6.5 */}
+                <CharacterBadgesTest />
+
+                {/* Status Filter Test - Story 6.6 */}
+                <StatusFilterTest />
+              </div>
+            </details>
+            {/* shadcn/ui Components Demo - Story 1.5 */}
+            <details className="border border-slate-300 dark:border-slate-700 rounded-lg overflow-hidden mb-6">
+              <summary className="cursor-pointer px-6 py-4 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-750 transition-colors font-semibold text-lg text-slate-900 dark:text-white">
+                🎨 shadcn/ui Component Library (Story 1.5)
+              </summary>
+              <div className="p-6 space-y-6 bg-white dark:bg-slate-900">
+                <div className="border rounded-lg p-6 bg-slate-50 dark:bg-slate-800 space-y-4">
+                  <h3 className="text-xl font-semibold mb-4 text-slate-900 dark:text-white">shadcn/ui Components Demo</h3>
+
+                  <div className="space-y-3">
+                    <div>
+                      <label className="text-sm font-medium mb-2 block text-slate-700 dark:text-slate-300">Button Variants:</label>
+                      <div className="flex gap-2 flex-wrap">
+                        <Button>Default</Button>
+                        <Button variant="secondary">Secondary</Button>
+                        <Button variant="outline">Outline</Button>
+                        <Button variant="ghost">Ghost</Button>
+                        <Button variant="destructive">Destructive</Button>
+                      </div>
+                    </div>
+
+                    <div>
+                      <label className="text-sm font-medium mb-2 block text-slate-700 dark:text-slate-300">Input:</label>
+                      <Input placeholder="Type something..." />
+                    </div>
+
+                    <div>
+                      <label className="text-sm font-medium mb-2 block text-slate-700 dark:text-slate-300">Textarea:</label>
+                      <Textarea placeholder="Enter your text here..." />
+                    </div>
+
+                    <div>
+                      <label className="text-sm font-medium mb-2 block text-slate-700 dark:text-slate-300">Dialog:</label>
+                      <Dialog>
+                        <DialogTrigger asChild>
+                          <Button variant="outline">Open Dialog</Button>
+                        </DialogTrigger>
+                        <DialogContent>
+                          <DialogHeader>
+                            <DialogTitle>Dialog Title</DialogTitle>
+                            <DialogDescription>
+                              This is a dialog component from shadcn/ui. It demonstrates the modal functionality.
+                            </DialogDescription>
+                          </DialogHeader>
+                          <div className="space-y-4 py-4">
+                            <Input placeholder="Name" />
+                            <Textarea placeholder="Description" />
+                          </div>
+                          <Button>Save</Button>
+                        </DialogContent>
+                      </Dialog>
+                    </div>
                   </div>
                 </div>
-
-                <div>
-                  <label className="text-sm font-medium mb-2 block">Input:</label>
-                  <Input placeholder="Type something..." />
-                </div>
-
-                <div>
-                  <label className="text-sm font-medium mb-2 block">Textarea:</label>
-                  <Textarea placeholder="Enter your text here..." />
-                </div>
-
-                <div>
-                  <label className="text-sm font-medium mb-2 block">Dialog:</label>
-                  <Dialog>
-                    <DialogTrigger asChild>
-                      <Button variant="outline">Open Dialog</Button>
-                    </DialogTrigger>
-                    <DialogContent>
-                      <DialogHeader>
-                        <DialogTitle>Dialog Title</DialogTitle>
-                        <DialogDescription>
-                          This is a dialog component from shadcn/ui. It demonstrates the modal functionality.
-                        </DialogDescription>
-                      </DialogHeader>
-                      <div className="space-y-4 py-4">
-                        <Input placeholder="Name" />
-                        <Textarea placeholder="Description" />
-                      </div>
-                      <Button>Save</Button>
-                    </DialogContent>
-                  </Dialog>
-                </div>
               </div>
-            </div>
+            </details>
           </div>
         </div>
       </div>

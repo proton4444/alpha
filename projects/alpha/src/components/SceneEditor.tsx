@@ -203,18 +203,18 @@ export const SceneEditor: React.FC<SceneEditorProps> = ({ sceneId }) => {
     <div className="h-full flex flex-col p-6 space-y-4">
       {/* Header */}
       <div className="flex items-center justify-between">
-        <h2 className="text-2xl font-semibold text-slate-900">
+        <h2 className="text-2xl font-semibold text-slate-900 dark:text-white">
           Scene {scene.sceneNumber}
         </h2>
         <div className="flex items-center gap-2">
           {getStatusBadge()}
           {scene.regenerationCount > 0 && (
-            <span className="text-xs text-slate-500">
+            <span className="text-xs text-slate-500 dark:text-slate-400">
               (Regenerated {scene.regenerationCount}x)
             </span>
           )}
           {isAccepted && (
-            <span className="text-xs px-2 py-1 rounded bg-emerald-100 text-emerald-800 font-semibold">
+            <span className="text-xs px-2 py-1 rounded bg-emerald-100 dark:bg-emerald-900 text-emerald-800 dark:text-emerald-200 font-semibold">
               ✓ Accepted
             </span>
           )}
@@ -224,12 +224,12 @@ export const SceneEditor: React.FC<SceneEditorProps> = ({ sceneId }) => {
       {/* Scene Outline Input */}
       <div className="space-y-2">
         <div className="flex items-center justify-between">
-          <label className="text-sm font-medium text-slate-700">Scene Outline</label>
+          <label className="text-sm font-medium text-slate-700 dark:text-slate-300">Scene Outline</label>
           {saveStatus === 'saving' && (
-            <span className="text-xs text-slate-500">Saving...</span>
+            <span className="text-xs text-slate-500 dark:text-slate-400">Saving...</span>
           )}
           {saveStatus === 'saved' && (
-            <span className="text-xs text-green-600">Saved</span>
+            <span className="text-xs text-green-600 dark:text-green-400">Saved</span>
           )}
         </div>
         <Textarea
@@ -240,7 +240,7 @@ export const SceneEditor: React.FC<SceneEditorProps> = ({ sceneId }) => {
           className="resize-none transition-all duration-200 focus:ring-2 focus:ring-purple-500 focus:border-purple-500"
           disabled={scene.status === 'generating'}
         />
-        <p className="text-xs text-slate-500">
+        <p className="text-xs text-slate-500 dark:text-slate-400">
           {outlineValue.length} / 2000 characters
         </p>
       </div>
@@ -276,7 +276,7 @@ export const SceneEditor: React.FC<SceneEditorProps> = ({ sceneId }) => {
       {/* Generated Prose Display / Edit Area */}
       {scene.prose && (
         <div className="flex-1 space-y-3 border-t pt-4">
-          <label className="text-sm font-medium text-slate-700">Generated Prose</label>
+          <label className="text-sm font-medium text-slate-700 dark:text-slate-300">Generated Prose</label>
 
           {/* Prose Display (Read-only or Editable) */}
           {isEditingProse ? (
