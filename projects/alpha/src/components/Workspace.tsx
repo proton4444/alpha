@@ -37,8 +37,6 @@ export function Workspace() {
     selectedStoryId ? { storyId: selectedStoryId as Id<"stories"> } : "skip"
   )
 
-  const selectedStory = allStories.find(s => s._id === selectedStoryId)
-
   // Build flat list of all scenes for navigation
   const allScenes = storyTree?.chapters.flatMap(ch =>
     ch.scenes.map(scene => ({ ...scene, chapterId: ch._id }))

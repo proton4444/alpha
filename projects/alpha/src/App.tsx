@@ -168,7 +168,7 @@ function AppContent() {
 
             {/* Story & Content Management (Stories 2-3) */}
             <details className="border border-slate-300 dark:border-slate-700 rounded-lg overflow-hidden mb-6">
-              <summary className="cursor-pointer px-6 py-4 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-750 transition-colors font-semibold text-lg text-slate-900 dark:text-white">
+              <summary className="cursor-pointer px-6 py-4 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 transition-colors font-semibold text-lg text-slate-900 dark:text-white">
                 📚 Story & Content Management (Stories 2.1 - 3.1)
               </summary>
               <div className="p-6 space-y-6 bg-white dark:bg-slate-900">
@@ -289,7 +289,7 @@ function AppContent() {
             </details>
             {/* shadcn/ui Components Demo - Story 1.5 */}
             <details className="border border-slate-300 dark:border-slate-700 rounded-lg overflow-hidden mb-6">
-              <summary className="cursor-pointer px-6 py-4 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-750 transition-colors font-semibold text-lg text-slate-900 dark:text-white">
+              <summary className="cursor-pointer px-6 py-4 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 transition-colors font-semibold text-lg text-slate-900 dark:text-white">
                 🎨 shadcn/ui Component Library (Story 1.5)
               </summary>
               <div className="p-6 space-y-6 bg-white dark:bg-slate-900">

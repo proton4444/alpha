@@ -267,7 +267,7 @@ export function ChapterNode({
       {/* Chapter Header Card */}
       <div
         onClick={handleCardClick}
-        className="p-4 cursor-pointer hover:bg-slate-50 dark:hover:bg-slate-750 transition-colors duration-150 rounded-t-lg"
+        className="p-4 cursor-pointer hover:bg-slate-50 dark:hover:bg-slate-700 transition-colors duration-150 rounded-t-lg"
       >
         <div className="flex items-start justify-between gap-3">
           {/* Left Section: Expand Icon + Chapter Info */}
