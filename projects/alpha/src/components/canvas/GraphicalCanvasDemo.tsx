@@ -241,7 +241,7 @@ export function GraphicalCanvasDemo() {
   )
 
   return (
-    <div className="w-full h-screen">
+    <div style={{ display: 'flex', flexDirection: 'column', width: '100%', height: '100%' }}>
       {/* Demo banner */}
       <div className="absolute top-4 left-4 z-10 bg-gradient-to-r from-purple-500 to-pink-500 text-white rounded-lg shadow-lg p-4">
         <div className="text-sm font-bold mb-1">🎨 Graphical Canvas Demo</div>
@@ -265,33 +265,34 @@ export function GraphicalCanvasDemo() {
 
       {/* React Flow canvas */}
       <ReactFlow
-        nodes={nodes}
-        edges={edges}
-        onNodesChange={onNodesChange}
-        onEdgesChange={onEdgesChange}
-        onConnect={onConnect}
-        nodeTypes={nodeTypes}
-        connectionMode={ConnectionMode.Loose}
-        fitView
-        minZoom={0.1}
-        maxZoom={2}
-        defaultViewport={{ x: 0, y: 0, zoom: 0.8 }}
-      >
-        <Background color="#aaa" gap={16} />
-        <Controls />
-        <MiniMap
-          nodeColor={(node) => {
-            if (node.type === 'chapter') return '#C026D3'
-            const status = node.data?.status
-            if (status === 'complete') return '#10B981'
-            if (status === 'generating') return '#3B82F6'
-            if (status === 'error') return '#EF4444'
-            return '#94A3B8'
-          }}
-          nodeStrokeWidth={3}
-          zoomable
-          pannable
-        />
+        style={{ flex: 1, width: '100%' }}
+          nodes={nodes}
+          edges={edges}
+          onNodesChange={onNodesChange}
+          onEdgesChange={onEdgesChange}
+          onConnect={onConnect}
+          nodeTypes={nodeTypes}
+          connectionMode={ConnectionMode.Loose}
+          fitView
+          minZoom={0.1}
+          maxZoom={2}
+          defaultViewport={{ x: 0, y: 0, zoom: 0.8 }}
+        >
+          <Background color="#aaa" gap={16} />
+          <Controls />
+          <MiniMap
+            nodeColor={(node) => {
+              if (node.type === 'chapter') return '#C026D3'
+              const status = node.data?.status
+              if (status === 'complete') return '#10B981'
+              if (status === 'generating') return '#3B82F6'
+              if (status === 'error') return '#EF4444'
+              return '#94A3B8'
+            }}
+            nodeStrokeWidth={3}
+            zoomable
+            pannable
+          />
       </ReactFlow>
 
       {/* Scene Detail Modal (when scene clicked) */}

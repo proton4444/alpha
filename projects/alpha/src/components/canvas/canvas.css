@@ -1,4 +1,10 @@
 /* React Flow custom styling */
+.react-flow {
+  width: 100%;
+  height: 100%;
+  flex: 1;
+}
+
 .react-flow__node {
   cursor: pointer;
 }
@@ -30,12 +36,12 @@
 }
 
 .react-flow__background {
-  background-color: #F8FAFC;
+  background-color: #F8FAFC !important;
 }
 
 /* Dark mode support */
 .dark .react-flow__background {
-  background-color: #0F172A;
+  background-color: #1E293B !important;
 }
 
 .dark .react-flow__edge-path {
@@ -67,6 +73,13 @@
 .scene-node {
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
   transition: all 0.2s ease-in-out;
+  background-color: #FFFFFF !important;
+  border-color: currentColor !important;
+}
+
+.dark .scene-node {
+  background-color: #1E293B !important;
+  color: #E2E8F0;
 }
 
 .scene-node:hover {
@@ -77,6 +90,14 @@
 /* Chapter node specific styling */
 .chapter-node {
   transition: all 0.2s ease-in-out;
+  background-color: #FDF5FF !important;
+  border-color: #C026D3 !important;
+}
+
+.dark .chapter-node {
+  background-color: #3F1B5C !important;
+  border-color: #E879F9 !important;
+  color: #E2E8F0;
 }
 
 .chapter-node:hover {

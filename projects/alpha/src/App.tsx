@@ -55,7 +55,7 @@ function AppContent() {
   // Production workspace view (default)
   if (!showTestComponents) {
     return (
-      <div className="relative h-screen">
+      <div style={{ position: 'relative', width: '100vw', height: '100vh', display: 'flex', flexDirection: 'column' }}>
         {/* Theme Toggle (floating) */}
         <button
           onClick={toggleTheme}
@@ -84,7 +84,9 @@ function AppContent() {
         </button>
 
         {/* Main view - Canvas or Workspace */}
-        {useGraphicalCanvas ? <GraphicalCanvasDemo /> : <Workspace />}
+        <div style={{ flex: 1, display: 'flex', minHeight: 0 }}>
+          {useGraphicalCanvas ? <GraphicalCanvasDemo /> : <Workspace />}
+        </div>
       </div>
     )
   }
