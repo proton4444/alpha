@@ -7,7 +7,8 @@
     "build": "convex codegen && tsc -b && vite build",
     "convex:dev": "convex dev",
     "dev": "vite",
-    "lint": "eslint src",
+    "lint": "eslint src --ext .ts,.tsx",
+    "lint:fix": "eslint src --ext .ts,.tsx --fix",
     "preview": "vite preview",
     "type-check": "tsc --noEmit"
   },
