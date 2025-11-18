@@ -3,10 +3,6 @@ import ReactFlow, {
   Background,
   Controls,
   MiniMap,
-  Node,
-  Edge,
-  useNodesState,
-  useEdgesState,
   addEdge,
   Connection,
   ConnectionMode,
@@ -21,60 +17,21 @@ import { Id } from '../../../convex/_generated/dataModel'
 import { SceneNode } from './SceneNode'
 import { ChapterNode } from './ChapterFlowNode'
 import { SceneEditor } from '../SceneEditor'
-
-// Type definitions for Convex data
-type Story = {
-  _id: Id<'stories'>
-  _creationTime: number
-  title: string
-  createdAt: number
-}
-
-type Chapter = {
-  _id: Id<'chapters'>
-  _creationTime: number
-  storyId: Id<'stories'>
-  chapterNumber: number
-  title: string
-}
-
-type Scene = {
-  _id: Id<'scenes'>
-  _creationTime: number
-  storyId: Id<'stories'>
-  chapterId: Id<'chapters'>
-  sceneNumber: number
-  outline: string
-  prose?: string
-  status: 'draft' | 'generating' | 'complete' | 'error'
-  errorMessage?: string
-  regenerationCount: number
-}
-
-type Character = {
-  _id: Id<'characters'>
-  _creationTime: number
-  storyId: Id<'stories'>
-  name: string
-  traits: string
-  backstory?: string
-}
-
-type ChapterWithScenes = Chapter & {
-  scenes: Scene[]
-}
+import { useCanvasLayout } from './hooks/useCanvasLayout'
+import { CANVAS_CONFIG, MINIMAP_COLORS } from './constants'
+import type { Story } from './types'
 
 // Register custom node types
 const nodeTypes = {
   scene: SceneNode,
-  chapter: ChapterNode
+  chapter: ChapterNode,
 }
 
 export function GraphicalCanvas() {
   const [selectedStoryId, setSelectedStoryId] = useState<Id<'stories'> | null>(null)
   const [selectedSceneId, setSelectedSceneId] = useState<Id<'scenes'> | null>(null)
 
-  // Fetch data
+  // Fetch data from Convex
   const stories = useQuery(api.stories.getAllStories)
   const storyTree = useQuery(
     api.stories.getStoryTree,
@@ -84,10 +41,6 @@ export function GraphicalCanvas() {
     api.characters.getCharactersByStory,
     selectedStoryId ? { storyId: selectedStoryId } : 'skip'
   )
-
-  // React Flow state
-  const [nodes, setNodes, onNodesChange] = useNodesState([])
-  const [edges, setEdges, onEdgesChange] = useEdgesState([])
 
   // Auto-select first story if none selected (UX convenience)
   // This is intentional data synchronization from external source (Convex),
@@ -99,94 +52,26 @@ export function GraphicalCanvas() {
     }
   }, [stories, selectedStoryId])
 
-  // Transform data to nodes and edges
-  useEffect(() => {
-    if (!storyTree || !characters) return
-
-    const newNodes: Node[] = []
-    const newEdges: Edge[] = []
-
-    const CHAPTER_SPACING_X = 260
-    const CHAPTER_SPACING_Y = 400
-    const SCENE_WIDTH = 160
-    const SCENE_SPACING = 20
-
-    // Create chapter nodes
-    storyTree.chapters.forEach((chapter: ChapterWithScenes, chapterIndex: number) => {
-      const chapterX = (chapterIndex % 4) * CHAPTER_SPACING_X
-      const chapterY = Math.floor(chapterIndex / 4) * CHAPTER_SPACING_Y
-
-      // Chapter node
-      const completedScenes = chapter.scenes.filter((s: Scene) => s.status === 'complete').length
-      const totalWords = chapter.scenes.reduce((sum: number, s: Scene) => {
-        return sum + (s.prose ? s.prose.split(/\s+/).length : 0)
-      }, 0)
-
-      newNodes.push({
-        id: `chapter-${chapter._id}`,
-        type: 'chapter',
-        position: { x: chapterX, y: chapterY },
-        data: {
-          chapterNumber: chapter.chapterNumber,
-          title: chapter.title,
-          sceneCount: chapter.scenes.length,
-          completedCount: completedScenes,
-          totalWords
-        }
-      })
-
-      // Scene nodes (below chapter)
-      chapter.scenes.forEach((scene: Scene, sceneIndex: number) => {
-        const sceneX = chapterX + (sceneIndex * (SCENE_WIDTH + SCENE_SPACING))
-        const sceneY = chapterY + 150
-
-        const sceneCharacters = characters.filter((char: Character) =>
-          scene.prose?.includes(char.name) || scene.outline.includes(char.name)
-        )
-
-        const wordCount = scene.prose ? scene.prose.split(/\s+/).length : 0
-
-        newNodes.push({
-          id: `scene-${scene._id}`,
-          type: 'scene',
-          position: { x: sceneX, y: sceneY },
-          data: {
-            sceneNumber: scene.sceneNumber,
-            outline: scene.outline,
-            prose: scene.prose,
-            status: scene.status,
-            regenerationCount: scene.regenerationCount,
-            characters: sceneCharacters,
-            wordCount,
-            onClick: () => setSelectedSceneId(scene._id)
-          },
-          selected: selectedSceneId === scene._id
-        })
-
-        // Edge from chapter to scene
-        newEdges.push({
-          id: `edge-${chapter._id}-${scene._id}`,
-          source: `chapter-${chapter._id}`,
-          target: `scene-${scene._id}`,
-          type: 'smoothstep',
-          animated: scene.status === 'generating',
-          style: {
-            stroke: scene.status === 'complete' ? '#10B981' : '#94A3B8',
-            strokeWidth: 2
-          }
-        })
-      })
-    })
-
-    setNodes(newNodes)
-    setEdges(newEdges)
-  }, [storyTree, characters, selectedSceneId, setNodes, setEdges])
+  // Use custom hook for canvas layout logic
+  const { nodes, edges, onNodesChange, onEdgesChange, setEdges } = useCanvasLayout({
+    chapters: storyTree?.chapters,
+    characters,
+    selectedSceneId,
+    onSceneClick: setSelectedSceneId,
+  })
 
   // Handle connection creation (optional feature)
   const onConnect = useCallback(
     (params: Connection) => setEdges((eds) => addEdge(params, eds)),
     [setEdges]
   )
+
+  // Mini map node color function
+  const getMinimapNodeColor = useCallback((node: any) => {
+    if (node.type === 'chapter') return MINIMAP_COLORS.chapter
+    const status = node.data?.status
+    return MINIMAP_COLORS.scene[status as keyof typeof MINIMAP_COLORS.scene] || MINIMAP_COLORS.scene.draft
+  }, [])
 
   return (
     <div className="w-full h-screen">
@@ -216,21 +101,14 @@ export function GraphicalCanvas() {
         nodeTypes={nodeTypes}
         connectionMode={ConnectionMode.Loose}
         fitView
-        minZoom={0.1}
-        maxZoom={2}
-        defaultViewport={{ x: 0, y: 0, zoom: 0.8 }}
+        minZoom={CANVAS_CONFIG.MIN_ZOOM}
+        maxZoom={CANVAS_CONFIG.MAX_ZOOM}
+        defaultViewport={{ x: 0, y: 0, zoom: CANVAS_CONFIG.DEFAULT_ZOOM }}
       >
-        <Background color="#aaa" gap={16} />
+        <Background color="#aaa" gap={CANVAS_CONFIG.BACKGROUND_GAP} />
         <Controls />
         <MiniMap
-          nodeColor={(node) => {
-            if (node.type === 'chapter') return '#C026D3'
-            const status = node.data?.status
-            if (status === 'complete') return '#10B981'
-            if (status === 'generating') return '#3B82F6'
-            if (status === 'error') return '#EF4444'
-            return '#94A3B8'
-          }}
+          nodeColor={getMinimapNodeColor}
           nodeStrokeWidth={3}
           zoomable
           pannable

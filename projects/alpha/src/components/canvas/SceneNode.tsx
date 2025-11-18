@@ -1,44 +1,36 @@
 import { memo } from 'react'
 import { Handle, Position } from 'reactflow'
-
-interface SceneNodeProps {
-  data: {
-    sceneNumber: number
-    outline: string
-    prose?: string
-    status: 'draft' | 'generating' | 'complete' | 'error'
-    regenerationCount: number
-    characters: { _id: string; name: string }[]
-    wordCount: number
-    onClick: () => void
-  }
-}
+import { STATUS_ICONS } from './constants'
+import { getStatusColorClasses, getCharacterColor } from './utils'
+import type { SceneNodeProps } from './types'
 
 export const SceneNode = memo(({ data }: SceneNodeProps) => {
-  const statusColors = {
-    draft: 'bg-slate-200 border-slate-400 text-slate-900',
-    generating: 'bg-blue-100 border-blue-500 text-blue-900 animate-pulse',
-    complete: 'bg-green-100 border-green-500 text-green-900',
-    error: 'bg-red-100 border-red-500 text-red-900'
-  }
-
-  const statusIcons = {
-    draft: '📝',
-    generating: '⏳',
-    complete: '✓',
-    error: '⚠️'
-  }
+  // Get status-based color classes
+  const bgClasses = getStatusColorClasses(data.status, 'bg')
+  const borderClasses = getStatusColorClasses(data.status, 'border')
+  const textClasses = getStatusColorClasses(data.status, 'text')
+  const statusIcon = STATUS_ICONS[data.status]
 
   return (
     <div
       className={`
         scene-node
-        w-40 rounded-lg border-2 p-3 bg-white
+        w-40 rounded-lg border-2 p-3
         cursor-pointer transition-all duration-200
         hover:shadow-lg hover:scale-105
-        ${statusColors[data.status]}
+        ${bgClasses} ${borderClasses} ${textClasses}
+        ${data.status === 'generating' ? 'animate-pulse' : ''}
       `}
       onClick={data.onClick}
+      role="button"
+      tabIndex={0}
+      aria-label={`Scene ${data.sceneNumber}, ${data.status}, ${data.wordCount} words`}
+      onKeyDown={(e) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault()
+          data.onClick()
+        }
+      }}
     >
       {/* Input handle (top) */}
       <Handle type="target" position={Position.Top} className="w-2 h-2" />
@@ -46,26 +38,26 @@ export const SceneNode = memo(({ data }: SceneNodeProps) => {
       {/* Header */}
       <div className="flex justify-between items-start mb-2">
         <span className="text-xs font-bold">Scene {data.sceneNumber}</span>
-        <span className="text-sm">{statusIcons[data.status]}</span>
+        <span className="text-sm" aria-label={data.status}>{statusIcon}</span>
       </div>
 
       {/* Outline preview */}
       <p className="text-xs line-clamp-2 mb-2 opacity-75">
-        {data.outline}
+        {data.outline || 'No outline yet...'}
       </p>
 
       {/* Footer: stats and badges */}
       <div className="flex flex-wrap gap-1 text-xs">
         {/* Word count */}
         {data.wordCount > 0 && (
-          <span className="px-1.5 py-0.5 bg-slate-200 rounded">
+          <span className="px-1.5 py-0.5 bg-slate-200 dark:bg-slate-700 rounded">
             {data.wordCount}w
           </span>
         )}
 
         {/* Regeneration count */}
         {data.regenerationCount > 0 && (
-          <span className="px-1.5 py-0.5 bg-yellow-200 rounded">
+          <span className="px-1.5 py-0.5 bg-yellow-200 dark:bg-yellow-700 rounded">
             ×{data.regenerationCount}
           </span>
         )}
@@ -80,6 +72,16 @@ export const SceneNode = memo(({ data }: SceneNodeProps) => {
             {char.name[0]}
           </span>
         ))}
+
+        {/* Show "+N" if more characters */}
+        {data.characters.length > 3 && (
+          <span
+            className="px-1.5 py-0.5 bg-gray-200 dark:bg-gray-700 rounded text-gray-600 dark:text-gray-300"
+            title={data.characters.slice(3).map(c => c.name).join(', ')}
+          >
+            +{data.characters.length - 3}
+          </span>
+        )}
       </div>
 
       {/* Output handle (bottom) */}
@@ -89,15 +91,3 @@ export const SceneNode = memo(({ data }: SceneNodeProps) => {
 })
 
 SceneNode.displayName = 'SceneNode'
-
-// Helper function for character colors
-function getCharacterColor(index: number): string {
-  const colors = [
-    'bg-purple-200 text-purple-800',
-    'bg-pink-200 text-pink-800',
-    'bg-blue-200 text-blue-800',
-    'bg-green-200 text-green-800',
-    'bg-orange-200 text-orange-800'
-  ]
-  return colors[index % colors.length]
-}
